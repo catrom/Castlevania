@@ -1,0 +1,6 @@
+﻿  main.cpp
+  c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+c:\users\admin\desktop\my game\castlevania\castlevania\define.h(14): warning C4005: 'DIRECTINPUT_VERSION': macro redefinition
+  c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h(42): note: see previous definition of 'DIRECTINPUT_VERSION'
+  Castlevania.vcxproj -> C:\Users\Admin\Desktop\My Game\Castlevania\Debug\Castlevania.exe
+  Castlevania.vcxproj -> C:\Users\Admin\Desktop\My Game\Castlevania\Debug\Castlevania.pdb (Full PDB)
