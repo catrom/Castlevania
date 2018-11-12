@@ -49,7 +49,7 @@ void Animation::Add(int spriteID, DWORD time)
 	frames.push_back(frame);
 }
 
-void Animation::Render(int nx, float x, float y, int alpha)
+void Animation::Render(bool& isOverAnimation, int nx, float x, float y, int alpha)
 {
 	DWORD now = GetTickCount();
 
@@ -65,8 +65,15 @@ void Animation::Render(int nx, float x, float y, int alpha)
 			currentFrame++;
 			lastFrameTime = now;
 
+			if (currentFrame == frames.size() - 1)
+			{
+				isOverAnimation = true;
+			}
+
 			if (currentFrame >= frames.size())
+			{
 				currentFrame = 0;
+			}
 		}
 	}
 

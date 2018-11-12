@@ -17,45 +17,56 @@ class KeyHandler : public KeyEventHandler
 {
 	virtual void KeyState(BYTE *state)
 	{
-		if (game->IsKeyPress(DIK_SPACE)) 
+		if (simon->GetState() == JUMP && simon->IsStand() == false)
+			return;
+		if (simon->GetState() == HIT_STAND && simon->isOverAnimation == false)
+			return;
+		if (simon->GetState() == HIT_SIT && simon->isOverAnimation == false)
+			return;
+		if (game->IsKeyDown(DIK_RIGHT))
 		{
-			if (simon->GetState() == JUMP || simon->GetState() == SIT)
-				return;
-			simon->SetState(JUMP);
-		}
-		else if (game->IsKeyDown(DIK_DOWN))
-		{
-			if (simon->GetState() == JUMP || simon->GetState() == WALK)
-				return;
-			simon->SetState(SIT);
-		}
-		else if (game->IsKeyDown(DIK_RIGHT))
-		{
-			if (simon->GetState() == JUMP)
-				return;
-
 			simon->nx = 1;
-
-			if (simon->GetState() != SIT)
-				simon->SetState(WALK);
+			simon->SetState(WALK);
 		}
 		else if (game->IsKeyDown(DIK_LEFT))
 		{
-			if (simon->GetState() == JUMP)
-				return;
-
 			simon->nx = -1;
-
-			if (simon->GetState() != SIT)
-				simon->SetState(WALK);
+			simon->SetState(WALK);
 		}
-		else simon->SetState(STAND);
+		else if (game->IsKeyDown(DIK_DOWN))
+		{
+			simon->SetState(SIT);
+		}
+		else
+		{
+			simon->SetState(STAND);
+		}
 	}
 
 	virtual void OnKeyDown(int KeyCode)
 	{
 		DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 
+		switch (KeyCode)
+		{
+		case DIK_SPACE:
+			simon->SetState(JUMP);
+			break;
+		case DIK_Z:
+			if (simon->GetState() == HIT_STAND || simon->GetState() == HIT_SIT)
+				return;
+			if (simon->GetState() == STAND || simon->GetState() == JUMP)
+			{
+				simon->SetState(HIT_STAND);
+			}
+			else if (simon->GetState() == SIT)
+			{
+				simon->SetState(HIT_SIT);
+			}
+			break;
+		default:
+			break;
+		}
 	}
 
 	virtual void OnKeyUp(int KeyCode)
