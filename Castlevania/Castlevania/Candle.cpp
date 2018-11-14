@@ -22,14 +22,22 @@ void Candle::LoadResources()
 	ani = new Animation();
 	ani->Add(30001, 150);
 	ani->Add(30002, 150);
-	animations->Add(10, ani);
+	animations->Add(0, ani);
 
-	AddAnimation(10);
+	AddAnimation(0);
 
-	SetPosition(300.0f, 300.0f);
+	//SetPosition(160.0f, 224.0f);
 }
 
 void Candle::Render()
 {
 	animations[state]->Render(nx, x, y);
+}
+
+void Candle::GetBoundingBox(float & left, float & top, float & right, float & bottom)
+{
+	left = x;
+	top = y;
+	right = x + CANDLE_BBOX_WIDTH;
+	bottom = y + CANDLE_BBOX_HEIGHT;
 }

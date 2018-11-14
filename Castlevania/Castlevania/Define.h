@@ -14,31 +14,34 @@
 #define DIRECTINPUT_VERSION		0x0800
 #define KEYBOARD_BUFFER_SIZE	1024
 
-// special texture to draw object bounding box
-#define ID_TEX_BBOX				-100		
 
-// Tile Map Scene 1
+#pragma region Texture ID
+
+#define ID_TEX_BBOX					-1
 #define ID_TEX_SCENE_1				0
+#define ID_TEX_SIMON				1
+#define ID_TEX_WHIP					2
+#define ID_TEX_CANDLE				3
+#define ID_TEX_GROUND				4
+
+#pragma endregion
+
+
+#pragma region PathFile
+
 #define FILEPATH_TEX_SCENE_1		L"Textures\\Scene1.png"
 #define FILEPATH_DATA_SCENE_1		L"Textures\\Scene1_data.txt"
-
-
-// Simon	
-#define ID_TEX_SIMON				0
 #define FILEPATH_TEX_SIMON			L"Textures\\Simon.png"
+#define FILEPATH_TEX_WHIP			L"Textures\\Whip.png"
+#define FILEPATH_TEX_CANDLE			L"Textures\\Candle.png"
+#define FILEPATH_TEX_GROUND			L"Textures\\Ground.png"
 
-#define SIMON_BBOX_WIDTH			60
-#define SIMON_BBOX_HEIGHT			66
+#pragma endregion
 
-#define SIMON_WALKING_SPEED			0.1f
-#define SIMON_JUMP_SPEED_Y			0.5f
-#define SIMON_GRAVITY				0.03f
 
-#define SIMON_STATE_STANDING		0
-#define SIMON_STATE_WALKING			100
-#define SIMON_STATE_SITTING			200
-#define SIMON_STATE_JUMPING			300
-
+#pragma region State
+ 
+// Simon
 #define STAND		0
 #define WALK		1
 #define SIT			2
@@ -46,13 +49,43 @@
 #define HIT_SIT		4
 #define HIT_STAND	5
 
-
 // Whip
-#define ID_TEX_WHIP					1
-#define FILEPATH_TEX_WHIP			L"Textures\\Whip.png"
-
 #define NORMAL_WHIP	0
 
+#pragma endregion
+
+
+#pragma region Properties
+
+// Simon
+#define SIMON_WALKING_SPEED			0.10f
+#define SIMON_JUMP_SPEED_Y			0.5f
+#define SIMON_GRAVITY				0.03f
+
+
+#pragma endregion
+
+
+#pragma region BBox Size
+
+// Simon
+#define SIMON_BBOX_WIDTH			40
+#define SIMON_BBOX_HEIGHT			62
+
+// Ground
+#define GROUND_BBOX_WIDTH			32
+#define GROUND_BBOX_HEIGHT			32
+
 // Candle
-#define ID_TEX_CANDLE				2
-#define FILEPATH_TEX_CANDLE			L"Textures\\Candle.png"
+#define CANDLE_BBOX_WIDTH			32
+#define CANDLE_BBOX_HEIGHT			64
+
+// Whip
+#define WHIP_BBOX_WIDTH				40
+#define WHIP_BBOX_HEIGHT			20
+
+#pragma endregion
+
+
+
+

@@ -1,4 +1,4 @@
-#include "GameObject.h"
+﻿#include "GameObject.h"
 
 
 GameObject::GameObject()
@@ -27,6 +27,107 @@ void GameObject::RenderBoundingBox()
 	Game::GetInstance()->Draw(0, x, y, bbox, rect.left, rect.top, rect.right, rect.bottom, 32);
 }
 
+bool GameObject::AABB(float left_a, float top_a, float right_a, float bottom_a, float left_b, float top_b, float right_b, float bottom_b)
+{
+	return left_a < right_b && right_a > left_b && top_a < bottom_b && bottom_a > top_b;
+}
+
+void GameObject::SweptAABB(
+	float ml, float mt, float mr, float mb,
+	float dx, float dy,
+	float sl, float st,
+	float sr, float sb,
+	float & t, float & nx, float & ny)
+{
+	float dx_entry, dx_exit, tx_entry, tx_exit;
+	float dy_entry, dy_exit, ty_entry, ty_exit;
+
+	float t_entry;
+	float t_exit;
+
+	t = -1.0f;		// no collision
+	nx = ny = 0;
+
+
+	//	Broad-phase test
+
+	float bl = dx > 0 ? ml : ml + dx;
+	float bt = dy > 0 ? mt : mt + dy;
+	float br = dx > 0 ? mr + dx : mr;
+	float bb = dy > 0 ? mb + dy : mb;
+
+	if (br < sl || bl > sr || bt > sb || bb < st)
+		return;
+
+	// moving object is not moving
+	if (dx == 0 && dy == 0)
+		return;
+
+	if (dx > 0)
+	{
+		dx_entry = sl - mr;
+		dx_exit = sr - ml;
+	}
+	else if (dx < 0)
+	{
+		dx_entry = sr - ml;
+		dx_exit = sl - mr;
+	}
+
+	if (dy > 0)
+	{
+		dy_entry = st - mb;
+		dy_exit = sb - mt;
+	}
+	else if (dy < 0)
+	{
+		dy_entry = sb - mt;
+		dy_exit = st - mb;
+	}
+
+	if (dx == 0)
+	{
+		tx_entry = -99999999999;
+		tx_exit = 99999999999;
+	}
+	else
+	{
+		tx_entry = dx_entry / dx;
+		tx_exit = dx_exit / dx;
+	}
+
+	if (dy == 0)
+	{
+		ty_entry = -99999999999;
+		ty_exit = 99999999999;
+	}
+	else {
+		ty_entry = dy_entry / dy;
+		ty_exit = dy_exit / dy;
+	}
+
+
+	if ((tx_entry < 0.0f && ty_entry < 0.0f) || tx_entry > 1.0f || ty_entry > 1.0f) return;
+
+	t_entry = max(tx_entry, ty_entry);
+	t_exit = min(tx_exit, ty_exit);
+
+	if (t_entry > t_exit) return;
+
+	t = t_entry;
+
+	if (tx_entry > ty_entry)
+	{
+		ny = 0.0f;
+		dx > 0 ? nx = -1.0f : nx = 1.0f;
+	}
+	else
+	{
+		nx = 0.0f;
+		dy > 0 ? ny = -1.0f : ny = 1.0f;
+	}
+}
+
 /*
 	Extension of original SweptAABB to deal with two moving objects
 */
@@ -50,7 +151,7 @@ LPCOLLISIONEVENT GameObject::SweptAABBEx(LPGAMEOBJECT coO)
 
 	GetBoundingBox(ml, mt, mr, mb);
 
-	Game::SweptAABB(
+	SweptAABB(
 		ml, mt, mr, mb,
 		dx, dy,
 		sl, st, sr, sb,
@@ -98,7 +199,7 @@ void GameObject::FilterCollision(vector<LPCOLLISIONEVENT>& coEvents, vector<LPCO
 	{
 		LPCOLLISIONEVENT c = coEvents[i];
 
-		if (c->t < min_tx && c->nx != 0) {
+		if (c->t < min_tx && c->nx != 0) {			// (thời gian va chạm), (nx != 0 có va chạm theo trục x)
 			min_tx = c->t; nx = c->nx; min_ix = i;
 		}
 
@@ -120,8 +221,11 @@ void GameObject::AddAnimation(int aniID)
 void GameObject::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 {
 	this->dt = dt;
-	x += vx * dt;
-	y += vy * dt;
+	/*x += vx * dt;
+	y += vy * dt;*/
+
+	dx = vx*dt;
+	dy = vy*dt;
 }
 
 

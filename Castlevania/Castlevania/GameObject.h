@@ -73,6 +73,19 @@ public:
 
 	void RenderBoundingBox();
 	
+	// check collision of 2 static object (ex: whip and candle)
+	bool AABB(
+		float left_a, float top_a, float right_a, float bottom_a,
+		float left_b, float top_b, float right_b, float bottom_b
+	);
+
+	void SweptAABB(
+		float ml, float mt, float mr, float mb,
+		float dx, float dy,
+		float sl, float st,
+		float sr, float sb,
+		float & t, float & nx, float & ny);
+
 	LPCOLLISIONEVENT SweptAABBEx(LPGAMEOBJECT coO);
 	void CalcPotentialCollisions(vector<LPGAMEOBJECT> *coObjects, vector<LPCOLLISIONEVENT> &coEvents);
 	void FilterCollision(

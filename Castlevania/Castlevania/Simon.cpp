@@ -53,16 +53,18 @@ void Simon::LoadResources()
 	ani->Add(10031);
 	animations->Add(JUMP, ani);
 
-	ani = new Animation();
-	ani->Add(10041, 150);
-	ani->Add(10042, 150);
-	ani->Add(10043, 200);
+	ani = new Animation(150);
+	ani->Add(10041);
+	ani->Add(10042);
+	ani->Add(10043);
+	ani->Add(10021);
 	animations->Add(HIT_SIT, ani);
 
-	ani = new Animation();
-	ani->Add(10051, 150);
-	ani->Add(10052, 150);
-	ani->Add(10053, 200);
+	ani = new Animation(150);
+	ani->Add(10051);
+	ani->Add(10052);
+	ani->Add(10053);
+	ani->Add(10001);
 	animations->Add(HIT_STAND, ani);
 
 	AddAnimation(STAND);
@@ -83,21 +85,101 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 	GameObject::Update(dt);
 
 	vy += SIMON_GRAVITY;
-	if (y > 224)
+	
+	/*if (y > 224)
 	{
 		vy = 0;
 		y = 224.0f;
-	}
-}
+	}*/
 
-void Simon::Render()
-{
-	if (state == HIT_SIT || state == HIT_STAND) {		// lấy vị trí của simon để thực hiện gắn roi
+	if (state == HIT_SIT || state == HIT_STAND) 
+	{		
 		D3DXVECTOR3 simonPositon;
 		GetPosition(simonPositon.x, simonPositon.y);
 
 		whip->SetOrientation(nx);
 		whip->SetWhipPosition(simonPositon, isStand);
+	}
+
+	// Check collision when fighting
+	if (state == HIT_SIT || state == HIT_STAND)
+	{
+		if (animations[state]->GetCurrentFrame() == animations[state]->GetFramesSize() - 2) // chỉ xét va chạm khi render tới sprite cuối cùng của roi
+		{
+			for (UINT i = 0; i < colliable_objects->size(); i++)
+			{
+				LPGAMEOBJECT e = colliable_objects->at(i);
+				if (dynamic_cast<Candle *>(e))
+				{
+					float left, top, right, bottom;
+					e->GetBoundingBox(left, top, right, bottom);
+
+					DebugOut(L"%f %f %f %f\n", left, top, right, bottom);
+
+
+					if (whip->CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và nến
+					{
+						DebugOut(L"collision\n");
+						colliable_objects->erase(colliable_objects->begin() + i);
+						i--;
+					}
+				}
+			}
+		}
+	}
+
+	// Check collision between Simon and other objects
+	vector<LPCOLLISIONEVENT> coEvents;
+	vector<LPCOLLISIONEVENT> coEventsResult;
+
+	coEvents.clear();
+
+	CalcPotentialCollisions(colliable_objects, coEvents);
+
+	if (coEvents.size() == 0)
+	{
+		x += dx;
+		y += dy;
+	}
+	else
+	{
+		float min_tx, min_ty, nx = 0, ny;
+
+		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
+
+		// ground
+		x += min_tx*dx + nx*0.4f; 
+		y += min_ty*dy + ny*0.4f;
+
+		if (nx != 0) vx = 0;
+		if (ny != 0) vy = 0;
+
+		for (UINT i = 0; i < coEventsResult.size(); i++)
+		{
+			LPCOLLISIONEVENT e = coEventsResult[i];
+
+			// collision of Simon and Candle -> do nothing -> update x;
+			if (dynamic_cast<Candle *>(e->obj))
+			{
+				x -= nx*0.4f;
+				
+			}
+		}
+	}
+
+	// clean up collision events
+	for (int i = 0; i < coEvents.size(); i++) delete coEvents[i];
+	//for (int i = 0; i < coEventsResult.size(); i++) delete coEventsResult[i];
+}
+
+void Simon::Render()
+{
+	if (state == HIT_SIT || state == HIT_STAND) {		// lấy vị trí của simon để thực hiện gắn roi
+		//D3DXVECTOR3 simonPositon;
+		//GetPosition(simonPositon.x, simonPositon.y);
+
+		//whip->SetOrientation(nx);
+		//whip->SetWhipPosition(simonPositon, isStand);
 		whip->Render();
 	}
 
@@ -120,8 +202,7 @@ void Simon::SetState(int state)
 		break;
 	case JUMP:
 		isStand = true;
-		if (y == 224)
-			vy = -SIMON_JUMP_SPEED_Y;
+		vy = -SIMON_JUMP_SPEED_Y;
 		break;
 	case SIT:
 		isStand = false;
@@ -141,15 +222,11 @@ void Simon::SetState(int state)
 	}
 }
 
-bool Simon::IsStand()
-{
-	return this->y == 224.0f;
-}
-
 void Simon::GetBoundingBox(float & left, float & top, float & right, float & bottom)
 {
-	left = x;
-	top = y;
+	// sprite có kích thước là 60x66, bbox là 40x62
+	left = x + 10; 
+	top = y + 2;
 	right = x + SIMON_BBOX_WIDTH;
 	bottom = y + SIMON_BBOX_HEIGHT;
 }

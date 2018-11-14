@@ -62,14 +62,7 @@ public:
 
 	void SetCameraPosition(float x, float y);
 
-	static void SweptAABB(
-		float ml, float mt, float mr, float mb,		// move (left, top, right, buttom)
-		float dx, float dy,
-		float sl, float st, float sr, float sb,		// static (left, top, right, bottom)
-		float &t,
-		float &nx,
-		float &ny
-	);
+	
 
 
 	~Game();

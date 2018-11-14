@@ -6,6 +6,7 @@
 #include "Textures.h"
 #include "Define.h"
 #include "Whip.h"
+#include "Candle.h"
 
 using namespace std;
 
@@ -14,7 +15,7 @@ class Simon : public GameObject
 	Whip* whip;
 
 public:
-	bool isStand = true;
+	bool isStand = true; // xác định trạng thái để lấy vị trí gắn roi cho phù hợp
 
 	Simon() : GameObject() {}
 
@@ -23,9 +24,7 @@ public:
 	void Render();
 	void SetState(int state);
 
-	
-
-	bool IsStand();
+	bool IsTouchGround() { return vy == 0; }
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 };

@@ -75,8 +75,11 @@ public:
 
 	Animation(int defaultTime = 100);
 
-	bool IsOver() { return isOverAnimation; }
-	void Reset() { isOverAnimation = false; }
+	bool IsOver() { return currentFrame == frames.size() - 1; }
+	void Reset() { /*isOverAnimation = false;*/ currentFrame = -1; }
+
+	int GetCurrentFrame() { return currentFrame; }
+	int GetFramesSize() { return frames.size(); }
 	
 	void Add(int spriteID, DWORD time = 0);
 	void Render(int nx, float x, float y, int alpha = 255);

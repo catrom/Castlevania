@@ -2,27 +2,32 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 
+#include "Define.h"
+
 #include "Debug.h"
 #include "Game.h"
 #include "GameObject.h"
 #include "Textures.h"
 #include "Simon.h"
 #include "Candle.h"
-#include "Define.h"
 #include "TileMap.h"
+#include "Ground.h"
 
 
 Game * game;
 Simon * simon;
 Candle * candle;
 TileMap * tilemap;
+Ground * ground;
+vector<Ground*> grounds;
+vector<LPGAMEOBJECT> coObjects;
 
 class KeyHandler : public KeyEventHandler
 {
 	virtual void KeyState(BYTE *state)
 	{
 		// nếu simon đang nhảy và chưa chạm đất, tiếp tục render trạng thái nhảy
-		if (simon->GetState() == JUMP && simon->IsStand() == false)
+		if (simon->GetState() == JUMP && simon->IsTouchGround() == false)
 			return;
 
 		// nếu simon đang quất roi và animation chưa được render hết thì tiếp tục render
@@ -59,6 +64,8 @@ class KeyHandler : public KeyEventHandler
 		switch (KeyCode)
 		{
 		case DIK_SPACE:
+			if (simon->GetState() == JUMP)
+				return;
 			simon->SetState(JUMP);
 			break;
 		case DIK_Z:
@@ -102,8 +109,12 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 void Update(DWORD dt)
 {
-	simon->Update(dt);
+	
+	
 
+	simon->Update(dt, &coObjects);
+
+	// render camera
 	float cx, cy;
 	simon->GetPosition(cx, cy);
 	
@@ -128,8 +139,13 @@ void Render()
 		
 		
 		simon->Render();
-		candle->Render();
+		/*candle->Render();
 		
+		for (int i = 0; i < grounds.size(); i++)
+			grounds[i]->Render();*/
+
+		for (int i = 0; i < coObjects.size(); i++)
+			coObjects[i]->Render();
 
 		spriteHandler->End();
 		d3ddv->EndScene();
@@ -240,13 +256,30 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	candle = new Candle();
 	candle->LoadResources();
+	candle->SetPosition(160.0f, 224.0f);
+	coObjects.push_back(candle);
+
+	candle = new Candle();
+	candle->LoadResources();
+	candle->SetPosition(400.0f, 224.0f);
+	coObjects.push_back(candle);
 
 	tilemap = new TileMap(0, FILEPATH_TEX_SCENE_1, FILEPATH_DATA_SCENE_1, 1536, 320, 32, 32);
 	tilemap->LoadResources();
 	tilemap->Load_MapData();
 	//tilemap->abcxyz();
 	
+	for (int i = 0; i < 48; i++)
+	{
+		ground = new Ground();
+		ground->SetPosition(32 * i, 288.0f);
+		grounds.push_back(ground);
+	}
 
+	
+
+	for (int i = 0; i < grounds.size(); i++)
+		coObjects.push_back(grounds[i]);
 
 	Run();
 
