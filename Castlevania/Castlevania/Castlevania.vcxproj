@@ -146,6 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Candle.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -153,9 +154,11 @@
     <ClCompile Include="Simon.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Textures.cpp" />
+    <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="Whip.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Candle.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Game.h" />
@@ -163,6 +166,7 @@
     <ClInclude Include="Simon.h" />
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="Textures.h" />
+    <ClInclude Include="TileMap.h" />
     <ClInclude Include="Whip.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

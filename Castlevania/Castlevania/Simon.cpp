@@ -72,7 +72,7 @@ void Simon::LoadResources()
 	AddAnimation(HIT_SIT);
 	AddAnimation(HIT_STAND);
 
-	SetPosition(0.0f, 300.0f);
+	SetPosition(0.0f, 224.0f);
 
 	whip = new Whip();
 	whip->LoadResources();
@@ -83,10 +83,10 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 	GameObject::Update(dt);
 
 	vy += SIMON_GRAVITY;
-	if (y > 300)
+	if (y > 224)
 	{
 		vy = 0;
-		y = 300.0f;
+		y = 224.0f;
 	}
 }
 
@@ -100,7 +100,8 @@ void Simon::Render()
 		whip->SetWhipPosition(simonPositon, isStand);
 		whip->Render();
 	}
-	animations[state]->Render(isOverAnimation, nx, x, y);
+
+	animations[state]->Render(nx, x, y);
 }
 
 void Simon::SetState(int state)
@@ -119,7 +120,7 @@ void Simon::SetState(int state)
 		break;
 	case JUMP:
 		isStand = true;
-		if (y == 300)
+		if (y == 224)
 			vy = -SIMON_JUMP_SPEED_Y;
 		break;
 	case SIT:
@@ -129,11 +130,11 @@ void Simon::SetState(int state)
 		break;
 	case HIT_SIT:
 		isStand = false;
-		isOverAnimation = false;
+		animations[HIT_SIT]->Reset();
 		break;
 	case HIT_STAND:
 		isStand = true;
-		isOverAnimation = false;
+		animations[HIT_STAND]->Reset();
 		break;
 	default:
 		break;
@@ -142,12 +143,7 @@ void Simon::SetState(int state)
 
 bool Simon::IsStand()
 {
-	return this->y == 300.0f;
-}
-
-bool Simon::IsFighting()
-{
-	return isOverAnimation;
+	return this->y == 224.0f;
 }
 
 void Simon::GetBoundingBox(float & left, float & top, float & right, float & bottom)

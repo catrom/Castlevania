@@ -6,7 +6,6 @@
 
 class Whip : public GameObject
 {
-	bool isOverAnimation = false;
 public:
 	Whip() : GameObject() {}
 

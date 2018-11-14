@@ -14,7 +14,6 @@ class Simon : public GameObject
 	Whip* whip;
 
 public:
-	bool isOverAnimation = false;
 	bool isStand = true;
 
 	Simon() : GameObject() {}
@@ -27,7 +26,6 @@ public:
 	
 
 	bool IsStand();
-	bool IsFighting();
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 };

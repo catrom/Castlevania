@@ -1,4 +1,4 @@
-#include <Windows.h>
+﻿#include <Windows.h>
 #include <d3d9.h>
 #include <d3dx9.h>
 
@@ -7,22 +7,31 @@
 #include "GameObject.h"
 #include "Textures.h"
 #include "Simon.h"
+#include "Candle.h"
 #include "Define.h"
+#include "TileMap.h"
 
 
 Game * game;
 Simon * simon;
+Candle * candle;
+TileMap * tilemap;
 
 class KeyHandler : public KeyEventHandler
 {
 	virtual void KeyState(BYTE *state)
 	{
+		// nếu simon đang nhảy và chưa chạm đất, tiếp tục render trạng thái nhảy
 		if (simon->GetState() == JUMP && simon->IsStand() == false)
 			return;
-		if (simon->GetState() == HIT_STAND && simon->isOverAnimation == false)
+
+		// nếu simon đang quất roi và animation chưa được render hết thì tiếp tục render
+		if (simon->GetState() == HIT_STAND && simon->animations[HIT_STAND]->IsOver() == false)
 			return;
-		if (simon->GetState() == HIT_SIT && simon->isOverAnimation == false)
+
+		if (simon->GetState() == HIT_SIT && simon->animations[HIT_SIT]->IsOver() == false)
 			return;
+		
 		if (game->IsKeyDown(DIK_RIGHT))
 		{
 			simon->nx = 1;
@@ -94,6 +103,12 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 void Update(DWORD dt)
 {
 	simon->Update(dt);
+
+	float cx, cy;
+	simon->GetPosition(cx, cy);
+	
+	if (cx > SCREEN_WIDTH / 2 && cx + SCREEN_WIDTH / 2 < tilemap->GetMapWidth()) 
+		game->SetCameraPosition(cx - SCREEN_WIDTH / 2, 0);
 }
 
 void Render()
@@ -109,7 +124,12 @@ void Render()
 
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 
+		tilemap->Draw(game->GetCameraPositon());
+		
+		
 		simon->Render();
+		candle->Render();
+		
 
 		spriteHandler->End();
 		d3ddv->EndScene();
@@ -217,6 +237,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	keyHandler = new KeyHandler();
 	game->InitKeyboard(keyHandler);
 	simon->LoadResources();
+
+	candle = new Candle();
+	candle->LoadResources();
+
+	tilemap = new TileMap(0, FILEPATH_TEX_SCENE_1, FILEPATH_DATA_SCENE_1, 1536, 320, 32, 32);
+	tilemap->LoadResources();
+	tilemap->Load_MapData();
+	//tilemap->abcxyz();
+	
 
 
 	Run();

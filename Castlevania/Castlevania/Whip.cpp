@@ -10,7 +10,7 @@ void Whip::LoadResources()
 	Sprites * sprites = Sprites::GetInstance();
 	Animations * animations = Animations::GetInstance();
 
-	LPDIRECT3DTEXTURE9 texWhip = texture->Get(ID_TEX_SIMON);
+	LPDIRECT3DTEXTURE9 texWhip = texture->Get(ID_TEX_WHIP);
 
 	sprites->Add(20001, 0, 0, 240, 66, texWhip); // normal whip
 	sprites->Add(20002, 240, 0, 480, 66, texWhip);
@@ -26,8 +26,6 @@ void Whip::LoadResources()
 	animations->Add(NORMAL_WHIP, ani);
 
 	AddAnimation(NORMAL_WHIP);
-
-	SetPosition(100.0f, 300.0f);
 }
 
 void Whip::Update()
@@ -36,7 +34,7 @@ void Whip::Update()
 
 void Whip::Render()
 {
-	animations[state]->Render(isOverAnimation, nx, x, y);
+	animations[state]->Render(nx, x, y);
 }
 
 void Whip::SetWhipPosition(D3DXVECTOR3 simonPositon, bool isStand)
