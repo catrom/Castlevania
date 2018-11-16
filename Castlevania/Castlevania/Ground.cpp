@@ -1,33 +1,25 @@
 #include "Ground.h"
 
-Ground::Ground() : GameObject()
+void Ground::LoadResources(Textures *& textures, Sprites *& sprites, Animations *& animations)
 {
+	textures->Add(ID_TEX_GROUND, FILEPATH_TEX_GROUND, D3DCOLOR_XRGB(255, 255, 255));
 
-	Textures * texture = Textures::GetInstance();
-
-	texture->Add(ID_TEX_GROUND, FILEPATH_TEX_GROUND, D3DCOLOR_XRGB(255, 255, 255));
-
-	Sprites * sprites = Sprites::GetInstance();
-	Animations * animations = Animations::GetInstance();
-
-	LPDIRECT3DTEXTURE9 texGround = texture->Get(ID_TEX_GROUND);
+	LPDIRECT3DTEXTURE9 texGround = textures->Get(ID_TEX_GROUND);
 
 	sprites->Add(40001, 0, 0, 32, 32, texGround);
-	
+
 	LPANIMATION ani;
 
 	ani = new Animation();
 	ani->Add(40001);
-	animations->Add(0, ani);
+	animations->Add(GROUND_ANI, ani);
 
-	AddAnimation(0);
-	
 
 }
 
 void Ground::Render()
 {
-	animations[0]->Render(-1, x, y);
+	animations[state]->Render(-1, x, y);
 }
 
 void Ground::GetBoundingBox(float & l, float & t, float & r, float & b)

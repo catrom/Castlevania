@@ -3,7 +3,6 @@
 
 GameObject::GameObject()
 {
-	state = 0;
 	x = y = 0;
 	vx = vy = 0;
 	nx = 1;					// right
@@ -168,11 +167,11 @@ LPCOLLISIONEVENT GameObject::SweptAABBEx(LPGAMEOBJECT coO)
 	coObjects: the list of colliable objects
 	coEvents: list of potential collisions
 */
-void GameObject::CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects, vector<LPCOLLISIONEVENT>& coEvents)
+void GameObject::CalcPotentialCollisions(vector<LPGAMEOBJECT*>* coObjects, vector<LPCOLLISIONEVENT>& coEvents)
 {
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
-		LPCOLLISIONEVENT e = SweptAABBEx(coObjects->at(i));
+		LPCOLLISIONEVENT e = SweptAABBEx(*(coObjects->at(i)));
 
 		if (e->t > 0 && e->t <= 1.0f)
 			coEvents.push_back(e);
@@ -218,7 +217,7 @@ void GameObject::AddAnimation(int aniID)
 	animations.push_back(ani);
 }
 
-void GameObject::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
+void GameObject::Update(DWORD dt, vector<LPGAMEOBJECT*>* coObject)
 {
 	this->dt = dt;
 	/*x += vx * dt;

@@ -63,7 +63,7 @@ typedef AnimationFrame * LPANIMATION_FRAME;
 */
 class Animation
 {
-	
+	DWORD animStartTime;
 	DWORD lastFrameTime;
 	int defaultTime;
 	int currentFrame;
@@ -75,7 +75,8 @@ public:
 
 	Animation(int defaultTime = 100);
 
-	bool IsOver() { return currentFrame == frames.size() - 1; }
+	void setAniStartTime(DWORD t) { animStartTime = t; }
+	bool IsOver(DWORD dt) { /*return currentFrame == frames.size() - 1;*/ return GetTickCount() - animStartTime >= dt; }
 	void Reset() { /*isOverAnimation = false;*/ currentFrame = -1; }
 
 	int GetCurrentFrame() { return currentFrame; }

@@ -9,8 +9,8 @@ class Whip : public GameObject
 public:
 	Whip() : GameObject() {}
 
-	void LoadResources();
-	void Update();
+	virtual void LoadResources(Textures* &textures, Sprites* &sprites, Animations* &animations);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT*>* coObject = NULL) {}
 	void Render();
 
 	void SetWhipPosition(D3DXVECTOR3 simonPositon, bool isStand);

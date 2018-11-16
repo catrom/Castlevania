@@ -148,9 +148,11 @@
   <ItemGroup>
     <ClCompile Include="Candle.cpp" />
     <ClCompile Include="Debug.cpp" />
+    <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Ground.cpp" />
+    <ClCompile Include="Items.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Simon.cpp" />
@@ -163,9 +165,11 @@
     <ClInclude Include="Candle.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Define.h" />
+    <ClInclude Include="Effect.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Ground.h" />
+    <ClInclude Include="Items.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Simon.h" />
     <ClInclude Include="Sprites.h" />
