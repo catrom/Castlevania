@@ -61,7 +61,7 @@ void Animation::Render(int nx, float x, float y, int alpha)
 	else
 	{
 		DWORD t = frames[currentFrame]->GetTime();
-		if (now - lastFrameTime > t) {
+		if (now - lastFrameTime >= t) {
 			currentFrame++;
 			lastFrameTime = now;
 

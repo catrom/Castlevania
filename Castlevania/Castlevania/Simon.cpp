@@ -2,9 +2,19 @@
 
 Simon::Simon() : GameObject()
 {
+	AddAnimation(STAND_ANI);
+	AddAnimation(WALK_ANI);
+	AddAnimation(SIT_ANI);
+	AddAnimation(JUMP_ANI);
+	AddAnimation(HIT_SIT_ANI);
+	AddAnimation(HIT_STAND_ANI);
+	AddAnimation(HIT_STAND_ANI);
+	AddAnimation(POWER_ANI);
+
+	SetState(STAND_ANI);
+
 	whip = new Whip();
-	whip->AddAnimation(NORMAL_WHIP_ANI);
-	whip->SetState(NORMAL_WHIP);
+	dagger = new Dagger();
 }
 
 void Simon::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &animations)
@@ -32,6 +42,10 @@ void Simon::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &a
 	sprites->Add(10052, 360, 0, 420, 66, texSimon);
 	sprites->Add(10053, 420, 0, 480, 66, texSimon);
 
+	sprites->Add(10061, 120, 198, 180, 264, texSimon); // power up
+	sprites->Add(10062, 60, 198, 120, 264, texSimon); 
+	sprites->Add(10063, 0, 198, 60, 264, texSimon);
+
 
 	LPANIMATION ani;
 
@@ -54,26 +68,34 @@ void Simon::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &a
 	ani->Add(10031);
 	animations->Add(JUMP_ANI, ani);
 
-	ani = new Animation(150);
+	ani = new Animation();
 	ani->Add(10041);
 	ani->Add(10042);
 	ani->Add(10043);
-	//ani->Add(10021);
 	animations->Add(HIT_SIT_ANI, ani);
 
-	ani = new Animation(150);
+	ani = new Animation();
 	ani->Add(10051);
 	ani->Add(10052);
 	ani->Add(10053);
-	//ani->Add(10001);
 	animations->Add(HIT_STAND_ANI, ani);
+
+	ani = new Animation(50);
+	ani->Add(10061);
+	ani->Add(10062);
+	ani->Add(10063);
+	animations->Add(POWER_ANI, ani);
+
+	
 }
 
-void Simon::Update(DWORD dt, vector<LPGAMEOBJECT*>* coObjects)
+void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT*>* coObjects)
 {
 	GameObject::Update(dt);
 
-	vy += SIMON_GRAVITY*dt;
+	if (vy < -0.1f || vy > 0.1f)
+		vy += SIMON_GRAVITY*dt;
+	else vy += SIMON_GRAVITY_LOWER*dt;
 
 
 	// simple collision with border map
@@ -107,6 +129,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT*>* coObjects)
 			// collision of Simon and Candle -> do nothing -> update x, y;
 			if (dynamic_cast<Candle*>(e->obj))
 			{
+				DebugOut(L"%d %d\n", e->nx, e->ny);
+
 				if (e->nx != 0) x += dx;
 				if (e->ny != 0) y += dy;
 			}
@@ -119,11 +143,30 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT*>* coObjects)
 			}
 			else if (dynamic_cast<Items*>(e->obj))
 			{
-				// will add more case for item type
+
+				//DebugOut(L"%d %d\n", e->nx, e->ny);
 				if (e->nx != 0) x += dx;
 				if (e->ny != 0) y += dy;
 
+				e->obj->isEnable = false;
 				
+				isPowered = true;
+				if (e->obj->GetState() == CHAIN)  // nếu item nhận được là chain
+				{
+					SetState(POWER);			// đổi trạng thái power - biến hình nhấp nháy các kiểu đà điểu
+					vx = 0;
+
+					// lên đời whip
+					if (whip->GetState() == NORMAL_WHIP) whip->SetState(SHORT_CHAIN);
+					else if (whip->GetState() == SHORT_CHAIN) whip->SetState(LONG_CHAIN);
+				}
+			}
+			else
+			{
+				x += min_tx*dx + nx*0.4f;
+				y += min_ty*dy + ny*0.4f;
+				if (nx != 0) vx = 0;
+				if (ny != 0) vy = 0;
 			}
 		}
 	}
@@ -137,11 +180,9 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT*>* coObjects)
 	if (state == HIT_SIT || state == HIT_STAND)
 	{
 		// lấy vị trí của simon để set vị trí cho roi
-		D3DXVECTOR3 simonPositon;
-		GetPosition(simonPositon.x, simonPositon.y);
 
 		whip->SetOrientation(nx);
-		whip->SetWhipPosition(simonPositon, isStand);
+		whip->SetWhipPosition(D3DXVECTOR3(x, y, 0), isStand);
 
 
 		//DebugOut(L"current: %d\n", animations[state]->GetCurrentFrame());
@@ -171,7 +212,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT*>* coObjects)
 						
 						// Tạo một random item và thay thế vào vị trí con trỏ của Candle*
 			
-						item = new Items();
+						Items * item = new Items();
+						item->isEnable = true;
 						item->SetPosition(e->x, e->y);
 						item->GetRandomItem();
 
@@ -227,6 +269,8 @@ void Simon::SetState(int state)
 		animations[state]->setAniStartTime(GetTickCount());
 		break;
 	case HIT_STAND:
+	case HIT:
+	case POWER:
 		isStand = true;
 		animations[state]->Reset();
 		animations[state]->setAniStartTime(GetTickCount());

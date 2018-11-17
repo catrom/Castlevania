@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "GameObject.h"
 #include "Sprites.h"
@@ -7,12 +7,14 @@
 
 class Items : public GameObject
 {
+
+	DWORD timeAppear;   // thời gian bắt đầu xuất hiện của item, dùng để xét cho item tự huỷ
 public:
 	Items();
 
 	virtual void LoadResources(Textures* &textures, Sprites* &sprites, Animations* &animations);
 	void Render();
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT*>* coObject = NULL);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *Objects = NULL, vector<LPGAMEOBJECT*>* coObject = NULL);
 
 	void GetRandomItem();
 

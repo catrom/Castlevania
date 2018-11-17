@@ -8,6 +8,8 @@ Items::Items() : GameObject()
 	AddAnimation(LARGE_HEART_ANI);
 	AddAnimation(CHAIN_ANI);
 	AddAnimation(DAGGER_ANI);
+
+	timeAppear = -1;
 }
 
 void Items::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &animations)
@@ -43,11 +45,11 @@ void Items::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &a
 
 void Items::Render()
 {
-	DebugOut(L"size: %d\n", this->animations.size());
 	animations[state]->Render(-1, x, y);
+	
 }
 
-void Items::Update(DWORD dt, vector<LPGAMEOBJECT*>* coObject)
+void Items::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT*>* coObject)
 {
 	//switch (state)
 	//{
@@ -63,6 +65,22 @@ void Items::Update(DWORD dt, vector<LPGAMEOBJECT*>* coObject)
 	//default:
 	//	break;
 	//}   // -> just for test, will delete after
+
+	if (timeAppear == -1)
+	{
+		timeAppear = GetTickCount();
+	}
+	else
+	{
+		DWORD now = GetTickCount();
+
+		if (now - timeAppear > ITEM_TIME_DESTROYED)
+		{
+			isEnable = false;
+			return;
+		}
+	}
+
 
 	GameObject::Update(dt);
 
@@ -86,6 +104,7 @@ void Items::Update(DWORD dt, vector<LPGAMEOBJECT*>* coObject)
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
 
 		y += min_ty*dy + ny*0.4f;
+		if (ny != 0) vy = 0;
 	}
 
 	// clean up collision events
@@ -94,9 +113,10 @@ void Items::Update(DWORD dt, vector<LPGAMEOBJECT*>* coObject)
 
 void Items::GetRandomItem()
 {
-	vector<int> listState = { LARGE_HEART, CHAIN, DAGGER };
+	/*vector<int> listState = { LARGE_HEART, CHAIN, DAGGER };
 	int rd = rand() % 3;
-	state = listState[rd];
+	state = listState[rd];*/
+	state = rand() % 3;
 }
 
 void Items::GetBoundingBox(float & left, float & top, float & right, float & bottom)
@@ -106,15 +126,15 @@ void Items::GetBoundingBox(float & left, float & top, float & right, float & bot
 
 	switch (state)
 	{
-	case 0 : // large heart
+	case LARGE_HEART: // large heart
 		right = left + LARGE_HEART_BBOX_WIDTH;
 		bottom = top + LARGE_HEART_BBOX_HEIGHT;
 		break;
-	case 1: // chain
+	case CHAIN: // chain
 		right = left + CHAIN_BBOX_WIDTH;
 		bottom = top + CHAIN_BBOX_HEIGHT;
 		break;
-	case 2: // dagger
+	case DAGGER: // dagger
 		right = left + DAGGER_BBOX_WIDTH;
 		bottom = top + DAGGER_BBOX_HEIGHT;
 		break;

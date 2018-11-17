@@ -8,7 +8,7 @@
 #define SCREEN_WIDTH			512
 #define SCREEN_HEIGHT			480
 
-#define MAX_FRAME_RATE			150
+#define MAX_FRAME_RATE			200
 
 // Input
 #define DIRECTINPUT_VERSION		0x0800
@@ -57,9 +57,13 @@
 #define JUMP		3
 #define HIT_SIT		4
 #define HIT_STAND	5
+#define HIT			6  // dagger, no need whip
+#define POWER		7
 
 // Whip
-#define NORMAL_WHIP	0
+#define NORMAL_WHIP		0
+#define SHORT_CHAIN		1
+#define LONG_CHAIN		2
 
 // Candle
 #define BIG_CANDLE	0
@@ -75,6 +79,9 @@
 #define CHAIN		1
 #define	DAGGER		2
 
+// Dagger
+#define DAGGER_STATE 0
+
 #pragma endregion
 
 #pragma region Animation ID
@@ -86,9 +93,12 @@
 #define JUMP_ANI		104
 #define HIT_SIT_ANI		105
 #define HIT_STAND_ANI	106
+#define POWER_ANI		107
 
 // Whip
 #define NORMAL_WHIP_ANI	201
+#define SHORT_CHAIN_ANI	202
+#define LONG_CHAIN_ANI	203
 
 // Candle
 #define BIG_CANDLE_ANI	301
@@ -113,9 +123,12 @@
 #define SIMON_WALKING_SPEED			0.10f
 #define SIMON_JUMP_SPEED_Y			0.5f
 #define SIMON_GRAVITY				0.002f
+#define SIMON_GRAVITY_LOWER			0.001f
 
 // Item
 #define ITEM_FALLING_SPEED			0.2f
+#define ITEM_TIME_DESTROYED			3000
+#define ITEM_DAGGER_SPEED			0.3f
 
 #pragma endregion
 

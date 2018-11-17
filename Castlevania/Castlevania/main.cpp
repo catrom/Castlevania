@@ -13,7 +13,7 @@
 #include "TileMap.h"
 #include "Ground.h"
 #include "Items.h"
-
+#include "Dagger.h"
 
 Game * game;
 Simon * simon;
@@ -22,6 +22,7 @@ TileMap * tilemap;
 Ground * ground;
 Items * item;
 Whip * whip;
+Dagger * dagger;
 Effect * effect;
 
 Textures * textures = Textures::GetInstance();
@@ -56,16 +57,24 @@ class KeyHandler : public KeyEventHandler
 {
 	virtual void KeyState(BYTE *state)
 	{
+		if (simon->GetState() == POWER && simon->animations[POWER]->IsOver(450) == false)
+			return;
+
+		if (simon->GetState() == HIT && simon->animations[HIT]->IsOver(300) == false)
+			return;
+
 		// nếu simon đang nhảy và chưa chạm đất, tiếp tục render trạng thái nhảy
 		if (simon->GetState() == JUMP && simon->IsTouchGround() == false)
 			return;
 
 		// nếu simon đang quất roi và animation chưa được render hết thì tiếp tục render
-		if (simon->GetState() == HIT_STAND && simon->animations[HIT_STAND]->IsOver(450) == false)
+		if (simon->GetState() == HIT_STAND && simon->animations[HIT_STAND]->IsOver(300) == false)
+			/*simon->animations[HIT_STAND]->GetCurrentFrame() < simon->animations[HIT_STAND]->GetFramesSize() - 1*/
 			return;
 
-		if (simon->GetState() == HIT_SIT && simon->animations[HIT_SIT]->IsOver(450) == false)
+		if (simon->GetState() == HIT_SIT && simon->animations[HIT_SIT]->IsOver(300) == false)
 			return;
+		
 		
 		if (game->IsKeyDown(DIK_RIGHT))
 		{
@@ -110,6 +119,18 @@ class KeyHandler : public KeyEventHandler
 				simon->SetState(HIT_SIT);
 			}
 			break;
+		case DIK_X:
+			if (simon->isPowered == false)
+				return;
+			if (simon->GetState() == STAND)
+			{
+				float sx, sy;
+				simon->GetPosition(sx, sy);
+				dagger->SetPosition(sx, sy + 10);
+				dagger->SetOrientation(simon->GetOrientation());
+				dagger->isEnable = true;
+				simon->SetState(HIT);
+			}
 		default:
 			break;
 		}
@@ -151,12 +172,8 @@ void Update(DWORD dt)
 
 	for (int i = 0; i < Objects.size(); i++)
 	{
-		if (Objects[i] == NULL)
-		{
-			Objects.erase(Objects.begin() + i);
-			i--;
+		if (Objects[i]->isEnable == false)
 			continue;
-		}
 
 		vector<LPGAMEOBJECT*> coObjects; // truyền con trỏ cấp 2, để trong hàm update có thể thay đổi trực tiếp đến phần tử của Objects
 
@@ -164,11 +181,8 @@ void Update(DWORD dt)
 		{
 			for (int j = 0; j < Objects.size(); j++)
 			{
-				if (Objects[j] == NULL) {
-					Objects.erase(Objects.begin() + j);
-					j--;
+				if (Objects[j]->isEnable == false)
 					continue;
-				}
 
 				if (i != j) // thêm tất cả objects "ko phải là simon", dùng trong hàm update của simon 
 					coObjects.push_back(&(Objects[j]));
@@ -178,11 +192,8 @@ void Update(DWORD dt)
 		{
 			for (int j = 0; j < Objects.size(); j++)
 			{
-				if (Objects[j] == NULL) {
-					Objects.erase(Objects.begin() + j);
-					j--;
+				if (Objects[i]->isEnable == false)
 					continue;
-				}
 
 				if (dynamic_cast<Ground*>(Objects[j])) // thêm tất cả objects "là ground", dùng trong hàm update của item
 				{
@@ -196,7 +207,7 @@ void Update(DWORD dt)
 		}
 
 
-		Objects[i]->Update(dt, &coObjects);
+		Objects[i]->Update(dt, &Objects, &coObjects);
 	}
 
 	//simon->Update(dt, &coObjects);
@@ -226,6 +237,9 @@ void Render()
 
 		for (int i = 0; i < Objects.size(); i++)
 		{
+			if (Objects[i]->isEnable == false)
+				continue;
+
 			Objects[i]->Render();
 		}
 			
@@ -328,14 +342,11 @@ void NewGame()
 {
 	Objects.clear();
 
+	dagger = new Dagger();
+	dagger->isEnable = false;
+	Objects.push_back(dagger);
+
 	simon = new Simon();
-	simon->AddAnimation(STAND_ANI);
-	simon->AddAnimation(WALK_ANI);
-	simon->AddAnimation(SIT_ANI);
-	simon->AddAnimation(JUMP_ANI);
-	simon->AddAnimation(HIT_SIT_ANI);
-	simon->AddAnimation(HIT_STAND_ANI);
-	simon->SetState(STAND_ANI);
 	simon->SetPosition(0.0f, 224.0f);
 	Objects.push_back(simon);
 

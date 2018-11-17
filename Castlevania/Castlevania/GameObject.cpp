@@ -6,6 +6,7 @@ GameObject::GameObject()
 	x = y = 0;
 	vx = vy = 0;
 	nx = 1;					// right
+	isEnable = true;
 }
 
 void GameObject::RenderBoundingBox()
@@ -217,7 +218,7 @@ void GameObject::AddAnimation(int aniID)
 	animations.push_back(ani);
 }
 
-void GameObject::Update(DWORD dt, vector<LPGAMEOBJECT*>* coObject)
+void GameObject::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT*>* coObject)
 {
 	this->dt = dt;
 	/*x += vx * dt;

@@ -147,6 +147,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Candle.cpp" />
+    <ClCompile Include="Dagger.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -163,6 +164,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Candle.h" />
+    <ClInclude Include="Dagger.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Effect.h" />
