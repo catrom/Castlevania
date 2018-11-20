@@ -65,20 +65,28 @@ void Animation::Render(int nx, float x, float y, int alpha)
 			currentFrame++;
 			lastFrameTime = now;
 
-			/*if (currentFrame == frames.size() - 1)
-			{
-				isOverAnimation = true;
-			}*/
-
 			if (currentFrame >= frames.size())
 			{
-				//Reset();
 				currentFrame = 0;
 			}
 		}
 	}
 
 	frames[currentFrame]->GetSprite()->Draw(nx, x, y, alpha);
+}
+
+void Animation::RenderByID(int currentID, int nx, float x, float y, int alpha)
+{
+	if (frames.size() == 3) // normal whip, short chain
+	{
+		frames[currentID]->GetSprite()->Draw(nx, x, y, alpha);
+	}
+	else  // == 12, long chain
+	{
+		int rd = rand() % 4;
+
+		frames[currentID * 4 + rd]->GetSprite()->Draw(nx, x, y, alpha);
+	}
 }
 
 

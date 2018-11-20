@@ -1,6 +1,14 @@
-#include "Candle.h"
+﻿#include "Candle.h"
 
 
+
+Candle::Candle() : GameObject()
+{
+	AddAnimation(BIG_CANDLE_ANI);
+	AddAnimation(EFFECT_ANI);
+
+	SetState(BIG_CANDLE);
+}
 
 void Candle::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &animations)
 {
@@ -20,18 +28,27 @@ void Candle::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &
 	animations->Add(BIG_CANDLE_ANI, ani);
 }
 
+void Candle::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT*>* coObject)
+{
+	if (state == DESTROYED && animations[state]->IsOver(150)) 	//nếu render xong hết đốm lửa rồi thì set enable = false -> biến mất
+	{
+		this->isEnable = false;
+
+		// Tạo một random item và thay thế vào vị trí con trỏ của Candle*
+
+		Items * item = new Items();
+		item->isEnable = true;
+		item->SetPosition(x, y);
+		item->GetRandomItem();
+
+		Objects->push_back(item);
+	}
+		
+}
+
 void Candle::Render()
 {
 	animations[state]->Render(nx, x, y);
-}
-
-void Candle::DestroyedEffect()
-{
-	Effect * effect = new Effect();
-	effect->AddAnimation(EFFECT_ANI);
-	effect->SetState(EFFECT);
-	effect->SetPosition(x, y);
-	effect->Render();
 }
 
 void Candle::GetBoundingBox(float & left, float & top, float & right, float & bottom)

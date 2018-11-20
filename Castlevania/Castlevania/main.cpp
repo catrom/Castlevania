@@ -69,7 +69,6 @@ class KeyHandler : public KeyEventHandler
 
 		// nếu simon đang quất roi và animation chưa được render hết thì tiếp tục render
 		if (simon->GetState() == HIT_STAND && simon->animations[HIT_STAND]->IsOver(300) == false)
-			/*simon->animations[HIT_STAND]->GetCurrentFrame() < simon->animations[HIT_STAND]->GetFramesSize() - 1*/
 			return;
 
 		if (simon->GetState() == HIT_SIT && simon->animations[HIT_SIT]->IsOver(300) == false)
@@ -324,6 +323,8 @@ int Run()
 
 		if (dt >= tickPerFrame)
 		{
+			DebugOut(L"%d \n", dt);
+
 			frameStart = now;
 
 			game->ProcessKeyboard();

@@ -207,18 +207,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT*
 					{
 						DebugOut(L"collision\n");
 
-						//e->DestroyedEffect();
-						
-						
-						// Tạo một random item và thay thế vào vị trí con trỏ của Candle*
-			
-						Items * item = new Items();
-						item->isEnable = true;
-						item->SetPosition(e->x, e->y);
-						item->GetRandomItem();
-
-						*(obj) = item;
-
+						e->SetState(DESTROYED);
+						e->animations[DESTROYED]->SetAniStartTime(GetTickCount());
 					}
 				}
 			}
@@ -228,16 +218,12 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT*
 
 void Simon::Render()
 {
-	if (state == HIT_SIT || state == HIT_STAND) {		// lấy vị trí của simon để thực hiện gắn roi
-		//D3DXVECTOR3 simonPositon;
-		//GetPosition(simonPositon.x, simonPositon.y);
+	animations[state]->Render(nx, x, y);
 
-		//whip->SetOrientation(nx);
-		//whip->SetWhipPosition(simonPositon, isStand);
-		whip->Render();
+	if (state == HIT_SIT || state == HIT_STAND) {
+		whip->Render(animations[state]->GetCurrentFrame());
 	}
 
-	animations[state]->Render(nx, x, y);
 }
 
 void Simon::SetState(int state)
@@ -266,14 +252,14 @@ void Simon::SetState(int state)
 	case HIT_SIT:
 		isStand = false;
 		animations[state]->Reset();
-		animations[state]->setAniStartTime(GetTickCount());
+		animations[state]->SetAniStartTime(GetTickCount());
 		break;
 	case HIT_STAND:
 	case HIT:
 	case POWER:
 		isStand = true;
 		animations[state]->Reset();
-		animations[state]->setAniStartTime(GetTickCount());
+		animations[state]->SetAniStartTime(GetTickCount());
 		break;
 	default:
 		break;

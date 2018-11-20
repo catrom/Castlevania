@@ -8,7 +8,7 @@
 #define SCREEN_WIDTH			512
 #define SCREEN_HEIGHT			480
 
-#define MAX_FRAME_RATE			200
+#define MAX_FRAME_RATE			90
 
 // Input
 #define DIRECTINPUT_VERSION		0x0800
@@ -67,6 +67,7 @@
 
 // Candle
 #define BIG_CANDLE	0
+#define DESTROYED	1
 
 // Ground
 #define GROUND		0
@@ -127,7 +128,7 @@
 
 // Item
 #define ITEM_FALLING_SPEED			0.2f
-#define ITEM_TIME_DESTROYED			3000
+#define ITEM_TIME_DESTROYED			5000
 #define ITEM_DAGGER_SPEED			0.3f
 
 #pragma endregion

@@ -11,7 +11,8 @@ public:
 
 	virtual void LoadResources(Textures* &textures, Sprites* &sprites, Animations* &animations);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *Objects = NULL, vector<LPGAMEOBJECT*>* coObject = NULL) {}
-	void Render();
+	virtual void Render() {}
+	void Render(int currentID);
 
 	void SetWhipPosition(D3DXVECTOR3 simonPositon, bool isStand);
 	bool CheckCollision(float obj_left, float obj_top, float obj_right, float obj_bottom);
