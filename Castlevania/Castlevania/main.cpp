@@ -6,142 +6,14 @@
 
 #include "Debug.h"
 #include "Game.h"
-#include "GameObject.h"
-#include "Textures.h"
-#include "Simon.h"
-#include "Candle.h"
-#include "TileMap.h"
-#include "Ground.h"
-#include "Items.h"
-#include "Dagger.h"
+#include "Input.h"
+#include "SceneManager.h"
 
+
+Input * input;
 Game * game;
-Simon * simon;
-Candle * candle;
-TileMap * tilemap;
-Ground * ground;
-Items * item;
-Whip * whip;
-Dagger * dagger;
-Effect * effect;
+SceneManager * scenes;
 
-Textures * textures = Textures::GetInstance();
-Sprites * sprites = Sprites::GetInstance();
-Animations * animations = Animations::GetInstance();
-
-vector<LPGAMEOBJECT> Objects;
-
-void LoadAllResources()
-{
-	simon = new Simon();
-	simon->LoadResources(textures, sprites, animations);
-
-	candle = new Candle();
-	candle->LoadResources(textures, sprites, animations);
-
-	effect = new Effect();
-	effect->LoadResources(textures, sprites, animations);
-
-	ground = new Ground();
-	ground->LoadResources(textures, sprites, animations);
-
-	item = new Items();
-	item->LoadResources(textures, sprites, animations);
-
-	whip = new Whip();
-	whip->LoadResources(textures, sprites, animations);
-}
-
-
-class KeyHandler : public KeyEventHandler
-{
-	virtual void KeyState(BYTE *state)
-	{
-		if (simon->GetState() == POWER && simon->animations[POWER]->IsOver(450) == false)
-			return;
-
-		if (simon->GetState() == HIT && simon->animations[HIT]->IsOver(300) == false)
-			return;
-
-		// nếu simon đang nhảy và chưa chạm đất, tiếp tục render trạng thái nhảy
-		if (simon->GetState() == JUMP && simon->IsTouchGround() == false)
-			return;
-
-		// nếu simon đang quất roi và animation chưa được render hết thì tiếp tục render
-		if (simon->GetState() == HIT_STAND && simon->animations[HIT_STAND]->IsOver(300) == false)
-			return;
-
-		if (simon->GetState() == HIT_SIT && simon->animations[HIT_SIT]->IsOver(300) == false)
-			return;
-		
-		
-		if (game->IsKeyDown(DIK_RIGHT))
-		{
-			simon->nx = 1;
-			simon->SetState(WALK);
-		}
-		else if (game->IsKeyDown(DIK_LEFT))
-		{
-			simon->nx = -1;
-			simon->SetState(WALK);
-		}
-		else if (game->IsKeyDown(DIK_DOWN))
-		{
-			simon->SetState(SIT);
-		}
-		else
-		{
-			simon->SetState(STAND);
-		}
-	}
-
-	virtual void OnKeyDown(int KeyCode)
-	{
-		DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
-
-		switch (KeyCode)
-		{
-		case DIK_SPACE:
-			if (simon->GetState() == JUMP || simon->GetState() == HIT_STAND || simon->GetState() == HIT_SIT)
-				return;
-			simon->SetState(JUMP);
-			break;
-		case DIK_Z:
-			if ((simon->GetState() == HIT_STAND || simon->GetState() == HIT_SIT))
-				return;
-			if (simon->GetState() == STAND || simon->GetState() == JUMP)
-			{
-				simon->SetState(HIT_STAND);
-			}
-			else if (simon->GetState() == SIT)
-			{
-				simon->SetState(HIT_SIT);
-			}
-			break;
-		case DIK_X:
-			if (simon->isPowered == false)
-				return;
-			if (simon->GetState() == STAND)
-			{
-				float sx, sy;
-				simon->GetPosition(sx, sy);
-				dagger->SetPosition(sx, sy + 10);
-				dagger->SetOrientation(simon->GetOrientation());
-				dagger->isEnable = true;
-				simon->SetState(HIT);
-			}
-		default:
-			break;
-		}
-	}
-
-	virtual void OnKeyUp(int KeyCode)
-	{
-		DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
-	}
-};
-
-KeyHandler * keyHandler;
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -159,64 +31,8 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 void Update(DWORD dt)
 {
-	//vector<LPGAMEOBJECT*> coObjects; // truyền con trỏ cấp 2, để trong hàm update có thể thay đổi trực tiếp đến phần tử của Objects
 
-	//for (int i = 1; i < Objects.size(); i++)
-	//{
-	//	if (dynamic_cast<Items*>(Objects[i]))
-	//		DebugOut(L"xXX   xx  xxxx\n");
-
-	//	coObjects.push_back(&(Objects[i]));
-	//}
-
-	for (int i = 0; i < Objects.size(); i++)
-	{
-		if (Objects[i]->isEnable == false)
-			continue;
-
-		vector<LPGAMEOBJECT*> coObjects; // truyền con trỏ cấp 2, để trong hàm update có thể thay đổi trực tiếp đến phần tử của Objects
-
-		if (dynamic_cast<Simon*>(Objects[i]))
-		{
-			for (int j = 0; j < Objects.size(); j++)
-			{
-				if (Objects[j]->isEnable == false)
-					continue;
-
-				if (i != j) // thêm tất cả objects "ko phải là simon", dùng trong hàm update của simon 
-					coObjects.push_back(&(Objects[j]));
-			}
-		}
-		else if (dynamic_cast<Items*>(Objects[i]))
-		{
-			for (int j = 0; j < Objects.size(); j++)
-			{
-				if (Objects[i]->isEnable == false)
-					continue;
-
-				if (dynamic_cast<Ground*>(Objects[j])) // thêm tất cả objects "là ground", dùng trong hàm update của item
-				{
-					coObjects.push_back(&(Objects[j]));
-				}
-			}
-		}
-		else
-		{
-			coObjects.push_back(&(Objects[i]));
-		}
-
-
-		Objects[i]->Update(dt, &Objects, &coObjects);
-	}
-
-	//simon->Update(dt, &coObjects);
-
-	// render camera
-	float cx, cy;
-	simon->GetPosition(cx, cy);
-	
-	if (cx > SCREEN_WIDTH / 2 && cx + SCREEN_WIDTH / 2 < tilemap->GetMapWidth()) 
-		game->SetCameraPosition(cx - SCREEN_WIDTH / 2, 0);
+	scenes->Update(dt);
 }
 
 void Render()
@@ -232,16 +48,7 @@ void Render()
 
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 
-		tilemap->Draw(game->GetCameraPositon());
-
-		for (int i = 0; i < Objects.size(); i++)
-		{
-			if (Objects[i]->isEnable == false)
-				continue;
-
-			Objects[i]->Render();
-		}
-			
+		scenes->Render();
 
 		spriteHandler->End();
 		d3ddv->EndScene();
@@ -323,8 +130,6 @@ int Run()
 
 		if (dt >= tickPerFrame)
 		{
-			DebugOut(L"%d \n", dt);
-
 			frameStart = now;
 
 			game->ProcessKeyboard();
@@ -339,55 +144,6 @@ int Run()
 	return 1;
 }
 
-void NewGame()
-{
-	Objects.clear();
-
-	dagger = new Dagger();
-	dagger->isEnable = false;
-	Objects.push_back(dagger);
-
-	simon = new Simon();
-	simon->SetPosition(0.0f, 224.0f);
-	Objects.push_back(simon);
-
-	///
-	
-	candle = new Candle();
-	candle->AddAnimation(BIG_CANDLE_ANI);
-	candle->SetPosition(160.0f, 224.0f);
-	Objects.push_back(candle);
-
-	candle = new Candle();
-	candle->AddAnimation(BIG_CANDLE_ANI);
-	candle->SetPosition(448.0f, 224.0f);
-	Objects.push_back(candle);
-
-	candle = new Candle();
-	candle->AddAnimation(BIG_CANDLE_ANI);
-	candle->SetPosition(672.0f, 224.0f);
-	Objects.push_back(candle);
-
-	candle = new Candle();
-	candle->AddAnimation(BIG_CANDLE_ANI);
-	candle->SetPosition(960.0f, 224.0f);
-	Objects.push_back(candle);
-
-	candle = new Candle();
-	candle->AddAnimation(BIG_CANDLE_ANI);
-	candle->SetPosition(1216.0f, 224.0f);
-	Objects.push_back(candle);
-
-	///
-
-	for (int i = 0; i < 48; i++)
-	{
-		ground = new Ground();
-		ground->AddAnimation(GROUND_ANI);
-		ground->SetPosition(32 * i, 288.0f);
-		Objects.push_back(ground);
-	}
-}
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
@@ -395,19 +151,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	game = Game::GetInstance();
 	game->Init(hWnd);
-
-	keyHandler = new KeyHandler();
-	game->InitKeyboard(keyHandler);
-
-	LoadAllResources();
-
-	NewGame();
-
-	tilemap = new TileMap(0, FILEPATH_TEX_SCENE_1, FILEPATH_DATA_SCENE_1, 1536, 320, 32, 32);
-	tilemap->LoadResources();
-	tilemap->Load_MapData();
 	
+	scenes = new SceneManager(game, SCENE_1);
+	scenes->LoadResources();
+	scenes->LoadObjectsFromFile(FILEPATH_OBJECTS_SCENE_1);
 
+	input = new Input(game, scenes->GetSimon());
+	game->InitKeyboard(input);
 
 	Run();
 

@@ -20,7 +20,7 @@ class Simon : public GameObject
 	Dagger* dagger;
 
 public:
-	bool isStand = true; // xác định trạng thái để lấy vị trí gắn roi cho phù hợp
+	bool isStand = true; // xác định trạng thái đứng/ngồi để lấy vị trí gắn roi cho phù hợp
 	bool isPowered = false; // lấy item, phóng item (up + fight key)
 
 	Simon();

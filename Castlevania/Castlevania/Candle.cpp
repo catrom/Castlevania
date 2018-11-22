@@ -34,7 +34,7 @@ void Candle::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT
 	{
 		this->isEnable = false;
 
-		// Tạo một random item và thay thế vào vị trí con trỏ của Candle*
+		// Tạo một random item và thêm vào Objects
 
 		Items * item = new Items();
 		item->isEnable = true;

@@ -2,6 +2,8 @@
 
 Simon::Simon() : GameObject()
 {
+	SetState(STAND);
+
 	AddAnimation(STAND_ANI);
 	AddAnimation(WALK_ANI);
 	AddAnimation(SIT_ANI);
@@ -10,8 +12,6 @@ Simon::Simon() : GameObject()
 	AddAnimation(HIT_STAND_ANI);
 	AddAnimation(HIT_STAND_ANI);
 	AddAnimation(POWER_ANI);
-
-	SetState(STAND_ANI);
 
 	whip = new Whip();
 	dagger = new Dagger();
@@ -85,8 +85,6 @@ void Simon::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &a
 	ani->Add(10062);
 	ani->Add(10063);
 	animations->Add(POWER_ANI, ani);
-
-	
 }
 
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT*>* coObjects)
@@ -100,7 +98,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT*
 
 	// simple collision with border map
 	if (x < 0) x = 0;
-	if (x >= 1476) x = 1476;
+	//if (x >= 1476) x = 1476;
 
 
 	// Check collision between Simon and other objects
@@ -137,7 +135,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT*
 			else if (dynamic_cast<Ground*>(e->obj))
 			{
 				x += dx;
-				y += min_ty*dy + ny*0.4f;
+				y += min_ty*dy + ny*0.1f;
 
 				if (ny != 0) vy = 0;
 			}
@@ -150,7 +148,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT*
 
 				e->obj->isEnable = false;
 				
-				isPowered = true;
+				isPowered = true;		// phóng dao
 				if (e->obj->GetState() == CHAIN)  // nếu item nhận được là chain
 				{
 					SetState(POWER);			// đổi trạng thái power - biến hình nhấp nháy các kiểu đà điểu
@@ -163,8 +161,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT*
 			}
 			else
 			{
-				x += min_tx*dx + nx*0.4f;
-				y += min_ty*dy + ny*0.4f;
+				x += min_tx*dx + nx*0.1f;
+				y += min_ty*dy + ny*0.1f;
 				if (nx != 0) vx = 0;
 				if (ny != 0) vy = 0;
 			}
@@ -220,7 +218,8 @@ void Simon::Render()
 {
 	animations[state]->Render(nx, x, y);
 
-	if (state == HIT_SIT || state == HIT_STAND) {
+	if (state == HIT_SIT || state == HIT_STAND) 
+	{
 		whip->Render(animations[state]->GetCurrentFrame());
 	}
 

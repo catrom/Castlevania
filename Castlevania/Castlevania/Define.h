@@ -33,8 +33,6 @@
 
 #pragma region PathFile
 
-#define FILEPATH_TEX_SCENE_1		L"Textures\\Scene1.png"
-#define FILEPATH_DATA_SCENE_1		L"Textures\\Scene1_data.txt"
 #define FILEPATH_TEX_SIMON			L"Textures\\Simon.png"
 #define FILEPATH_TEX_WHIP			L"Textures\\Whip.png"
 #define FILEPATH_TEX_CANDLE			L"Textures\\Candle.png"
@@ -43,6 +41,14 @@
 #define FILEPATH_TEX_ITEM_LARGE_HEART			L"Textures\\Items\\Large Heart.png"
 #define FILEPATH_TEX_ITEM_CHAIN					L"Textures\\Items\\Chain.png"
 #define FILEPATH_TEX_ITEM_DAGGER				L"Textures\\Items\\Dagger.png"
+// Scenes
+#define FILEPATH_TEX_MAP_SCENE_1		L"Scenes\\Scene1.png"
+#define FILEPATH_DATA_MAP_SCENE_1		L"Scenes\\Scene1_map.txt"
+#define FILEPATH_OBJECTS_SCENE_1		L"Scenes\\Scene1_objects.txt"
+
+#define FILEPATH_TEX_MAP_SCENE_2		L"Scenes\\Scene2.png"
+#define FILEPATH_DATA_MAP_SCENE_2		L"Scenes\\Scene2_map.txt"
+#define FILEPATH_OBJECTS_SCENE_2		L"Scenes\\Scene2_objects.txt"
 
 
 #pragma endregion
@@ -50,6 +56,11 @@
 
 #pragma region State
  
+// Scene
+#define SCENE_1		0
+#define SCENE_2		1
+#define SCENE_3		2
+
 // Simon
 #define STAND		0
 #define WALK		1
@@ -74,6 +85,10 @@
 
 // Flame Effect
 #define	EFFECT		0
+
+// Ground
+#define GROUND_1	0
+#define GROUND_2	0
 
 // Items
 #define	LARGE_HEART 0
@@ -105,7 +120,8 @@
 #define BIG_CANDLE_ANI	301
 
 // Ground
-#define GROUND_ANI		401
+#define GROUND_ANI_1	401
+#define GROUND_ANI_2	402
 
 // Flame Effect
 #define	EFFECT_ANI		501
@@ -165,6 +181,13 @@
 #define DAGGER_BBOX_HEIGHT			18
 #pragma endregion
 
+
+#pragma region ID objects to load from file
+
+#define	CANDLE		0
+#define	GROUND		1
+
+#pragma endregion
 
 
 

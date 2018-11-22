@@ -1,6 +1,5 @@
 ﻿#include "TileMap.h"
 
-
 TileMap::TileMap(int ID, LPCWSTR filePath_tex, LPCWSTR filePath_data, int map_width, int map_height, int tile_width, int tile_height)
 {
 	this->ID = ID;
@@ -18,9 +17,9 @@ TileMap::TileMap(int ID, LPCWSTR filePath_tex, LPCWSTR filePath_data, int map_wi
 	nums_row = map_Height / tile_Height;
 	nums_col = map_Width / tile_Width;
 
-	//map_Data.resize(nums_row);
-	//for (int i = 0; i < nums_row; i++)
-	//	map_Data.resize(nums_col);
+	
+	LoadResources();
+	Load_MapData();
 }
 
 void TileMap::LoadResources()
@@ -49,7 +48,7 @@ void TileMap::LoadResources()
 	{
 		for (int j = 0; j < nums_colToRead; j++)
 		{
-			sprites->Add(id_sprite, tile_Width * j, tile_Height * i, tile_Width * (j + 1), tile_Height * (i + 1), texTileMap);
+			sprites->Add(1000 * ID + id_sprite, tile_Width * j, tile_Height * i, tile_Width * (j + 1), tile_Height * (i + 1), texTileMap);
 			id_sprite += 1;
 		}
 	}
@@ -90,15 +89,6 @@ void TileMap::Load_MapData()
 
 
 	fs.close();
-
-	//DebugOut(L"%d %d\n", map_Data.size(), map_Data[0].size());
-
-	//for (int i = 0; i < map_Data.size(); i++) {
-	//	for (int j = 0; j < map_Data[i].size(); j++) {
-	//		DebugOut(L"%d ", map_Data[i][j]);
-	//	}
-	//	DebugOut(L"\n");
-	//}
 }
 
 void TileMap::Draw(int start_col, int end_col)
@@ -124,8 +114,21 @@ void TileMap::Draw(D3DXVECTOR3 camPosition)
 			float x = tile_Width * (j - start_col_to_draw) + camPosition.x - (int)camPosition.x % 32; 
 			float y = tile_Height * i;
 			
-			sprites->Get(map_Data[i][j])->Draw(-1, x, y);
+			sprites->Get(1000 * ID + map_Data[i][j])->Draw(-1, x, y);
 		}
 	}
 }
 
+TileMaps * TileMaps::_instance = NULL;
+
+void TileMaps::Add(int ID, LPCWSTR filePath_tex, LPCWSTR filePath_data, int map_width, int map_height, int tile_width, int tile_height)
+{
+	LPTILEMAP tilemap = new TileMap(ID, filePath_tex, filePath_data, map_width, map_height, tile_width, tile_height);
+	tilemaps[ID] = tilemap;
+}
+
+TileMaps * TileMaps::GetInstance()
+{
+	if (_instance == NULL) _instance = new TileMaps();
+	return _instance;
+}

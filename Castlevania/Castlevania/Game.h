@@ -7,6 +7,12 @@
 #include "Define.h"
 #include "Debug.h"
 
+class KeyEventHandler;
+class Game;
+
+typedef KeyEventHandler * LPKEYEVENTHANDLER;
+
+
 /*
 Abstract class to define keyboard event handlers
 */
@@ -17,9 +23,6 @@ public:
 	virtual void OnKeyDown(int KeyCode) = 0;
 	virtual void OnKeyUp(int KeyCode) = 0;
 };
-
-typedef KeyEventHandler * LPKEYEVENTHANDLER; // long pointer
-
 
 class Game
 {

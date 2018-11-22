@@ -7,6 +7,7 @@
 class Ground : public GameObject
 {
 public:
+	Ground();
 
 	virtual void LoadResources(Textures* &textures, Sprites* &sprites, Animations* &animations);
 
