@@ -46,26 +46,10 @@ void Items::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &a
 void Items::Render()
 {
 	animations[state]->Render(-1, x, y);
-	
 }
 
-void Items::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT*>* coObject)
+void Items::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>* coObject)
 {
-	//switch (state)
-	//{
-	//case LARGE_HEART: // large heart
-	//	y += (y + 4.0f <= 288.0f - LARGE_HEART_BBOX_HEIGHT) ? 4.0f : 0;  // 288.0f is ground.x
-	//	break;
-	//case CHAIN: // chain
-	//	y += (y + 4.0f <= 288.0f - CHAIN_BBOX_HEIGHT) ? 4.0f : 0;
-	//	break;
-	//case DAGGER: // dagger
-	//	y += (y + 4.0f <= 288.0f - DAGGER_BBOX_HEIGHT) ? 4.0f : 0;
-	//	break;
-	//default:
-	//	break;
-	//}   // -> just for test, will delete after
-
 	if (timeAppear == -1)
 	{
 		timeAppear = GetTickCount();
@@ -103,7 +87,7 @@ void Items::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT*
 
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
 
-		y += min_ty*dy + ny*0.4f;
+		y += min_ty*dy + ny*0.1f;
 		if (ny != 0) vy = 0;
 	}
 
@@ -111,12 +95,9 @@ void Items::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT*
 	for (int i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
 
-void Items::GetRandomItem()
+void Items::SetItem(int idItem)
 {
-	/*vector<int> listState = { LARGE_HEART, CHAIN, DAGGER };
-	int rd = rand() % 3;
-	state = listState[rd];*/
-	state = rand() % 3;
+	state = idItem;
 }
 
 void Items::GetBoundingBox(float & left, float & top, float & right, float & bottom)

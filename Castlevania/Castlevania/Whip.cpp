@@ -70,6 +70,7 @@ void Whip::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &an
 void Whip::Render(int currentID)
 {
 	animations[state]->RenderByID(currentID, nx, x, y);
+	RenderBoundingBox();
 }
 
 void Whip::SetWhipPosition(D3DXVECTOR3 simonPositon, bool isStand)
@@ -107,10 +108,12 @@ void Whip::GetBoundingBox(float & left, float & top, float & right, float & bott
 	{
 		if (state != LONG_CHAIN)
 			left = (240 - 50) - WHIP_BBOX_WIDTH + x;
-		else left = (240 - 20) - WHIP_BBOX_WIDTH + x;
+		else left = (240 - 20) - LONG_CHAIN_BBOX_WIDTH + x;
 	}
 
-	right = left + WHIP_BBOX_WIDTH;
+	if (state != LONG_CHAIN)
+		right = left + WHIP_BBOX_WIDTH;
+	else  right = left + LONG_CHAIN_BBOX_WIDTH;
 }
 
 

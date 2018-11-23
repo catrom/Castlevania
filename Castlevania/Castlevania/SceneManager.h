@@ -8,7 +8,7 @@
 #include "Simon.h"
 #include "Whip.h"
 #include "Dagger.h"
-#include "Input.h"
+
 
 
 class SceneManager
@@ -43,5 +43,6 @@ public:
 
 	void ChangeScene(int scene);
 	Simon * GetSimon() { return this->simon; }
+	Dagger * GetDagger() { return this->dagger; }
 };
 

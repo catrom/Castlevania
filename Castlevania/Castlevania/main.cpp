@@ -156,7 +156,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	scenes->LoadResources();
 	scenes->LoadObjectsFromFile(FILEPATH_OBJECTS_SCENE_1);
 
-	input = new Input(game, scenes->GetSimon());
+	input = new Input(game, scenes);
 	game->InitKeyboard(input);
 
 	Run();

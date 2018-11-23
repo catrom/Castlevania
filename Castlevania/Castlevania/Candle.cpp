@@ -28,20 +28,23 @@ void Candle::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &
 	animations->Add(BIG_CANDLE_ANI, ani);
 }
 
-void Candle::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT*>* coObject)
+void Candle::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject)
 {
 	if (state == DESTROYED && animations[state]->IsOver(150)) 	//nếu render xong hết đốm lửa rồi thì set enable = false -> biến mất
 	{
 		this->isEnable = false;
 
-		// Tạo một random item và thêm vào Objects
+		if (idItem != -1)
+		{
+			// Tạo một item theo id và thêm vào Objects
 
-		Items * item = new Items();
-		item->isEnable = true;
-		item->SetPosition(x, y);
-		item->GetRandomItem();
+			Items * item = new Items();
+			item->isEnable = true;
+			item->SetPosition(x, y);
+			item->SetItem(idItem);
 
-		Objects->push_back(item);
+			Objects->push_back(item);
+		}
 	}
 		
 }

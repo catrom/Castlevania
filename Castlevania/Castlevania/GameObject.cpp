@@ -8,6 +8,7 @@ GameObject::GameObject()
 	vx = vy = 0;
 	nx = 1;					// right
 	isEnable = true;
+	idItem = -1;
 }
 
 void GameObject::RenderBoundingBox()
@@ -25,7 +26,7 @@ void GameObject::RenderBoundingBox()
 	rect.right = (int)r - (int)l;
 	rect.bottom = (int)b - (int)t;
 
-	Game::GetInstance()->Draw(0, x, y, bbox, rect.left, rect.top, rect.right, rect.bottom, 32);
+	Game::GetInstance()->Draw(0, l, t, bbox, 0, 0, rect.right, rect.bottom, 32);
 }
 
 bool GameObject::AABB(float left_a, float top_a, float right_a, float bottom_a, float left_b, float top_b, float right_b, float bottom_b)
@@ -169,11 +170,11 @@ LPCOLLISIONEVENT GameObject::SweptAABBEx(LPGAMEOBJECT coO)
 	coObjects: the list of colliable objects
 	coEvents: list of potential collisions
 */
-void GameObject::CalcPotentialCollisions(vector<LPGAMEOBJECT*>* coObjects, vector<LPCOLLISIONEVENT>& coEvents)
+void GameObject::CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects, vector<LPCOLLISIONEVENT>& coEvents)
 {
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
-		LPCOLLISIONEVENT e = SweptAABBEx(*(coObjects->at(i)));
+		LPCOLLISIONEVENT e = SweptAABBEx(coObjects->at(i));
 
 		if (e->t > 0 && e->t <= 1.0f)
 			coEvents.push_back(e);
@@ -204,7 +205,7 @@ void GameObject::FilterCollision(vector<LPCOLLISIONEVENT>& coEvents, vector<LPCO
 			min_tx = c->t; nx = c->nx; min_ix = i;
 		}
 
-		if (c->t < min_ty  && c->ny != 0) {
+		if (c->t < min_ty && c->ny != 0) {
 			min_ty = c->t; ny = c->ny; min_iy = i;
 		}
 	}
@@ -219,7 +220,7 @@ void GameObject::AddAnimation(int aniID)
 	animations.push_back(ani);
 }
 
-void GameObject::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT*>* coObject)
+void GameObject::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>* coObject)
 {
 	this->dt = dt;
 	/*x += vx * dt;

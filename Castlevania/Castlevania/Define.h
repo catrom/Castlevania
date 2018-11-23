@@ -33,6 +33,7 @@
 
 #pragma region PathFile
 
+#define FILEPATH_TEX_BBOX			L"Textures\\BBox.png"
 #define FILEPATH_TEX_SIMON			L"Textures\\Simon.png"
 #define FILEPATH_TEX_WHIP			L"Textures\\Whip.png"
 #define FILEPATH_TEX_CANDLE			L"Textures\\Candle.png"
@@ -165,8 +166,9 @@
 #define CANDLE_BBOX_HEIGHT			64
 
 // Whip
-#define WHIP_BBOX_WIDTH				40
-#define WHIP_BBOX_HEIGHT			10
+#define LONG_CHAIN_BBOX_WIDTH		80
+#define WHIP_BBOX_WIDTH				50
+#define WHIP_BBOX_HEIGHT			15
 
 // Large Heart
 #define LARGE_HEART_BBOX_WIDTH		24

@@ -10,7 +10,7 @@ public:
 	Whip();
 
 	virtual void LoadResources(Textures* &textures, Sprites* &sprites, Animations* &animations);
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *Objects = NULL, vector<LPGAMEOBJECT*>* coObject = NULL) {}
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *Objects = NULL, vector<LPGAMEOBJECT>* coObject = NULL) {}
 	virtual void Render() {}
 	void Render(int currentID);
 

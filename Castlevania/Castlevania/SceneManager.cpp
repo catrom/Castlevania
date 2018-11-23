@@ -35,6 +35,8 @@ void SceneManager::LoadResources()
 	
 	tilemaps->Add(SCENE_1, FILEPATH_TEX_MAP_SCENE_1, FILEPATH_DATA_MAP_SCENE_1, 1536, 320, 32, 32);
 	tilemaps->Add(SCENE_2, FILEPATH_TEX_MAP_SCENE_2, FILEPATH_DATA_MAP_SCENE_2, 2880, 352, 32, 32);
+
+	textures->Add(ID_TEX_BBOX, FILEPATH_TEX_BBOX, D3DCOLOR_XRGB(255, 255, 255));
 }
 
 void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
@@ -51,17 +53,22 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 	}
 
 	simon = new Simon();
-	simon->SetPosition(0.0f, 224.0f);
+	simon->SetPosition(0.0f, 220.0f);
 	Objects.push_back(simon);
+
+	dagger = new Dagger();
+	dagger->isEnable = false;
+	Objects.push_back(dagger);
 
 	int ID_Obj;
 	float pos_x, pos_y;
 	int state;
 	bool isEnable;
+	int idItem;
 
 	while (!fs.eof())
 	{
-		fs >> ID_Obj >> pos_x >> pos_y >> state >> isEnable;
+		fs >> ID_Obj >> pos_x >> pos_y >> state >> isEnable >> idItem;
 
 		switch (ID_Obj)
 		{
@@ -69,14 +76,16 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 			candle = new Candle();
 			candle->SetPosition(pos_x, pos_y);
 			candle->SetState(state);
-			candle->isEnable = isEnable;
+			candle->SetEnable(isEnable);
+			candle->SetIDItem(idItem);
 			Objects.push_back(candle);
 			break;
 		case GROUND:
 			ground = new Ground();
 			ground->SetPosition(pos_x, pos_y);
 			ground->SetState(state);
-			candle->isEnable = isEnable;
+			ground->SetEnable(isEnable);
+			ground->SetIDItem(idItem);
 			Objects.push_back(ground);
 			break;
 		default:
@@ -85,7 +94,6 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 	}
 
 	fs.close();
-	DebugOut(L"Objects size: %d \n", Objects.size());
 }
 
 void SceneManager::Update(DWORD dt)
@@ -93,7 +101,7 @@ void SceneManager::Update(DWORD dt)
 	float pos_x, pos_y;
 	simon->GetPosition(pos_x, pos_y);
 	
-	DebugOut(L"%f %f\n", pos_x, pos_y);
+	//DebugOut(L"%f %f\n", pos_x, pos_y);
 
 	if (IDScene == SCENE_1 && pos_x >= 1450.0f)
 	{
@@ -107,7 +115,7 @@ void SceneManager::Update(DWORD dt)
 		if (Objects[i]->isEnable == false)
 			continue;
 
-		vector<LPGAMEOBJECT*> coObjects; // truyền con trỏ cấp 2, để trong hàm update có thể thay đổi trực tiếp đến phần tử của Objects
+		vector<LPGAMEOBJECT> coObjects; // truyền con trỏ cấp 2, để trong hàm update có thể thay đổi trực tiếp đến phần tử của Objects
 
 		if (dynamic_cast<Simon*>(Objects[i]))
 		{
@@ -117,7 +125,7 @@ void SceneManager::Update(DWORD dt)
 					continue;
 
 				if (i != j) // thêm tất cả objects "ko phải là simon", dùng trong hàm update của simon 
-					coObjects.push_back(&(Objects[j]));
+					coObjects.push_back(Objects[j]);
 			}
 		}
 		else if (dynamic_cast<Items*>(Objects[i]))
@@ -129,13 +137,13 @@ void SceneManager::Update(DWORD dt)
 
 				if (dynamic_cast<Ground*>(Objects[j])) // thêm tất cả objects "là ground", dùng trong hàm update của item
 				{
-					coObjects.push_back(&(Objects[j]));
+					coObjects.push_back(Objects[j]);
 				}
 			}
 		}
 		else
 		{
-			coObjects.push_back(&(Objects[i]));
+			coObjects.push_back(Objects[i]);
 		}
 
 
@@ -160,6 +168,7 @@ void SceneManager::Render()
 			continue;
 
 		Objects[i]->Render();
+		Objects[i]->RenderBoundingBox();
 	}
 }
 

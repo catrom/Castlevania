@@ -14,7 +14,7 @@ void Dagger::Render()
 	animations[state]->Render(-nx, x, y);
 }
 
-void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT*>* coObject)
+void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject)
 {
 	if (nx < 0) vx = -ITEM_DAGGER_SPEED;
 	else vx = ITEM_DAGGER_SPEED;

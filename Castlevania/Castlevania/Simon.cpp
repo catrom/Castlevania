@@ -87,7 +87,7 @@ void Simon::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &a
 	animations->Add(POWER_ANI, ani);
 }
 
-void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT*>* coObjects)
+void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>* coObjects)
 {
 	GameObject::Update(dt);
 
@@ -120,6 +120,9 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT*
 
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
 
+		x += min_tx*dx + nx*0.1f;
+		y += min_ty*dy + ny*0.1f;
+
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
@@ -127,28 +130,20 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT*
 			// collision of Simon and Candle -> do nothing -> update x, y;
 			if (dynamic_cast<Candle*>(e->obj))
 			{
-				DebugOut(L"%d %d\n", e->nx, e->ny);
-
 				if (e->nx != 0) x += dx;
 				if (e->ny != 0) y += dy;
 			}
 			else if (dynamic_cast<Ground*>(e->obj))
 			{
-				x += dx;
-				y += min_ty*dy + ny*0.1f;
-
 				if (ny != 0) vy = 0;
 			}
 			else if (dynamic_cast<Items*>(e->obj))
 			{
-
-				//DebugOut(L"%d %d\n", e->nx, e->ny);
-				if (e->nx != 0) x += dx;
-				if (e->ny != 0) y += dy;
-
 				e->obj->isEnable = false;
 				
-				isPowered = true;		// phóng dao
+				if (e->obj->GetState() == DAGGER)
+					isPowered = true;		// phóng dao
+
 				if (e->obj->GetState() == CHAIN)  // nếu item nhận được là chain
 				{
 					SetState(POWER);			// đổi trạng thái power - biến hình nhấp nháy các kiểu đà điểu
@@ -161,8 +156,6 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT*
 			}
 			else
 			{
-				x += min_tx*dx + nx*0.1f;
-				y += min_ty*dy + ny*0.1f;
 				if (nx != 0) vx = 0;
 				if (ny != 0) vy = 0;
 			}
@@ -189,10 +182,10 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT*
 		{
 			for (UINT i = 0; i < coObjects->size(); i++)
 			{
-				LPGAMEOBJECT * obj = coObjects->at(i);
-				if (dynamic_cast<Candle*>(*obj))
+				LPGAMEOBJECT obj = coObjects->at(i);
+				if (dynamic_cast<Candle*>(obj))
 				{
-					Candle * e = dynamic_cast<Candle*> (*obj);
+					Candle * e = dynamic_cast<Candle*> (obj);
 
 					float left, top, right, bottom;
 
@@ -270,8 +263,8 @@ void Simon::GetBoundingBox(float & left, float & top, float & right, float & bot
 	// sprite có kích thước là 60x66, bbox là 40x62
 	left = x + 10;
 	top = y + 2;
-	right = x + SIMON_BBOX_WIDTH;
-	bottom = y + SIMON_BBOX_HEIGHT;
+	right = left + SIMON_BBOX_WIDTH;
+	bottom = top + SIMON_BBOX_HEIGHT;
 }
 
 

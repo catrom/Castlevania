@@ -26,7 +26,7 @@ public:
 	Simon();
 
 	virtual void LoadResources(Textures* &textures, Sprites* &sprites, Animations* &animations);
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *Objects = NULL, vector<LPGAMEOBJECT*> *coObjects = NULL);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *Objects = NULL, vector<LPGAMEOBJECT> *coObjects = NULL);
 	void Render();
 	void SetState(int state);
 
