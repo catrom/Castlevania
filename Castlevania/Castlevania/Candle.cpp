@@ -51,7 +51,7 @@ void Candle::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT
 
 void Candle::Render()
 {
-	animations[state]->Render(nx, x, y);
+	animations[state]->Render(1, nx, x, y);
 }
 
 void Candle::GetBoundingBox(float & left, float & top, float & right, float & bottom)

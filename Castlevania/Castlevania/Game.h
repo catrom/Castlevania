@@ -48,7 +48,9 @@ class Game
 public:
 	void InitKeyboard(LPKEYEVENTHANDLER handler);
 	void Init(HWND hWnd);
-	void Draw(int nx, float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha = 255);
+	void Draw(int accordingCam, int nx, float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha = 255);
+	// accordingCam: render theo camera hay là không
+	// 0 : no, 1 : yes																																					
 
 	int IsKeyDown(int KeyCode);
 	int IsKeyPress(int KeyCode);

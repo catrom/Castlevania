@@ -11,7 +11,7 @@ Dagger::Dagger() : GameObject()
 
 void Dagger::Render()
 {
-	animations[state]->Render(-nx, x, y);
+	animations[state]->Render(1, -nx, x, y);
 }
 
 void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject)

@@ -11,10 +11,10 @@ Sprite::Sprite(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTU
 	this->texture = tex;
 }
 
-void Sprite::Draw(int nx, float x, float y, int alpha)
+void Sprite::Draw(int accordingCam, int nx, float x, float y, int alpha)
 {
 	Game * game = Game::GetInstance();
-	game->Draw(nx, x, y, texture, left, top, right, bottom, alpha);
+	game->Draw(accordingCam, nx, x, y, texture, left, top, right, bottom, alpha);
 }
 
 
@@ -79,13 +79,13 @@ void Animation::RenderByID(int currentID, int nx, float x, float y, int alpha)
 {
 	if (frames.size() == 3) // normal whip, short chain
 	{
-		frames[currentID]->GetSprite()->Draw(nx, x, y, alpha);
+		frames[currentID]->GetSprite()->Draw(1, nx, x, y, alpha);
 	}
 	else  // == 12, long chain
 	{
 		int rd = rand() % 4;
 
-		frames[currentID * 4 + rd]->GetSprite()->Draw(nx, x, y, alpha);
+		frames[currentID * 4 + rd]->GetSprite()->Draw(1, nx, x, y, alpha);
 	}
 }
 

@@ -15,6 +15,13 @@ Simon::Simon() : GameObject()
 
 	whip = new Whip();
 	dagger = new Dagger();
+
+	score = 0;
+	item = -1;
+	energy = 0;
+	life = 3;
+	subWeapon = -1;
+	HP = 10;
 }
 
 void Simon::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &animations)
@@ -141,10 +148,12 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>
 			{
 				e->obj->isEnable = false;
 				
-				if (e->obj->GetState() == DAGGER)
-					isPowered = true;		// phóng dao
 
-				if (e->obj->GetState() == CHAIN)  // nếu item nhận được là chain
+				if (e->obj->GetState() == LARGE_HEART)
+					energy += 5;
+				else if (e->obj->GetState() == DAGGER)
+					isPowered = true;		// phóng dao
+				else if (e->obj->GetState() == CHAIN)  // nếu item nhận được là chain
 				{
 					SetState(POWER);			// đổi trạng thái power - biến hình nhấp nháy các kiểu đà điểu
 					vx = 0;
@@ -209,7 +218,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>
 
 void Simon::Render()
 {
-	animations[state]->Render(nx, x, y);
+	animations[state]->Render(1, nx, x, y);
 
 	if (state == HIT_SIT || state == HIT_STAND) 
 	{

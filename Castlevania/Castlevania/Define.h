@@ -4,7 +4,7 @@
 #define WINDOW_CLASS_NAME		L"Castlevania"
 #define MAIN_WINDOW_TITLE		L"Castlevania"
 
-#define BACKGROUND_COLOR		D3DCOLOR_XRGB(255,255,255)
+#define BACKGROUND_COLOR		D3DCOLOR_XRGB(0,0,0)
 #define SCREEN_WIDTH			512
 #define SCREEN_HEIGHT			480
 
@@ -14,6 +14,8 @@
 #define DIRECTINPUT_VERSION		0x0800
 #define KEYBOARD_BUFFER_SIZE	1024
 
+// Time play
+#define DEFAULT_TIME_PLAY		300
 
 #pragma region Texture ID
 
@@ -27,11 +29,15 @@
 #define ID_TEX_ITEM_LARGE_HEART		6
 #define ID_TEX_ITEM_CHAIN			7
 #define ID_TEX_ITEM_DAGGER			8
+#define ID_TEX_HP					9
 
 #pragma endregion
 
 
 #pragma region PathFile
+
+// Font
+#define FILEPATH_FONT				L"Font\\prstart.ttf"
 
 #define FILEPATH_TEX_BBOX			L"Textures\\BBox.png"
 #define FILEPATH_TEX_SIMON			L"Textures\\Simon.png"
@@ -50,7 +56,8 @@
 #define FILEPATH_TEX_MAP_SCENE_2		L"Scenes\\Scene2.png"
 #define FILEPATH_DATA_MAP_SCENE_2		L"Scenes\\Scene2_map.txt"
 #define FILEPATH_OBJECTS_SCENE_2		L"Scenes\\Scene2_objects.txt"
-
+// Player
+#define FILEPATH_TEX_HP				L"Textures\\HP.png"
 
 #pragma endregion
 

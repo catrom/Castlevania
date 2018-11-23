@@ -109,10 +109,10 @@ void Game::Init(HWND hWnd)
 	DebugOut(L"[INFO] Init Game done\n");
 }
 
-void Game::Draw(int nx, float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha)
+void Game::Draw(int accordingCam, int nx, float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha)
 {
 	// calculate position of object in real world
-	D3DXVECTOR3 p(x - cameraPosition.x, y - cameraPosition.y, 0);
+	D3DXVECTOR3 p(x - cameraPosition.x * accordingCam, y - cameraPosition.y * accordingCam, 0);
 
 	RECT rect;
 	rect.left = left;

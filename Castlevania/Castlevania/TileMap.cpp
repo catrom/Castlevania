@@ -95,7 +95,7 @@ void TileMap::Draw(int start_col, int end_col)
 {
 	for (int i = 0; i < 10; i++) {
 		for (int j = start_col; j <= end_col; j++) {
-			sprites->Get(map_Data[i][j])->Draw(-1, tile_Width * (j - start_col), tile_Height * i);
+			sprites->Get(map_Data[i][j])->Draw(1, -1, tile_Width * (j - start_col), tile_Height * i);
 		}
 	}
 }
@@ -112,9 +112,9 @@ void TileMap::Draw(D3DXVECTOR3 camPosition)
 			// +camPosition.x để luôn giữ camera ở chính giữa, vì trong hàm draw có trừ cho camPosition.x làm các object đều di chuyển theo
 			// +(int)camPosition.x % 32 để giữ cho camera chuyển động mượt (thực ra giá trị này bằng vx*dt, chính là quãng đường dịch chuyển của simon)
 			float x = tile_Width * (j - start_col_to_draw) + camPosition.x - (int)camPosition.x % 32; 
-			float y = tile_Height * i;
+			float y = tile_Height * i + 80;
 			
-			sprites->Get(1000 * ID + map_Data[i][j])->Draw(-1, x, y);
+			sprites->Get(1000 * ID + map_Data[i][j])->Draw(1, -1, x, y);
 		}
 	}
 }

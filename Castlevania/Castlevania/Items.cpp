@@ -45,7 +45,7 @@ void Items::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &a
 
 void Items::Render()
 {
-	animations[state]->Render(-1, x, y);
+	animations[state]->Render(1, -1, x, y);
 }
 
 void Items::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>* coObject)

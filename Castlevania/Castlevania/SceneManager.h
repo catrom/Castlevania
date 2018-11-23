@@ -44,5 +44,6 @@ public:
 	void ChangeScene(int scene);
 	Simon * GetSimon() { return this->simon; }
 	Dagger * GetDagger() { return this->dagger; }
+	int GetIDScene() { return this->IDScene; }
 };
 

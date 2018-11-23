@@ -8,12 +8,12 @@
 #include "Game.h"
 #include "Input.h"
 #include "SceneManager.h"
-
+#include "Player.h"
 
 Input * input;
 Game * game;
 SceneManager * scenes;
-
+Player * player;
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -31,7 +31,7 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 void Update(DWORD dt)
 {
-
+	player->Update(dt);
 	scenes->Update(dt);
 }
 
@@ -49,6 +49,7 @@ void Render()
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 
 		scenes->Render();
+		player->Render();
 
 		spriteHandler->End();
 		d3ddv->EndScene();
@@ -109,6 +110,7 @@ int Run()
 {
 	MSG msg;
 	int done = 0;
+	DWORD gamePlayStartTime = GetTickCount();
 	DWORD frameStart = GetTickCount();
 	DWORD tickPerFrame = 1000 / MAX_FRAME_RATE;
 
@@ -158,6 +160,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	input = new Input(game, scenes);
 	game->InitKeyboard(input);
+
+	player = new Player(scenes, game);
+	player->Init();
 
 	Run();
 
