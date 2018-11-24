@@ -49,7 +49,7 @@ void Animation::Add(int spriteID, DWORD time)
 	frames.push_back(frame);
 }
 
-void Animation::Render(int nx, float x, float y, int alpha)
+void Animation::Render(int accordingCam, int nx, float x, float y, int alpha)
 {
 	DWORD now = GetTickCount();
 
@@ -72,7 +72,7 @@ void Animation::Render(int nx, float x, float y, int alpha)
 		}
 	}
 
-	frames[currentFrame]->GetSprite()->Draw(nx, x, y, alpha);
+	frames[currentFrame]->GetSprite()->Draw(accordingCam, nx, x, y, alpha);
 }
 
 void Animation::RenderByID(int currentID, int nx, float x, float y, int alpha)

@@ -15,7 +15,7 @@
 #define KEYBOARD_BUFFER_SIZE	1024
 
 // Time play
-#define DEFAULT_TIME_PLAY		300
+#define DEFAULT_TIME_PLAY		1000
 
 #pragma region Texture ID
 
@@ -26,10 +26,30 @@
 #define ID_TEX_CANDLE				3
 #define ID_TEX_GROUND				4
 #define ID_TEX_EFFECT				5
-#define ID_TEX_ITEM_LARGE_HEART		6
-#define ID_TEX_ITEM_CHAIN			7
-#define ID_TEX_ITEM_DAGGER			8
-#define ID_TEX_HP					9
+#define ID_TEX_HP					6
+#define ID_TEX_RECT					7
+//Items
+#define ID_TEX_ITEM_STOP_WATCH		8
+#define ID_TEX_ITEM_DAGGER			9
+#define ID_TEX_ITEM_AXE 			10
+#define ID_TEX_ITEM_HOLY_WATER		11
+#define ID_TEX_ITEM_BOOMERANG		12
+#define ID_TEX_ITEM_SMALL_HEART		13
+#define ID_TEX_ITEM_LARGE_HEART		14
+#define ID_TEX_ITEM_CROSS			15
+#define ID_TEX_ITEM_INVISIBILITY_POTION		16
+#define ID_TEX_ITEM_CHAIN			17
+#define ID_TEX_ITEM_MONEY_BAG		18
+#define ID_TEX_ITEM_DOUBLE_SHOT		19
+#define ID_TEX_ITEM_TRIPLE_SHOT		20
+#define ID_TEX_ITEM_PORK_CHOP		21
+#define ID_TEX_ITEM_MAGIC_CRYSTAL	22
+//SubWeapons
+#define ID_TEX_WEAPONS_AXE			23
+#define ID_TEX_WEAPONS_HOLY_WATER	24
+#define ID_TEX_WEAPONS_BOOMERANG	25
+
+
 
 #pragma endregion
 
@@ -39,15 +59,37 @@
 // Font
 #define FILEPATH_FONT				L"Font\\prstart.ttf"
 
+// Objects
 #define FILEPATH_TEX_BBOX			L"Textures\\BBox.png"
 #define FILEPATH_TEX_SIMON			L"Textures\\Simon.png"
 #define FILEPATH_TEX_WHIP			L"Textures\\Whip.png"
 #define FILEPATH_TEX_CANDLE			L"Textures\\Candle.png"
 #define FILEPATH_TEX_GROUND			L"Textures\\Ground.png"
 #define FILEPATH_TEX_EFFECT			L"Textures\\Effect.png"
-#define FILEPATH_TEX_ITEM_LARGE_HEART			L"Textures\\Items\\Large Heart.png"
-#define FILEPATH_TEX_ITEM_CHAIN					L"Textures\\Items\\Chain.png"
+
+// Items
+#define FILEPATH_TEX_ITEM_STOP_WATCH			L"Textures\\Items\\Stopwatch.png"
 #define FILEPATH_TEX_ITEM_DAGGER				L"Textures\\Items\\Dagger.png"
+#define FILEPATH_TEX_ITEM_AXE					L"Textures\\Items\\Axe.png"
+#define FILEPATH_TEX_ITEM_HOLY_WATER			L"Textures\\Items\\HolyWater.png"
+#define FILEPATH_TEX_ITEM_BOOMERANG				L"Textures\\Items\\Boomerang.png"
+#define FILEPATH_TEX_ITEM_SMALL_HEART			L"Textures\\Items\\SmallHeart.png"
+#define FILEPATH_TEX_ITEM_LARGE_HEART			L"Textures\\Items\\LargeHeart.png"
+#define FILEPATH_TEX_ITEM_CROSS					L"Textures\\Items\\Cross.png"
+#define FILEPATH_TEX_ITEM_INVISIBILITY_POTION	L"Textures\\Items\\InvisibilityPotion.png"
+#define FILEPATH_TEX_ITEM_CHAIN					L"Textures\\Items\\Chain.png"
+#define FILEPATH_TEX_ITEM_MONEY_BAG				L"Textures\\Items\\MoneyBag.png"
+#define FILEPATH_TEX_ITEM_DOUBLE_SHOT			L"Textures\\Items\\DoubleShot.png"
+#define FILEPATH_TEX_ITEM_TRIPLE_SHOT			L"Textures\\Items\\TripleShot.png"
+#define FILEPATH_TEX_ITEM_PORK_CHOP				L"Textures\\Items\\PorkChop.png"
+#define FILEPATH_TEX_ITEM_MAGIC_CRYSTAL			L"Textures\\Items\\MagicCrystal.png"
+
+// Sub Weapons
+#define FILEPATH_TEX_WEAPONS_AXE				L"Textures\\SubWeapons\\Axe.png"
+#define FILEPATH_TEX_WEAPONS_HOLY_WATER			L"Textures\\SubWeapons\\HolyWater.png"
+#define FILEPATH_TEX_WEAPONS_BOOMERANG			L"Textures\\SubWeapons\\Boomerang.png"
+
+
 // Scenes
 #define FILEPATH_TEX_MAP_SCENE_1		L"Scenes\\Scene1.png"
 #define FILEPATH_DATA_MAP_SCENE_1		L"Scenes\\Scene1_map.txt"
@@ -56,8 +98,10 @@
 #define FILEPATH_TEX_MAP_SCENE_2		L"Scenes\\Scene2.png"
 #define FILEPATH_DATA_MAP_SCENE_2		L"Scenes\\Scene2_map.txt"
 #define FILEPATH_OBJECTS_SCENE_2		L"Scenes\\Scene2_objects.txt"
+
 // Player
 #define FILEPATH_TEX_HP				L"Textures\\HP.png"
+#define FILEPATH_TEX_RECT			L"Textures\\Rect.png"
 
 #pragma endregion
 
@@ -99,11 +143,26 @@
 #define GROUND_2	0
 
 // Items
-#define	LARGE_HEART 0
-#define CHAIN		1
-#define	DAGGER		2
+#define	STOP_WATCH	 0
+#define DAGGER		1
+#define	AXE			2
+#define HOLY_WATER	3
+#define BOOMERANG	4
+#define SMALL_HEART	5
+#define LARGE_HEART  6
+#define CROSS       7
+#define INVISIBILITY_POTION	8
+#define CHAIN		9
+#define MONEY_BAG_RED	10
+#define MONEY_BAG_BLUE	11
+#define MONEY_BAG_WHITE 12
+#define MONEY_BAG_FLASHING 13
+#define DOUBLE_SHOT		14
+#define TRIPLE_SHOT		15
+#define PORK_CHOP		16
+#define MAGIC_CRYSTAL	17
 
-// Dagger
+
 #define DAGGER_STATE 0
 
 #pragma endregion
@@ -135,9 +194,31 @@
 #define	EFFECT_ANI		501
 
 // Items
-#define	LARGE_HEART_ANI 601
-#define CHAIN_ANI		701
-#define	DAGGER_ANI		801
+#define	STOP_WATCH_ANI				601
+#define DAGGER_ANI					602
+#define	AXE_ANI						603
+#define HOLY_WATER_ANI				604
+#define BOOMERANG_ANI				605
+#define SMALL_HEART_ANI				606
+#define LARGE_HEART_ANI				607
+#define CROSS_ANI					608
+#define INVISIBILITY_POTION_ANI		609
+#define CHAIN_ANI					610
+#define MONEY_BAG_RED_ANI			611
+#define MONEY_BAG_BLUE_ANI			612
+#define MONEY_BAG_WHITE_ANI			613
+#define MONEY_BAG_FLASHING_ANI		614
+#define DOUBLE_SHOT_ANI				615
+#define TRIPLE_SHOT_ANI				616
+#define PORK_CHOP_ANI				617
+#define MAGIC_CRYSTAL_ANI			618
+
+// SubWeapons
+#define	WEAPONS_STOP_WATCH_ANI				701
+#define WEAPONS_DAGGER_ANI					702
+#define	WEAPONS_AXE_ANI						703
+#define WEAPONS_HOLY_WATER_ANI				704
+#define WEAPONS_BOOMERANG_ANI				705
 
 #pragma endregion
 
@@ -153,7 +234,17 @@
 // Item
 #define ITEM_FALLING_SPEED			0.2f
 #define ITEM_TIME_DESTROYED			5000
-#define ITEM_DAGGER_SPEED			0.3f
+
+// SubWeapons
+#define WEAPONS_DAGGER_SPEED		0.3f
+
+#define WEAPONS_AXE_SPEED_X			0.2f
+#define WEAPONS_AXE_SPEED_Y			0.5f
+
+#define WEAPONS_HOLY_WATER_SPEED_X	0.25f
+#define WEAPONS_HOLY_WATER_SPEED_Y	0.1f
+
+#define WEAPONS_BOOMERANG_SPEED		0.5f
 
 #pragma endregion
 
@@ -177,17 +268,7 @@
 #define WHIP_BBOX_WIDTH				50
 #define WHIP_BBOX_HEIGHT			15
 
-// Large Heart
-#define LARGE_HEART_BBOX_WIDTH		24
-#define LARGE_HEART_BBOX_HEIGHT		20
 
-// Chain
-#define CHAIN_BBOX_WIDTH			32
-#define CHAIN_BBOX_HEIGHT			32
-
-// Dagger
-#define DAGGER_BBOX_WIDTH			32
-#define DAGGER_BBOX_HEIGHT			18
 #pragma endregion
 
 

@@ -32,6 +32,9 @@ void SceneManager::LoadResources()
 	whip = new Whip();
 	whip->LoadResources(textures, sprites, animations);
 
+	weapon = new SubWeapon();
+	weapon->LoadResources(textures, sprites, animations);
+
 	
 	tilemaps->Add(SCENE_1, FILEPATH_TEX_MAP_SCENE_1, FILEPATH_DATA_MAP_SCENE_1, 1536, 320, 32, 32);
 	tilemaps->Add(SCENE_2, FILEPATH_TEX_MAP_SCENE_2, FILEPATH_DATA_MAP_SCENE_2, 2880, 352, 32, 32);
@@ -56,9 +59,9 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 	simon->SetPosition(0.0f, 220.0f);
 	Objects.push_back(simon);
 
-	dagger = new Dagger();
-	dagger->isEnable = false;
-	Objects.push_back(dagger);
+	weapon = new SubWeapon();
+	weapon->SetEnable(false);
+	Objects.push_back(weapon);
 
 	int ID_Obj;
 	float pos_x, pos_y;
@@ -103,7 +106,7 @@ void SceneManager::Update(DWORD dt)
 	
 	//DebugOut(L"%f %f\n", pos_x, pos_y);
 
-	if (IDScene == SCENE_1 && pos_x >= 1450.0f)
+	if (IDScene == SCENE_1 && pos_x >= 1400.0f)
 	{
 		ChangeScene(SCENE_2);
 		game->SetCameraPosition(0.0f, 0.0f);
@@ -119,23 +122,35 @@ void SceneManager::Update(DWORD dt)
 
 		if (dynamic_cast<Simon*>(Objects[i]))
 		{
-			for (int j = 0; j < Objects.size(); j++)
+			for (int j = 2; j < Objects.size(); j++)
 			{
 				if (Objects[j]->isEnable == false)
 					continue;
 
-				if (i != j) // thêm tất cả objects "ko phải là simon", dùng trong hàm update của simon 
-					coObjects.push_back(Objects[j]);
+				coObjects.push_back(Objects[j]);
 			}
 		}
 		else if (dynamic_cast<Items*>(Objects[i]))
 		{
 			for (int j = 0; j < Objects.size(); j++)
 			{
-				if (Objects[i]->isEnable == false)
+				if (Objects[j]->isEnable == false)
 					continue;
 
 				if (dynamic_cast<Ground*>(Objects[j])) // thêm tất cả objects "là ground", dùng trong hàm update của item
+				{
+					coObjects.push_back(Objects[j]);
+				}
+			}
+		}
+		else if (dynamic_cast<SubWeapon*>(Objects[i]))
+		{
+			for (int j = 1; j < Objects.size(); j++)
+			{
+				if (Objects[j]->isEnable == false)
+					continue;
+
+				if (dynamic_cast<Ground*>(Objects[j])) // thêm tất cả objects "là ground", dùng trong hàm update của subweapon
 				{
 					coObjects.push_back(Objects[j]);
 				}
@@ -160,7 +175,7 @@ void SceneManager::Update(DWORD dt)
 
 void SceneManager::Render()
 {
-	tilemaps->Get(IDScene)->Draw(game->GetCameraPositon());
+	//tilemaps->Get(IDScene)->Draw(game->GetCameraPositon());
 
 	for (int i = 0; i < Objects.size(); i++)
 	{

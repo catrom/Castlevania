@@ -19,9 +19,12 @@ Player::~Player()
 void Player::Init()
 {
 	// Khởi tạo list máu của Simon và Enemy
-	Textures * texture = Textures::GetInstance();
-	texture->Add(ID_TEX_HP, FILEPATH_TEX_HP, D3DCOLOR_XRGB(255, 255, 255));
-	LPDIRECT3DTEXTURE9 texHP = texture->Get(ID_TEX_HP);
+	Textures * textures = Textures::GetInstance();
+	textures->Add(ID_TEX_HP, FILEPATH_TEX_HP, D3DCOLOR_XRGB(255, 255, 255));
+	textures->Add(ID_TEX_RECT, FILEPATH_TEX_RECT, D3DCOLOR_XRGB(255, 255, 255)); 
+
+	LPDIRECT3DTEXTURE9 texHP = textures->Get(ID_TEX_HP);
+	LPDIRECT3DTEXTURE9 texRect = textures->Get(ID_TEX_RECT);
 
 	for (int i = 0; i < 16; i++)
 	{
@@ -34,6 +37,16 @@ void Player::Init()
 		Sprite * enemy = new Sprite(102, 16, 0, 24, 15, texHP);
 		enemyHP.push_back(enemy);
 	}
+
+	// Khởi tạo list subweapon để render trong subweaponbox
+	subWeaponBox = new Sprite(110, 0, 0, 95, 40, texRect);
+
+	Sprites * sprites = Sprites::GetInstance();
+	subWeaponList.push_back(sprites->Get(80001)); // ID bên class Items
+	subWeaponList.push_back(sprites->Get(80002));
+	subWeaponList.push_back(sprites->Get(80003));
+	subWeaponList.push_back(sprites->Get(80004));
+	subWeaponList.push_back(sprites->Get(80005));
 
 	// Font
 	font = NULL;
@@ -52,7 +65,7 @@ void Player::Init()
 
 	information = "SCORE-000000 TIME 0000 SCENE 00\n";
 	information +="PLAYER                  -00\n";
-	information +="ENEMY                  P-00\n";
+	information +="ENEMY                   -00\n";
 }
 
 void Player::Update(DWORD dt)
@@ -62,7 +75,7 @@ void Player::Update(DWORD dt)
 	life = simon->GetLife();
 	item = simon->GetItem();
 	subWeapon = simon->GetSubWeapon();
-	scene = scenes->GetIDScene() + 1;
+	scene = scenes->GetIDScene() + 1; // (based 1)
 	simonHP = simon->GetHP();
 	time += dt;
 
@@ -86,7 +99,7 @@ void Player::Update(DWORD dt)
 	// update information
 	information = "SCORE-" + score_str + " TIME " + time_str + " SCENE " + scene_str + "\n";
 	information += "PLAYER                  -" + energy_str + "\n";
-	information += "ENEMY                  P-" + life_str + "\n";
+	information += "ENEMY                   -" + life_str + "\n";
 }
 
 void Player::Render()
@@ -99,15 +112,28 @@ void Player::Render()
 		font->DrawTextA(NULL, information.c_str(), -1, &rect, DT_LEFT, D3DCOLOR_XRGB(255, 255, 255));
 	}
 
+	// draw subWeaponBox
+	subWeaponBox->Draw(0, -1, 288, 32);
+
+	if (subWeapon != -1) // simon get subweapon
+	{
+		subWeaponList[subWeapon]->Draw(0, -1, 303, 40);
+	}
+
 	for (int i = 0; i < simonHP; i++)
 	{
 		playerHP[i]->Draw(0, -1, 105 + i * 9, 31);
-		//enemyHP[i]->Draw(0, -1, 106 + i * 9, 47);
+		enemyHP[i]->Draw(0, -1, 106 + i * 9, 47);
 	}
 
 	for (int i = simonHP; i < 16; i++)
 	{
 		loseHP[i]->Draw(0, -1, 105 + i * 9, 31);
+	}
+
+	for (int i = 0; i < 16; i++)
+	{
+		enemyHP[i]->Draw(0, -1, 106 + i * 9, 47);
 	}
 }
 

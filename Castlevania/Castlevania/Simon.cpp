@@ -14,13 +14,12 @@ Simon::Simon() : GameObject()
 	AddAnimation(POWER_ANI);
 
 	whip = new Whip();
-	dagger = new Dagger();
 
 	score = 0;
 	item = -1;
-	energy = 0;
+	energy = 99;
 	life = 3;
-	subWeapon = -1;
+	subWeapon = BOOMERANG;
 	HP = 10;
 }
 
@@ -148,19 +147,58 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>
 			{
 				e->obj->isEnable = false;
 				
+				int idItem = e->obj->GetState();
 
-				if (e->obj->GetState() == LARGE_HEART)
-					energy += 5;
-				else if (e->obj->GetState() == DAGGER)
-					isPowered = true;		// phóng dao
-				else if (e->obj->GetState() == CHAIN)  // nếu item nhận được là chain
+				switch (idItem)
 				{
-					SetState(POWER);			// đổi trạng thái power - biến hình nhấp nháy các kiểu đà điểu
+				case STOP_WATCH:
+				case DAGGER:
+				case AXE:
+				case HOLY_WATER:
+				case BOOMERANG:
+					subWeapon = idItem;
+					break;
+				case SMALL_HEART:
+					energy += 1;
+					break;
+				case LARGE_HEART:
+					energy += 5;
+					break;
+				case CROSS:
+					break;
+				case INVISIBILITY_POTION:
+					break;
+				case CHAIN:
+					SetState(POWER); // đổi trạng thái power - biến hình nhấp nháy các kiểu đà điểu
 					vx = 0;
-
 					// lên đời whip
 					if (whip->GetState() == NORMAL_WHIP) whip->SetState(SHORT_CHAIN);
 					else if (whip->GetState() == SHORT_CHAIN) whip->SetState(LONG_CHAIN);
+					break;
+				case MONEY_BAG_RED:
+					score += 100;
+					break;
+				case MONEY_BAG_BLUE:
+					score += 400;
+					break;
+				case MONEY_BAG_WHITE:
+					score += 700;
+					break;
+				case MONEY_BAG_FLASHING:
+					score += 1000;
+					break;
+				case DOUBLE_SHOT:
+				case TRIPLE_SHOT:
+					item = idItem;
+					break;
+				case PORK_CHOP:
+					HP += 2;
+					break;
+				case MAGIC_CRYSTAL:
+					HP = 16;
+					break;
+				default:
+					break;
 				}
 			}
 			else

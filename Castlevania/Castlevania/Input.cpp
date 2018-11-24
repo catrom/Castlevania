@@ -35,12 +35,12 @@ void Input::KeyState(BYTE *state)
 
 	if (game->IsKeyDown(DIK_RIGHT))
 	{
-		scene->GetSimon()->nx = 1;
+		scene->GetSimon()->SetOrientation(1);
 		scene->GetSimon()->SetState(WALK);
 	}
 	else if (game->IsKeyDown(DIK_LEFT))
 	{
-		scene->GetSimon()->nx = -1;
+		scene->GetSimon()->SetOrientation(-1);
 		scene->GetSimon()->SetState(WALK);
 	}
 	else if (game->IsKeyDown(DIK_DOWN))
@@ -78,16 +78,27 @@ void Input::OnKeyDown(int KeyCode)
 		}
 		break;
 	case DIK_X:
-		if (scene->GetSimon()->isPowered == false)
+		if (scene->GetSimon()->GetSubWeapon() == -1 || scene->GetSimon()->GetEnergy() == 0) // không có vũ khí hoặc enery = 0
 			return;
 		if (scene->GetSimon()->GetState() == STAND || scene->GetSimon()->GetState() == JUMP)
 		{
+			Simon * simon = scene->GetSimon();
+			SubWeapon * weapon = scene->GetWeapon();
 			float sx, sy;
-			scene->GetSimon()->GetPosition(sx, sy);
-			scene->GetDagger()->SetPosition(sx, sy + 10);
-			scene->GetDagger()->SetOrientation(scene->GetSimon()->GetOrientation());
-			scene->GetDagger()->isEnable = true;
-			scene->GetSimon()->SetState(HIT);
+
+			// position
+			simon->GetPosition(sx, sy);
+			weapon->SetPosition(sx, sy);
+
+			// orientation
+			weapon->SetOrientation(simon->GetOrientation());
+
+			// state weapon
+			weapon->SetState(simon->GetSubWeapon());
+
+			weapon->SetEnable(true);
+			simon->LoseEnergy(1);
+			simon->SetState(HIT);
 		}
 	default:
 		break;

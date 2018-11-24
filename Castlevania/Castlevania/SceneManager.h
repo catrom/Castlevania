@@ -7,8 +7,7 @@
 #include "Ground.h"
 #include "Simon.h"
 #include "Whip.h"
-#include "Dagger.h"
-
+#include "SubWeapon.h"
 
 
 class SceneManager
@@ -21,8 +20,8 @@ class SceneManager
 	Ground * ground;
 	Items * item;
 	Whip * whip;
-	Dagger * dagger;
 	Effect * effect;
+	SubWeapon * weapon;
 
 	TileMaps * tilemaps = TileMaps::GetInstance();
 	Textures * textures = Textures::GetInstance();
@@ -42,8 +41,9 @@ public:
 	virtual void Render();
 
 	void ChangeScene(int scene);
-	Simon * GetSimon() { return this->simon; }
-	Dagger * GetDagger() { return this->dagger; }
 	int GetIDScene() { return this->IDScene; }
+
+	Simon * GetSimon() { return this->simon; }
+	SubWeapon * GetWeapon() { return this->weapon; }
 };
 

@@ -10,14 +10,12 @@
 #include "Effect.h"
 #include "Ground.h"
 #include "Items.h"
-#include "Dagger.h"
 
 using namespace std;
 
 class Simon : public GameObject
 {
 	Whip* whip;
-	Dagger* dagger;
 
 	int score;
 	int item;
@@ -47,6 +45,8 @@ public:
 	int GetItem() { return this->item; }
 	int GetSubWeapon() { return this->subWeapon; }
 	int GetHP() { return this->HP; }
+
+	void LoseEnergy(int amount) { energy -= amount; }
 };
 
 

@@ -25,6 +25,9 @@ private:
 	vector<LPSPRITE> playerHP;
 	vector<LPSPRITE> enemyHP;
 	vector<LPSPRITE> loseHP;
+
+	Sprite * subWeaponBox;
+	vector<LPSPRITE> subWeaponList;
 	
 	int score;
 	int time;
