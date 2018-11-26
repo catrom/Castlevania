@@ -8,6 +8,7 @@
 #include "Simon.h"
 #include "Whip.h"
 #include "SubWeapon.h"
+#include "Stair.h"
 
 
 class SceneManager
@@ -22,6 +23,7 @@ class SceneManager
 	Whip * whip;
 	Effect * effect;
 	SubWeapon * weapon;
+	Stair * stair;
 
 	TileMaps * tilemaps = TileMaps::GetInstance();
 	Textures * textures = Textures::GetInstance();
@@ -29,6 +31,7 @@ class SceneManager
 	Animations * animations = Animations::GetInstance();
 
 	vector<LPGAMEOBJECT> Objects;
+	vector<LPGAMEOBJECT> listStairs;
 
 public:
 	SceneManager(Game * game, int idScene);
@@ -45,5 +48,6 @@ public:
 
 	Simon * GetSimon() { return this->simon; }
 	SubWeapon * GetWeapon() { return this->weapon; }
+	vector<LPGAMEOBJECT> * GetListStairs() { return &(this->listStairs); }
 };
 

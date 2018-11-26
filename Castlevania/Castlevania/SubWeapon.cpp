@@ -61,7 +61,7 @@ void SubWeapon::LoadResources(Textures *& textures, Sprites *& sprites, Animatio
 	animations->Add(WEAPONS_AXE_ANI, ani);
 
 	ani = new Animation();
-	ani->Add(90011);
+	ani->Add(90011, 300);
 	ani->Add(90012);
 	ani->Add(90013);
 	animations->Add(WEAPONS_HOLY_WATER_ANI, ani);

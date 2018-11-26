@@ -14,14 +14,31 @@ Input::~Input()
 
 void Input::KeyState(BYTE *state)
 {
+	bool isCollideWithStair = false;
+
+	Simon * simon = scene->GetSimon();
+	vector<LPGAMEOBJECT> * listStairs = scene->GetListStairs();
+
+	if (simon->CheckCollisionWithStair(listStairs) == true)
+	{
+		isCollideWithStair = true;
+	}
+
 	if (scene->GetSimon()->GetState() == POWER && scene->GetSimon()->animations[POWER]->IsOver(450) == false)
 		return;
 
 	if (scene->GetSimon()->GetState() == HIT && scene->GetSimon()->animations[HIT]->IsOver(300) == false)
 		return;
 
+	if (scene->GetSimon()->GetState() == STAIR_UP && scene->GetSimon()->animations[STAIR_UP]->IsOver(200) == false)
+		return;
+
+	if (scene->GetSimon()->GetState() == STAIR_DOWN && scene->GetSimon()->animations[STAIR_DOWN]->IsOver(200) == false)
+		return;
+
 	// nếu simon đang nhảy và chưa chạm đất, tiếp tục render trạng thái nhảy
-	if (scene->GetSimon()->GetState() == JUMP && scene->GetSimon()->IsTouchGround() == false)
+	if ((scene->GetSimon()->GetState() == JUMP || scene->GetSimon()->GetState() == STAND)
+		&&  scene->GetSimon()->IsTouchGround() == false)
 		return;
 
 	// nếu simon đang quất roi và animation chưa được render hết thì tiếp tục render
@@ -45,10 +62,80 @@ void Input::KeyState(BYTE *state)
 	}
 	else if (game->IsKeyDown(DIK_DOWN))
 	{
+		if (isCollideWithStair == true)
+		{
+			if (simon->IsMovingDown() == false)
+				return;
+
+			int prevState = simon->GetState();
+
+			simon->SetOrientation(-simon->GetStairDirection());
+			simon->SetState(STAIR_DOWN);
+
+			if (simon->IsStandOnStair() == false)
+			{
+				simon->SetStandOnStair(true);
+				simon->PositionCorrection();
+			}
+			else if (prevState == STAIR_UP)
+			{
+				simon->PositionCorrection(prevState);
+			}
+			return;
+		}
+
 		scene->GetSimon()->SetState(SIT);
+	}
+	else if (game->IsKeyDown(DIK_UP))
+	{
+		int prevState = simon->GetState();
+
+		if (isCollideWithStair == true)
+		{
+			if (simon->IsMovingUp() == false)
+			{
+				simon->SetState(STAND);
+
+				// chỉnh lại vị trí một tí
+				if (prevState == STAIR_UP)
+				{
+					float sx, sy, nx;
+					simon->GetPosition(sx, sy);
+					nx = simon->GetOrientation();
+					simon->SetPosition(sx + nx * 5.0f, sy - 5.0f);
+				}
+				
+				return;
+			}
+				
+
+			simon->SetOrientation(simon->GetStairDirection());
+			simon->SetState(STAIR_UP);
+
+			if (simon->IsStandOnStair() == false)
+			{
+				simon->SetStandOnStair(true);
+				simon->PositionCorrection();
+			}
+			else if (prevState == STAIR_DOWN)
+			{
+				simon->PositionCorrection(prevState);
+			}
+		}
+		else
+		{
+			simon->SetState(STAND);
+		}
 	}
 	else
 	{
+		if (isCollideWithStair == true && (simon->GetState() == STAIR_UP || simon->GetState() == STAIR_DOWN))
+		{
+			simon->StandOnStair();
+			simon->animations[simon->GetState()]->Reset();
+			return;
+		}
+
 		scene->GetSimon()->SetState(STAND);
 	}
 }

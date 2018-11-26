@@ -70,7 +70,6 @@ void Whip::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &an
 void Whip::Render(int currentID)
 {
 	animations[state]->RenderByID(currentID, nx, x, y);
-	RenderBoundingBox();
 }
 
 void Whip::SetWhipPosition(D3DXVECTOR3 simonPositon, bool isStand)

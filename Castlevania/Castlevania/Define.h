@@ -8,7 +8,7 @@
 #define SCREEN_WIDTH			512
 #define SCREEN_HEIGHT			480
 
-#define MAX_FRAME_RATE			90
+#define MAX_FRAME_RATE			150
 
 // Input
 #define DIRECTINPUT_VERSION		0x0800
@@ -28,6 +28,9 @@
 #define ID_TEX_EFFECT				5
 #define ID_TEX_HP					6
 #define ID_TEX_RECT					7
+#define ID_TEX_SMALL_CANDLE			26
+#define ID_TEX_STAIR				27
+
 //Items
 #define ID_TEX_ITEM_STOP_WATCH		8
 #define ID_TEX_ITEM_DAGGER			9
@@ -64,8 +67,10 @@
 #define FILEPATH_TEX_SIMON			L"Textures\\Simon.png"
 #define FILEPATH_TEX_WHIP			L"Textures\\Whip.png"
 #define FILEPATH_TEX_CANDLE			L"Textures\\Candle.png"
+#define FILEPATH_TEX_SMALL_CANDLE	L"Textures\\SmallCandle.png"
 #define FILEPATH_TEX_GROUND			L"Textures\\Ground.png"
 #define FILEPATH_TEX_EFFECT			L"Textures\\Effect.png"
+#define FILEPATH_TEX_STAIR			L"Textures\\Stair.png"
 
 // Items
 #define FILEPATH_TEX_ITEM_STOP_WATCH			L"Textures\\Items\\Stopwatch.png"
@@ -120,8 +125,13 @@
 #define JUMP		3
 #define HIT_SIT		4
 #define HIT_STAND	5
-#define HIT			6  // dagger, no need whip
+#define HIT			6  // subweapon, no need whip
 #define POWER		7
+#define STAIR_UP	8
+#define STAIR_DOWN	9
+#define HIT_STAIR_UP	10
+#define HIT_STAIR_DOWN	11
+
 
 // Whip
 #define NORMAL_WHIP		0
@@ -130,17 +140,19 @@
 
 // Candle
 #define BIG_CANDLE	0
-#define DESTROYED	1
-
-// Ground
-#define GROUND		0
+#define SMALL_CANDLE	1
+#define DESTROYED	2
 
 // Flame Effect
 #define	EFFECT		0
 
 // Ground
 #define GROUND_1	0
-#define GROUND_2	0
+#define GROUND_2	1
+
+// Stair
+#define STAIR_LEFT_UP		0
+#define STAIR_RIGHT_DOWN	1
 
 // Items
 #define	STOP_WATCH	 0
@@ -177,6 +189,10 @@
 #define HIT_SIT_ANI		105
 #define HIT_STAND_ANI	106
 #define POWER_ANI		107
+#define STAIR_UP_ANI	108
+#define STAIR_DOWN_ANI	109
+#define HIT_STAIR_UP_ANI	110
+#define HIT_STAIR_DOWN_ANI	111
 
 // Whip
 #define NORMAL_WHIP_ANI	201
@@ -185,6 +201,7 @@
 
 // Candle
 #define BIG_CANDLE_ANI	301
+#define SMALL_CANDLE_ANI	302
 
 // Ground
 #define GROUND_ANI_1	401
@@ -220,6 +237,10 @@
 #define WEAPONS_HOLY_WATER_ANI				704
 #define WEAPONS_BOOMERANG_ANI				705
 
+// Stair
+#define STAIR_LEFT_UP_ANI		801
+#define STAIR_RIGHT_DOWN_ANI	802
+
 #pragma endregion
 
 
@@ -230,6 +251,8 @@
 #define SIMON_JUMP_SPEED_Y			0.5f
 #define SIMON_GRAVITY				0.002f
 #define SIMON_GRAVITY_LOWER			0.001f
+#define SIMON_STAIR_SPEED_X			0.08f
+#define SIMON_STAIR_SPEED_Y			0.08f
 
 // Item
 #define ITEM_FALLING_SPEED			0.2f
@@ -263,19 +286,25 @@
 #define CANDLE_BBOX_WIDTH			32
 #define CANDLE_BBOX_HEIGHT			64
 
+#define SMALL_CANDLE_BBOX_WIDTH		16
+#define SMALL_CANDLE_BBOX_HEIGHT	32
+
 // Whip
 #define LONG_CHAIN_BBOX_WIDTH		80
 #define WHIP_BBOX_WIDTH				50
 #define WHIP_BBOX_HEIGHT			15
 
-
+// Stair
+#define STAIR_BBOX_WIDTH			32
+#define STAIR_BBOX_HEIGHT			32
 #pragma endregion
 
 
-#pragma region ID objects to load from file
+#pragma region ID objects to load from file -> very important
 
 #define	CANDLE		0
 #define	GROUND		1
+#define STAIR		2
 
 #pragma endregion
 

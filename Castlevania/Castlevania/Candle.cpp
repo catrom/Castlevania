@@ -5,6 +5,7 @@
 Candle::Candle() : GameObject()
 {
 	AddAnimation(BIG_CANDLE_ANI);
+	AddAnimation(SMALL_CANDLE_ANI);
 	AddAnimation(EFFECT_ANI);
 
 	SetState(BIG_CANDLE);
@@ -13,12 +14,16 @@ Candle::Candle() : GameObject()
 void Candle::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &animations)
 {
 	textures->Add(ID_TEX_CANDLE, FILEPATH_TEX_CANDLE, D3DCOLOR_XRGB(255, 255, 255));
+	textures->Add(ID_TEX_SMALL_CANDLE, FILEPATH_TEX_SMALL_CANDLE, D3DCOLOR_XRGB(255, 255, 255));
 
-	LPDIRECT3DTEXTURE9 texCandle = textures->Get(ID_TEX_CANDLE);
+	LPDIRECT3DTEXTURE9 texBigCandle = textures->Get(ID_TEX_CANDLE);
 
-	sprites->Add(30001, 0, 0, 32, 64, texCandle); // normal candle
-	sprites->Add(30002, 32, 0, 64, 64, texCandle);
+	sprites->Add(30001, 0, 0, 32, 64, texBigCandle); // normal candle
+	sprites->Add(30002, 32, 0, 64, 64, texBigCandle);
 
+	LPDIRECT3DTEXTURE9 texSmallCandle = textures->Get(ID_TEX_SMALL_CANDLE);
+	sprites->Add(30003, 0, 0, 16, 32, texSmallCandle); // normal candle
+	sprites->Add(30004, 16, 0, 32, 32, texSmallCandle);
 
 	LPANIMATION ani;
 
@@ -26,6 +31,12 @@ void Candle::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &
 	ani->Add(30001, 150);
 	ani->Add(30002, 150);
 	animations->Add(BIG_CANDLE_ANI, ani);
+
+	ani = new Animation();
+	ani->Add(30003, 150);
+	ani->Add(30004, 150);
+	animations->Add(SMALL_CANDLE_ANI, ani);
+
 }
 
 void Candle::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject)
@@ -58,6 +69,16 @@ void Candle::GetBoundingBox(float & left, float & top, float & right, float & bo
 {
 	left = x;
 	top = y;
-	right = x + CANDLE_BBOX_WIDTH;
-	bottom = y + CANDLE_BBOX_HEIGHT;
+
+	if (state == BIG_CANDLE)
+	{
+		right = left + CANDLE_BBOX_WIDTH;
+		bottom = top + CANDLE_BBOX_HEIGHT;
+	}
+	
+	else if (state == SMALL_CANDLE)
+	{
+		right = left + SMALL_CANDLE_BBOX_WIDTH;
+		bottom = top + SMALL_CANDLE_BBOX_HEIGHT;
+	}
 }

@@ -35,11 +35,17 @@ void SceneManager::LoadResources()
 	weapon = new SubWeapon();
 	weapon->LoadResources(textures, sprites, animations);
 
+	stair = new Stair();
+	stair->LoadResources(textures, sprites, animations);
+
 	
 	tilemaps->Add(SCENE_1, FILEPATH_TEX_MAP_SCENE_1, FILEPATH_DATA_MAP_SCENE_1, 1536, 320, 32, 32);
 	tilemaps->Add(SCENE_2, FILEPATH_TEX_MAP_SCENE_2, FILEPATH_DATA_MAP_SCENE_2, 2880, 352, 32, 32);
 
 	textures->Add(ID_TEX_BBOX, FILEPATH_TEX_BBOX, D3DCOLOR_XRGB(255, 255, 255));
+
+	simon = new Simon();
+	weapon = new SubWeapon();
 }
 
 void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
@@ -50,18 +56,11 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 	fs.open(FilePath, ios::in);
 	if (fs.fail())
 	{
-		DebugOut(L"[INFO] Scene %d load data failed: file path = %s\n", IDScene, FilePath);
+		DebugOut(L"[ERROR] Scene %d load data failed: file path = %s\n", IDScene, FilePath);
 		fs.close();
 		return;
 	}
 
-	simon = new Simon();
-	simon->SetPosition(0.0f, 220.0f);
-	Objects.push_back(simon);
-
-	weapon = new SubWeapon();
-	weapon->SetEnable(false);
-	Objects.push_back(weapon);
 
 	int ID_Obj;
 	float pos_x, pos_y;
@@ -91,12 +90,28 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 			ground->SetIDItem(idItem);
 			Objects.push_back(ground);
 			break;
+		case STAIR:
+			stair = new Stair();
+			stair->SetPosition(pos_x, pos_y);
+			stair->SetState(state);
+			stair->SetEnable(isEnable);
+			stair->SetIDItem(idItem);
+			Objects.push_back(stair);
+			listStairs.push_back(stair);
 		default:
 			break;
 		}
 	}
 
 	fs.close();
+
+
+	simon->SetPosition(0.0f, 220.0f);
+	Objects.push_back(simon);
+
+	weapon->SetEnable(false);
+	Objects.push_back(weapon);
+
 }
 
 void SceneManager::Update(DWORD dt)
@@ -122,12 +137,13 @@ void SceneManager::Update(DWORD dt)
 
 		if (dynamic_cast<Simon*>(Objects[i]))
 		{
-			for (int j = 2; j < Objects.size(); j++)
+			for (int j = 0; j < Objects.size(); j++)
 			{
 				if (Objects[j]->isEnable == false)
 					continue;
 
-				coObjects.push_back(Objects[j]);
+				if (dynamic_cast<Stair*>(Objects[j]) == false)
+					coObjects.push_back(Objects[j]);
 			}
 		}
 		else if (dynamic_cast<Items*>(Objects[i]))
@@ -175,7 +191,7 @@ void SceneManager::Update(DWORD dt)
 
 void SceneManager::Render()
 {
-	//tilemaps->Get(IDScene)->Draw(game->GetCameraPositon());
+	tilemaps->Get(IDScene)->Draw(game->GetCameraPositon());
 
 	for (int i = 0; i < Objects.size(); i++)
 	{
@@ -183,7 +199,7 @@ void SceneManager::Render()
 			continue;
 
 		Objects[i]->Render();
-		Objects[i]->RenderBoundingBox();
+		//Objects[i]->RenderBoundingBox();
 	}
 }
 
