@@ -44,20 +44,7 @@ void Candle::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT
 	if (state == DESTROYED && animations[state]->IsOver(150)) 	//nếu render xong hết đốm lửa rồi thì set enable = false -> biến mất
 	{
 		this->isEnable = false;
-
-		if (idItem != -1)
-		{
-			// Tạo một item theo id và thêm vào Objects
-
-			Items * item = new Items();
-			item->isEnable = true;
-			item->SetPosition(x, y);
-			item->SetItem(idItem);
-
-			Objects->push_back(item);
-		}
-	}
-		
+	}		
 }
 
 void Candle::Render()

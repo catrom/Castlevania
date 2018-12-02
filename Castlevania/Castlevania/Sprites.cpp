@@ -77,7 +77,7 @@ void Animation::Render(int accordingCam, int nx, float x, float y, int alpha)
 
 void Animation::RenderByID(int currentID, int nx, float x, float y, int alpha)
 {
-	if (frames.size() == 3) // normal whip, short chain
+	if (frames.size() <= 5) // normal whip, short chain
 	{
 		frames[currentID]->GetSprite()->Draw(1, nx, x, y, alpha);
 	}

@@ -66,7 +66,6 @@ public:
 	static Game* GetInstance();
 
 	void SetCameraPosition(float x, float y);
-
 	
 
 

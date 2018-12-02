@@ -10,6 +10,8 @@
 #include "Effect.h"
 #include "Ground.h"
 #include "Items.h"
+#include "Door.h"
+#include "ChangeSceneObject.h"
 
 using namespace std;
 
@@ -24,6 +26,10 @@ class Simon : public GameObject
 	int subWeapon;
 	int HP;
 
+	float autoWalkDistance = 0;
+	int stateAfterAutoWalk = -1;
+	int nxAfterAutoWalk = 0;
+
 public:
 	bool isStand = true; // xác định trạng thái đứng/ngồi để lấy vị trí gắn roi cho phù hợp
 	bool isPowered = false; // lấy item, phóng item (up + fight key)
@@ -31,8 +37,12 @@ public:
 	bool isStandOnStair = false; // trạng thái đang đứng trên cầu thang 
 	bool isMovingUp = false;
 	bool isMovingDown = false;
+	bool isAutoWalk = false;
+	bool isWalkThroughDoor = false;
 	int stairDirection = 0; // 1: trái dưới - phải trên, -1: trái trên - phải dưới
-	
+
+	int changeScene = -1;
+
 
 	LPGAMEOBJECT stairCollided = nullptr; // lưu bậc thang va chạm với simon -> để xét vị trí cho chuẩn trong hàm PositionCorrection
 
@@ -55,6 +65,9 @@ public:
 
 	bool IsTouchGround() { return isTouchGround; }
 
+	int GetChangeScene() { return this->changeScene; }
+	void SetChangeScene(int x) { this->changeScene = x; }
+
 	bool IsStandOnStair() { return this->isStandOnStair; }
 	void SetStandOnStair(bool x) { this->isStandOnStair = x; }
 
@@ -66,11 +79,21 @@ public:
 	// Kiểm tra va chạm của Simon với list bậc thang
 	bool CheckCollisionWithStair(vector<LPGAMEOBJECT> * listStair);
 	LPGAMEOBJECT GetStairCollided() { return this->stairCollided; }
+
+	bool CheckCollisionWithItem(vector<LPGAMEOBJECT> * listItem);
 	
+	bool CheckChangeScene(vector<LPCHANGESCENEOBJ> * listChangeScene);
+
 	// Căn chỉnh lại vị trí của Simon với bậc thang
 	void PositionCorrection(int prevState = -1);  // -1 is not changed  
 	// Giữ cho Simon đứng yên trên bậc thang
 	void StandOnStair();
+
+	void SetAutoWalkDistance(float d) { this->autoWalkDistance = d; }
+	void SetStateAfterAutoWalk(int state) { this->stateAfterAutoWalk = state; }
+
+	void AutoWalk(float distance, int new_state, int new_nx);
+	bool IsAutoWalk() { return this->isAutoWalk; }
 };
 
 

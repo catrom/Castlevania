@@ -24,6 +24,10 @@ void Input::KeyState(BYTE *state)
 		isCollideWithStair = true;
 	}
 
+
+	if (scene->GetSimon()->IsAutoWalk() == true)
+		return;
+
 	if (scene->GetSimon()->GetState() == POWER && scene->GetSimon()->animations[POWER]->IsOver(450) == false)
 		return;
 
@@ -62,15 +66,22 @@ void Input::KeyState(BYTE *state)
 	}
 	else if (game->IsKeyDown(DIK_DOWN))
 	{
+		int prevState = simon->GetState();
+
 		if (isCollideWithStair == true)
 		{
 			if (simon->IsMovingDown() == false)
-				return;
+			{
+				simon->SetState(STAND);
 
-			int prevState = simon->GetState();
+				return;
+			}
+
+			
 
 			simon->SetOrientation(-simon->GetStairDirection());
 			simon->SetState(STAIR_DOWN);
+
 
 			if (simon->IsStandOnStair() == false)
 			{
@@ -93,24 +104,21 @@ void Input::KeyState(BYTE *state)
 		if (isCollideWithStair == true)
 		{
 			if (simon->IsMovingUp() == false)
-			{
-				simon->SetState(STAND);
-
-				// chỉnh lại vị trí một tí
-				if (prevState == STAIR_UP)
+			{			
+				if (prevState == STAIR_UP || prevState == STAIR_DOWN)
 				{
-					float sx, sy, nx;
-					simon->GetPosition(sx, sy);
-					nx = simon->GetOrientation();
-					simon->SetPosition(sx + nx * 5.0f, sy - 5.0f);
+					int nx = simon->GetOrientation();
+					simon->SetState(STAIR_UP);
+					simon->AutoWalk(16 * nx, STAND, nx);
 				}
-				
+
 				return;
 			}
 				
 
 			simon->SetOrientation(simon->GetStairDirection());
 			simon->SetState(STAIR_UP);
+			
 
 			if (simon->IsStandOnStair() == false)
 			{
@@ -187,6 +195,10 @@ void Input::OnKeyDown(int KeyCode)
 			simon->LoseEnergy(1);
 			simon->SetState(HIT);
 		}
+	case DIK_C:
+		scene->GetSimon()->SetState(WALK);
+		scene->GetSimon()->AutoWalk(100, STAND, -1);
+		break;
 	default:
 		break;
 	}

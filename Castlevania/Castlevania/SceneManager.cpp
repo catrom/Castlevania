@@ -5,6 +5,15 @@ SceneManager::SceneManager(Game * game, int idScene)
 {
 	this->game = game;
 	IDScene = idScene;
+
+	curCameraPosition = D3DXVECTOR3(0, 0, 0);
+	lastCameraPosition = D3DXVECTOR3(0, 0, 0);
+
+	lastIndexTileMap = 0;
+	curIndexTileMap = 0;
+
+	lastSimonPosition = D3DXVECTOR2(-1, -1);
+	curSimonPosition = D3DXVECTOR2(-1, -1);
 }
 
 
@@ -38,9 +47,12 @@ void SceneManager::LoadResources()
 	stair = new Stair();
 	stair->LoadResources(textures, sprites, animations);
 
-	
+	door = new Door();
+	door->LoadResources(textures, sprites, animations);
+
 	tilemaps->Add(SCENE_1, FILEPATH_TEX_MAP_SCENE_1, FILEPATH_DATA_MAP_SCENE_1, 1536, 320, 32, 32);
-	tilemaps->Add(SCENE_2, FILEPATH_TEX_MAP_SCENE_2, FILEPATH_DATA_MAP_SCENE_2, 2880, 352, 32, 32);
+	tilemaps->Add(SCENE_2, FILEPATH_TEX_MAP_SCENE_2, FILEPATH_DATA_MAP_SCENE_2, 5632, 352, 32, 32);
+	tilemaps->Add(SCENE_3, FILEPATH_TEX_MAP_SCENE_3, FILEPATH_DATA_MAP_SCENE_3, 1024, 352, 32, 32);
 
 	textures->Add(ID_TEX_BBOX, FILEPATH_TEX_BBOX, D3DCOLOR_XRGB(255, 255, 255));
 
@@ -51,6 +63,11 @@ void SceneManager::LoadResources()
 void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 {
 	Objects.clear();
+	listCandles.clear();
+	listStairs.clear();
+	listGrounds.clear();
+	listItems.clear();
+	listDoors.clear();
 
 	fstream fs;
 	fs.open(FilePath, ios::in);
@@ -80,6 +97,7 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 			candle->SetState(state);
 			candle->SetEnable(isEnable);
 			candle->SetIDItem(idItem);
+			listCandles.push_back(candle);
 			Objects.push_back(candle);
 			break;
 		case GROUND:
@@ -88,6 +106,7 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 			ground->SetState(state);
 			ground->SetEnable(isEnable);
 			ground->SetIDItem(idItem);
+			listGrounds.push_back(ground);
 			Objects.push_back(ground);
 			break;
 		case STAIR:
@@ -96,8 +115,19 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 			stair->SetState(state);
 			stair->SetEnable(isEnable);
 			stair->SetIDItem(idItem);
-			Objects.push_back(stair);
 			listStairs.push_back(stair);
+			Objects.push_back(stair);
+			break;
+		case DOOR:
+			door = new Door();
+			door->SetPosition(pos_x, pos_y);
+			door->SetState(state);
+			door->SetEnable(isEnable);
+			door->SetIDItem(idItem);
+			door->SetIsRenderAnimation(false);
+			listDoors.push_back(door);
+			Objects.push_back(door);
+			break;
 		default:
 			break;
 		}
@@ -105,101 +135,289 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 
 	fs.close();
 
-
-	simon->SetPosition(0.0f, 220.0f);
 	Objects.push_back(simon);
 
 	weapon->SetEnable(false);
 	Objects.push_back(weapon);
+}
 
+void SceneManager::CreateListChangeSceneObjects()
+{
+	listChangeSceneObjs.clear();
+
+	switch (IDScene)
+	{
+	case SCENE_1:
+		changeScene = new ChangeSceneObject(1440, 336, SCENE_2);
+		listChangeSceneObjs.push_back(changeScene);
+		break;
+	case SCENE_2:
+		changeScene = new ChangeSceneObject(3168, 432, SCENE_3);
+		listChangeSceneObjs.push_back(changeScene);
+		changeScene = new ChangeSceneObject(3808, 432, SCENE_3);
+		listChangeSceneObjs.push_back(changeScene);
+		break;
+	case SCENE_3:
+		changeScene = new ChangeSceneObject(96, 80, SCENE_2);
+		listChangeSceneObjs.push_back(changeScene);
+		changeScene = new ChangeSceneObject(736, 80, SCENE_2);
+		listChangeSceneObjs.push_back(changeScene);
+		break;
+	default:
+		break;
+	}
 }
 
 void SceneManager::Update(DWORD dt)
 {
-	float pos_x, pos_y;
-	simon->GetPosition(pos_x, pos_y);
-	
-	//DebugOut(L"%f %f\n", pos_x, pos_y);
+	// Cập nhật trạng thái Simon đi qua cửa:
+	// Di chuyển Camera -> Mở cửa -> AutoWalk -> Di chuyển Camera
 
-	if (IDScene == SCENE_1 && pos_x >= 1400.0f)
+	if (simon->isWalkThroughDoor == true)
 	{
-		ChangeScene(SCENE_2);
-		game->SetCameraPosition(0.0f, 0.0f);
-		return;
+		isMovingCamera = true;
+		countDxCamera = 0;
+
+		simon->isWalkThroughDoor = false;
 	}
 
-	for (int i = 0; i < Objects.size(); i++)
+	if (isMovingCamera == true)
 	{
-		if (Objects[i]->isEnable == false)
-			continue;
-
-		vector<LPGAMEOBJECT> coObjects; // truyền con trỏ cấp 2, để trong hàm update có thể thay đổi trực tiếp đến phần tử của Objects
-
-		if (dynamic_cast<Simon*>(Objects[i]))
+		if (countDxCamera < 224)	// Di chuyển camera một đoạn 224
 		{
-			for (int j = 0; j < Objects.size(); j++)
-			{
-				if (Objects[j]->isEnable == false)
-					continue;
+			D3DXVECTOR3 cam = game->GetCameraPositon();
+			game->SetCameraPosition(cam.x + 2, cam.y);
+			countDxCamera += 2;
 
-				if (dynamic_cast<Stair*>(Objects[j]) == false)
-					coObjects.push_back(Objects[j]);
-			}
+			return;
 		}
-		else if (dynamic_cast<Items*>(Objects[i]))
-		{
-			for (int j = 0; j < Objects.size(); j++)
-			{
-				if (Objects[j]->isEnable == false)
-					continue;
 
-				if (dynamic_cast<Ground*>(Objects[j])) // thêm tất cả objects "là ground", dùng trong hàm update của item
-				{
-					coObjects.push_back(Objects[j]);
-				}
-			}
-		}
-		else if (dynamic_cast<SubWeapon*>(Objects[i]))
+		if (isSetSimonAutoWalk == false)  // AutoWalk
 		{
-			for (int j = 1; j < Objects.size(); j++)
-			{
-				if (Objects[j]->isEnable == false)
-					continue;
+			isSetSimonAutoWalk = true;  
 
-				if (dynamic_cast<Ground*>(Objects[j])) // thêm tất cả objects "là ground", dùng trong hàm update của subweapon
-				{
-					coObjects.push_back(Objects[j]);
-				}
-			}
+			simon->SetState(WALK);
+			simon->vy = 0;
+			simon->AutoWalk(120, STAND, 1);
 		}
 		else
 		{
-			coObjects.push_back(Objects[i]);
+			if (simon->IsAutoWalk() == false)
+			{
+				if (countDxCamera < 480) // Di chuyển camera thêm một đoạn nữa
+				{
+					D3DXVECTOR3 cam = game->GetCameraPositon();
+					game->SetCameraPosition(cam.x + 2, cam.y);
+					countDxCamera += 2;
+
+					return;
+				}
+				else
+				{
+					isMovingCamera = false;
+					isSetSimonAutoWalk = false;
+					countDxCamera = 0;
+
+					tilemaps->Get(IDScene)->index += 1;
+				}
+			}
+		}
+	}
+
+	// Khi Simon va chạm với ChangScene objects, tiến hành thay đổi, cập nhật trạng thái
+	if (simon->GetChangeScene() != -1)
+	{
+		if (IDScene == SCENE_1 || 
+			(IDScene == SCENE_2 && simon->GetState() == STAIR_DOWN) ||
+			(IDScene == SCENE_3 && simon->GetState() == STAIR_UP))
+		{
+			bool isNeedToUpdatePosition = false;
+
+			if (IDScene != SCENE_1) isNeedToUpdatePosition = true;
+
+			float x, y;
+			simon->GetPosition(x, y);
+
+			//DebugOut(L"%f %f \n", x, y);
+
+			IDScene = simon->GetChangeScene();
+			ChangeScene(IDScene);
+
+			if (isNeedToUpdatePosition == true)
+			{
+				switch (IDScene)
+				{
+				case SCENE_3:
+					if (x < 3200.0f) simon->SetPosition(93.0f, 48.0f);
+					else simon->SetPosition(733.0f, 48.0f);
+
+					tilemaps->Get(IDScene)->index = 0;
+					game->SetCameraPosition(0.0f, 0.0f);
+					break;
+				case SCENE_2:
+					if (x < 320.0f) simon->SetPosition(3136.0f, 335.0f);
+					else simon->SetPosition(3776.0f, 335.0f);
+
+					simon->SetState(STAND);
+					tilemaps->Get(IDScene)->index = 1;
+					game->SetCameraPosition(3056.0f, 0.0f);
+					break;
+				default:
+					break;
+				}
+			}
+
+			simon->SetChangeScene(-1);
+		}
+		else
+		{
+			simon->SetChangeScene(-1);
+		}
+	}
+
+	for (UINT i = 0; i < Objects.size(); i++)
+	{
+		LPGAMEOBJECT object = Objects[i];
+
+		if (object->IsEnable() == false)
+		{
+			if (dynamic_cast<Candle*>(object))
+			{
+				if (object->idItem != -1)
+				{
+					// Tạo một item theo id và thêm vào Objects
+
+					item = new Items();
+					item->SetEnable(true);
+					item->SetPosition(object->x, object->y);
+					item->SetItem(object->idItem);
+
+					listItems.push_back(item);
+					Objects.push_back(item);
+				}
+			}
+
+			Objects.erase(Objects.begin() + i);
+			i--;
+
+			continue;
 		}
 
 
-		Objects[i]->Update(dt, &Objects, &coObjects);
+		vector<LPGAMEOBJECT> coObjects;
+
+		if (dynamic_cast<Simon*>(object))
+		{
+			for (auto candle : listCandles)
+			{
+				if (candle->IsEnable() == false)
+					continue;
+
+				coObjects.push_back(candle);
+			}
+
+			for (auto ground : listGrounds)
+			{
+				if (ground->IsEnable() == false)
+					continue;
+
+				coObjects.push_back(ground);
+			}
+
+			for (auto door : listDoors)
+			{
+				if (door->IsEnable() == false)
+					continue;
+
+				coObjects.push_back(door);
+			}
+
+			simon->Update(dt, &Objects, &coObjects);
+			simon->CheckCollisionWithItem(&listItems);
+			simon->CheckChangeScene(&listChangeSceneObjs);
+		}
+		else if (dynamic_cast<Items*>(object))
+		{
+			for (auto ground : listGrounds)
+			{
+				if (ground->IsEnable() == false)
+					continue;
+
+				coObjects.push_back(ground);
+			}
+
+			object->Update(dt, &Objects, &coObjects);
+		}
+		else if (dynamic_cast<SubWeapon*>(object))
+		{
+			//for (int j = 1; j < Objects.size(); j++)
+			//{
+			//	if (Objects[j]->isEnable == false)
+			//		continue;
+
+			//	if (dynamic_cast<Ground*>(Objects[j])) // thêm tất cả objects "là ground", dùng trong hàm update của subweapon
+			//	{
+			//		coObjects.push_back(Objects[j]);
+			//	}
+			//}
+		}
+		else
+		{
+			object->Update(dt, &Objects, &coObjects);
+		}
 	}
 
-	// render camera
-	float cx, cy;
-	simon->GetPosition(cx, cy);
 
-	if (cx > SCREEN_WIDTH / 2 && cx + SCREEN_WIDTH / 2 < tilemaps->Get(IDScene)->GetMapWidth())
-		game->SetCameraPosition(cx - SCREEN_WIDTH / 2, 0);
+
+	// update camera
+
+	TileMap * map = tilemaps->Get(IDScene);
+	int min_col = map->min_max_col_to_draw[map->index][0];
+	int max_col = map->min_max_col_to_draw[map->index][1];
+
+	if (simon->x > SCREEN_WIDTH / 2 &&
+		simon->x + SCREEN_WIDTH / 2 < tilemaps->Get(IDScene)->GetMapWidth())
+	{
+		if (simon->x >= min_col * 32 + (SCREEN_WIDTH / 2 - 16) &&
+			simon->x <= max_col * 32 - (SCREEN_WIDTH/ 2 - 16))
+		{
+			game->SetCameraPosition(simon->x - SCREEN_WIDTH / 2, 0);
+		}
+	}
 }
 
 void SceneManager::Render()
 {
 	tilemaps->Get(IDScene)->Draw(game->GetCameraPositon());
 
-	for (int i = 0; i < Objects.size(); i++)
+	for (auto candle : listCandles)
 	{
-		if (Objects[i]->isEnable == false)
+		if (candle->IsEnable() == false)
 			continue;
 
-		Objects[i]->Render();
-		//Objects[i]->RenderBoundingBox();
+		candle->Render();
+		candle->RenderBoundingBox();
+	}
+
+	for (auto item : listItems)
+	{
+		if (item->IsEnable() == false)
+			continue;
+
+		item->Render();
+		item->RenderBoundingBox();
+	}
+
+	simon->Render();
+	simon->RenderBoundingBox();
+
+	for (auto door : listDoors)
+	{
+		if (door->IsEnable() == false)
+			continue;
+
+		door->Render();
+		door->RenderBoundingBox();
 	}
 }
 
@@ -211,11 +429,25 @@ void SceneManager::ChangeScene(int scene)
 	{
 	case SCENE_1:
 		LoadObjectsFromFile(FILEPATH_OBJECTS_SCENE_1);
+		CreateListChangeSceneObjects();
+		simon->SetPosition(0.0f, 302.0f);
+		game->SetCameraPosition(0.0f, 0.0f);
 		break;
 	case SCENE_2:
 		LoadObjectsFromFile(FILEPATH_OBJECTS_SCENE_2);
+		CreateListChangeSceneObjects();
+		simon->SetPosition(0.0f, 335.0f);
+		game->SetCameraPosition(0.0f, 0.0f);
+		break;
+	case SCENE_3:
+		LoadObjectsFromFile(FILEPATH_OBJECTS_SCENE_3);
+		CreateListChangeSceneObjects();
+ 		simon->SetPosition(93.0f, 48.0f);
+		simon->SetState(STAIR_DOWN);
+		game->SetCameraPosition(0.0f, 0.0f);
 		break;
 	default:
 		break;
 	}
 }
+

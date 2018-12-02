@@ -20,6 +20,7 @@ TileMap::TileMap(int ID, LPCWSTR filePath_tex, LPCWSTR filePath_data, int map_wi
 	
 	LoadResources();
 	Load_MapData();
+	CreateZoneToDraw();
 }
 
 void TileMap::LoadResources()
@@ -91,6 +92,26 @@ void TileMap::Load_MapData()
 	fs.close();
 }
 
+void TileMap::CreateZoneToDraw()
+{
+	switch (ID)
+	{
+	case SCENE_1:
+		min_max_col_to_draw.push_back({ 0, 48 });
+		break;
+	case SCENE_2:
+		min_max_col_to_draw.push_back({ 0, 96 });
+		min_max_col_to_draw.push_back({ 96, 128 });
+		min_max_col_to_draw.push_back({ 128, 176 });
+		break;
+	case SCENE_3:
+		min_max_col_to_draw.push_back({ 0, 32 });
+		break;
+	default:
+		break;
+	}
+}
+
 void TileMap::Draw(int start_col, int end_col)
 {
 	for (int i = 0; i < 10; i++) {
@@ -102,8 +123,9 @@ void TileMap::Draw(int start_col, int end_col)
 
 void TileMap::Draw(D3DXVECTOR3 camPosition)
 {
-	int start_col_to_draw = (int)camPosition.x / 32;
-	int end_col_to_draw = (int)(camPosition.x + SCREEN_WIDTH) / 32;
+	start_col_to_draw = (int)camPosition.x / 32;
+	end_col_to_draw = start_col_to_draw + SCREEN_WIDTH / 32;
+
 
 	for (int i = 0; i < nums_row; i++)
 	{

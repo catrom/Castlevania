@@ -60,6 +60,8 @@ public:
 	bool isEnable;
 	int idItem;		// id của item mà object đó chứa (-1: no item)
 
+	bool isRenderAnimation;
+
 	vector<LPANIMATION> animations;
 
 
@@ -72,6 +74,9 @@ public:
 	void SetOrientation(int nx) { this->nx = nx; }
 	void SetIDItem(int id) { this->idItem = id; }
 	void SetEnable(bool enable) { this->isEnable = enable; }
+
+	bool GetIsRenderAnimation() { return this->isRenderAnimation; }
+	void SetIsRenderAnimation(bool x) { this->isRenderAnimation = x; }
 
 	void GetPosition(float &x, float &y) { x = this->x; y = this->y; }
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }

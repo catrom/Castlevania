@@ -30,6 +30,8 @@
 #define ID_TEX_RECT					7
 #define ID_TEX_SMALL_CANDLE			26
 #define ID_TEX_STAIR				27
+#define ID_TEX_DOOR					28
+#define ID_TEX_GATE					29
 
 //Items
 #define ID_TEX_ITEM_STOP_WATCH		8
@@ -71,6 +73,8 @@
 #define FILEPATH_TEX_GROUND			L"Textures\\Ground.png"
 #define FILEPATH_TEX_EFFECT			L"Textures\\Effect.png"
 #define FILEPATH_TEX_STAIR			L"Textures\\Stair.png"
+#define FILEPATH_TEX_DOOR			L"Textures\\Door.png"
+#define FILEPATH_TEX_GATE			L"Textures\\Gate.png"
 
 // Items
 #define FILEPATH_TEX_ITEM_STOP_WATCH			L"Textures\\Items\\Stopwatch.png"
@@ -104,6 +108,9 @@
 #define FILEPATH_DATA_MAP_SCENE_2		L"Scenes\\Scene2_map.txt"
 #define FILEPATH_OBJECTS_SCENE_2		L"Scenes\\Scene2_objects.txt"
 
+#define FILEPATH_TEX_MAP_SCENE_3		L"Scenes\\Scene3.png"
+#define FILEPATH_DATA_MAP_SCENE_3		L"Scenes\\Scene3_map.txt"
+#define FILEPATH_OBJECTS_SCENE_3		L"Scenes\\Scene3_objects.txt"
 // Player
 #define FILEPATH_TEX_HP				L"Textures\\HP.png"
 #define FILEPATH_TEX_RECT			L"Textures\\Rect.png"
@@ -131,7 +138,7 @@
 #define STAIR_DOWN	9
 #define HIT_STAIR_UP	10
 #define HIT_STAIR_DOWN	11
-
+#define AUTO_WALK		12
 
 // Whip
 #define NORMAL_WHIP		0
@@ -174,8 +181,11 @@
 #define PORK_CHOP		16
 #define MAGIC_CRYSTAL	17
 
+// Door
+#define DOOR_1			0
+#define DOOR_2_IDLE			1
+#define DOOR_2_OPEN			2
 
-#define DAGGER_STATE 0
 
 #pragma endregion
 
@@ -241,13 +251,18 @@
 #define STAIR_LEFT_UP_ANI		801
 #define STAIR_RIGHT_DOWN_ANI	802
 
+// Door
+#define DOOR_1_ANI				901
+#define DOOR_2_IDLE_ANI			902
+#define DOOR_2_OPEN_ANI			903
 #pragma endregion
 
 
 #pragma region Properties
 
 // Simon
-#define SIMON_WALKING_SPEED			0.10f
+#define SIMON_WALKING_SPEED			0.15f
+#define SIMON_WALKING_SPEED_LOWER	0.05f
 #define SIMON_JUMP_SPEED_Y			0.5f
 #define SIMON_GRAVITY				0.002f
 #define SIMON_GRAVITY_LOWER			0.001f
@@ -275,7 +290,7 @@
 #pragma region BBox Size
 
 // Simon
-#define SIMON_BBOX_WIDTH			40
+#define SIMON_BBOX_WIDTH			34
 #define SIMON_BBOX_HEIGHT			62
 
 // Ground
@@ -297,14 +312,23 @@
 // Stair
 #define STAIR_BBOX_WIDTH			32
 #define STAIR_BBOX_HEIGHT			32
+
+// Door
+#define DOOR_BBOX_WIDTH				32
+#define DOOR_BBOX_HEIGHT			96
+
+// Change Scene Object
+#define CHANGE_SCENE_BBOX_WIDTH		32
+#define CHANGE_SCENE_BBOX_HEIGHT	32
 #pragma endregion
 
 
-#pragma region ID objects to load from file -> very important
+#pragma region ID objects to load from file
 
 #define	CANDLE		0
 #define	GROUND		1
 #define STAIR		2
+#define DOOR		3
 
 #pragma endregion
 
