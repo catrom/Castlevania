@@ -40,9 +40,12 @@ void Input::KeyState(BYTE *state)
 	if (scene->GetSimon()->GetState() == STAIR_DOWN && scene->GetSimon()->animations[STAIR_DOWN]->IsOver(200) == false)
 		return;
 
+	if (scene->GetSimon()->GetState() == DEFLECT && scene->GetSimon()->animations[DEFLECT]->IsOver(600) == false)
+		return;
+
 	// nếu simon đang nhảy và chưa chạm đất, tiếp tục render trạng thái nhảy
 	if ((scene->GetSimon()->GetState() == JUMP || scene->GetSimon()->GetState() == STAND)
-		&&  scene->GetSimon()->IsTouchGround() == false)
+		&& scene->GetSimon()->IsTouchGround() == false)
 		return;
 
 	// nếu simon đang quất roi và animation chưa được render hết thì tiếp tục render

@@ -17,7 +17,8 @@ Simon::Simon() : GameObject()
 	AddAnimation(HIT_STAIR_UP_ANI);
 	AddAnimation(HIT_STAIR_DOWN_ANI);
 	AddAnimation(WALK_ANI);  // for auto - walk
-
+	AddAnimation(DEFLECT_ANI);
+	
 	whip = new Whip();
 
 	score = 0;
@@ -70,6 +71,8 @@ void Simon::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &a
 	sprites->Add(10101, 120, 132, 180, 196, texSimon); // hit - stair down
 	sprites->Add(10102, 180, 132, 240, 196, texSimon);
 	sprites->Add(10103, 240, 132, 300, 196, texSimon);
+
+	sprites->Add(10111, 0, 66, 60, 130, texSimon); // deflect - when collied with enemy
 
 	LPANIMATION ani;
 
@@ -131,6 +134,12 @@ void Simon::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &a
 	ani->Add(10102);
 	ani->Add(10103);
 	animations->Add(HIT_STAIR_DOWN_ANI, ani);
+
+	ani = new Animation();
+	ani->Add(10001);
+	ani->Add(10111, 400);
+	ani->Add(10021);
+	animations->Add(DEFLECT_ANI, ani);
 }
 
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>* coObjects)
@@ -139,7 +148,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>
 
 	if (state != STAIR_UP && state != STAIR_DOWN && isAutoWalk != true)
 	{
-		if (vy < -0.1f || vy > 0.1f)
+		if (vy < -0.2f || vy > 0.2f)
 			vy += SIMON_GRAVITY*dt;
 		else vy += SIMON_GRAVITY_LOWER*dt;
 
@@ -171,6 +180,12 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>
 		return; // no need to check collision
 	}
 
+	// Reset untouchable timer if untouchable time has passed
+	if (GetTickCount() - untouchable_start > SIMON_UNTOUCHABLE_TIME)
+	{
+		untouchable_start = 0;
+		isUntouchable = false;
+	}
 
 	// Check collision between Simon and other objects
 	vector<LPCOLLISIONEVENT> coEvents;
@@ -244,7 +259,23 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>
 				{
 					vx = SIMON_WALKING_SPEED_LOWER;
 					vy = 0;
-					AutoWalk(100, STAND, 1);
+					AutoWalk(80, STAND, 1);
+				}
+			}
+			else if (dynamic_cast<Zombie*>(e->obj))
+			{
+				if (isUntouchable == false)
+				{
+					if (e->nx != 0)
+					{
+						if (e->nx == 1.0f && this->nx == 1) this->nx = -1;
+						else if (e->nx == -1.0f && this->nx == -1) this->nx = 1;
+					}
+
+					SetState(DEFLECT);
+					StartUntouchable();
+
+					//HP = HP - 2;
 				}
 			}
 			else
@@ -289,10 +320,30 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>
 
 					if (whip->CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và nến
 					{
-						DebugOut(L"collision\n");
+						//DebugOut(L"collision\n");
 
-						e->SetState(DESTROYED);
-						e->animations[DESTROYED]->SetAniStartTime(GetTickCount());
+						e->SetState(CANDLE_DESTROYED);
+						e->animations[CANDLE_DESTROYED]->SetAniStartTime(GetTickCount());
+					}
+				}
+				else if (dynamic_cast<Zombie*>(obj))
+				{
+					Zombie * e = dynamic_cast<Zombie*> (obj);
+
+					float left, top, right, bottom;
+
+					e->GetBoundingBox(left, top, right, bottom);
+
+					//DebugOut(L"%f %f %f %f\n", left, top, right, bottom);
+
+
+					if (whip->CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và nến
+					{
+						//DebugOut(L"collision\n");
+
+						e->vx = 0;
+						e->SetState(ZOMBIE_DESTROYED);
+						e->animations[ZOMBIE_DESTROYED]->SetAniStartTime(GetTickCount());
 					}
 				}
 			}
@@ -302,8 +353,18 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>
 
 void Simon::Render()
 {
-	animations[state]->Render(1, nx, x, y);
+	if (isUntouchable)  // Để render Simon nhấp nháy trong trạng thái isUntouchable
+	{
+		int r = rand() % 2;
 
+		if (r == 0) animations[state]->Render(1, nx, x, y);
+		else animations[state]->Render(1, nx, x, y, 100);
+	}
+	else
+	{
+		animations[state]->Render(1, nx, x, y);
+	}
+	
 	if (state == HIT_SIT || state == HIT_STAND)
 	{
 		whip->Render(animations[state]->GetCurrentFrame());
@@ -372,6 +433,13 @@ void Simon::SetState(int state)
 		animations[state]->Reset();
 		animations[state]->SetAniStartTime(GetTickCount());
 		break;
+	case DEFLECT:
+		vy = -SIMON_DEFLECT_SPEED_Y;
+		if (nx > 0) vx = -SIMON_DEFLECT_SPEED_X;
+		else vx = SIMON_DEFLECT_SPEED_X;
+		animations[state]->Reset();
+		animations[state]->SetAniStartTime(GetTickCount());
+		break;
 	default:
 		break;
 	}
@@ -383,7 +451,9 @@ void Simon::GetBoundingBox(float & left, float & top, float & right, float & bot
 	left = x + 13;
 	top = y + 2;
 	right = left + SIMON_BBOX_WIDTH;
-	bottom = top + SIMON_BBOX_HEIGHT;
+
+	if (state != JUMP) bottom = top + SIMON_BBOX_HEIGHT;
+	else bottom = top + SIMON_JUMPING_BBOX_HEIGHT;
 }
 
 bool Simon::CheckCollisionWithStair(vector<LPGAMEOBJECT>* listStair)

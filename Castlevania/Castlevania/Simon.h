@@ -11,6 +11,7 @@
 #include "Ground.h"
 #include "Items.h"
 #include "Door.h"
+#include "Zombie.h"
 #include "ChangeSceneObject.h"
 
 using namespace std;
@@ -29,6 +30,9 @@ class Simon : public GameObject
 	float autoWalkDistance = 0;
 	int stateAfterAutoWalk = -1;
 	int nxAfterAutoWalk = 0;
+
+	bool isUntouchable = false;
+	DWORD untouchable_start = 0;
 
 public:
 	bool isStand = true; // xác định trạng thái đứng/ngồi để lấy vị trí gắn roi cho phù hợp
@@ -54,7 +58,8 @@ public:
 	void SetState(int state);
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
-	
+	void StartUntouchable() { isUntouchable = true; untouchable_start = GetTickCount(); }
+
 	int GetEnergy() { return this->energy; }
 	int GetLife() { return this->life; }
 	int GetScore() { return this->score; }

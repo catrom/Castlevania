@@ -32,6 +32,7 @@
 #define ID_TEX_STAIR				27
 #define ID_TEX_DOOR					28
 #define ID_TEX_GATE					29
+#define ID_TEX_ZOMBIE				30
 
 //Items
 #define ID_TEX_ITEM_STOP_WATCH		8
@@ -75,6 +76,7 @@
 #define FILEPATH_TEX_STAIR			L"Textures\\Stair.png"
 #define FILEPATH_TEX_DOOR			L"Textures\\Door.png"
 #define FILEPATH_TEX_GATE			L"Textures\\Gate.png"
+#define FILEPATH_TEX_ZOMBIE			L"Textures\\Zombie.png"
 
 // Items
 #define FILEPATH_TEX_ITEM_STOP_WATCH			L"Textures\\Items\\Stopwatch.png"
@@ -139,6 +141,7 @@
 #define HIT_STAIR_UP	10
 #define HIT_STAIR_DOWN	11
 #define AUTO_WALK		12
+#define	DEFLECT			13
 
 // Whip
 #define NORMAL_WHIP		0
@@ -148,7 +151,7 @@
 // Candle
 #define BIG_CANDLE	0
 #define SMALL_CANDLE	1
-#define DESTROYED	2
+#define CANDLE_DESTROYED	2
 
 // Flame Effect
 #define	EFFECT		0
@@ -186,6 +189,9 @@
 #define DOOR_2_IDLE			1
 #define DOOR_2_OPEN			2
 
+// Zombie
+#define ZOMBIE		0
+#define ZOMBIE_DESTROYED	1
 
 #pragma endregion
 
@@ -203,6 +209,7 @@
 #define STAIR_DOWN_ANI	109
 #define HIT_STAIR_UP_ANI	110
 #define HIT_STAIR_DOWN_ANI	111
+#define DEFLECT_ANI			112
 
 // Whip
 #define NORMAL_WHIP_ANI	201
@@ -255,12 +262,16 @@
 #define DOOR_1_ANI				901
 #define DOOR_2_IDLE_ANI			902
 #define DOOR_2_OPEN_ANI			903
+
+// Zombie
+#define ZOMBIE_ANI				1001
 #pragma endregion
 
 
 #pragma region Properties
 
 // Simon
+#define SIMON_UNTOUCHABLE_TIME		3000
 #define SIMON_WALKING_SPEED			0.15f
 #define SIMON_WALKING_SPEED_LOWER	0.05f
 #define SIMON_JUMP_SPEED_Y			0.5f
@@ -268,6 +279,9 @@
 #define SIMON_GRAVITY_LOWER			0.001f
 #define SIMON_STAIR_SPEED_X			0.08f
 #define SIMON_STAIR_SPEED_Y			0.08f
+#define SIMON_DEFLECT_SPEED_X		0.15f
+#define SIMON_DEFLECT_SPEED_Y		0.3f
+
 
 // Item
 #define ITEM_FALLING_SPEED			0.2f
@@ -284,6 +298,8 @@
 
 #define WEAPONS_BOOMERANG_SPEED		0.5f
 
+// Zombie
+#define ZOMBIE_WALKING_SPEED		0.1f
 #pragma endregion
 
 
@@ -292,6 +308,7 @@
 // Simon
 #define SIMON_BBOX_WIDTH			34
 #define SIMON_BBOX_HEIGHT			62
+#define SIMON_JUMPING_BBOX_HEIGHT	62
 
 // Ground
 #define GROUND_BBOX_WIDTH			32
@@ -320,6 +337,10 @@
 // Change Scene Object
 #define CHANGE_SCENE_BBOX_WIDTH		32
 #define CHANGE_SCENE_BBOX_HEIGHT	32
+
+// Zombie
+#define ZOMBIE_BBOX_WIDTH			32
+#define ZOMBIE_BBOX_HEIGHT			64
 #pragma endregion
 
 

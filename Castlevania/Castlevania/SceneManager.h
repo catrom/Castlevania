@@ -10,7 +10,7 @@
 #include "SubWeapon.h"
 #include "Stair.h"
 #include "Door.h"
-
+#include "Zombie.h"
 #include "ChangeSceneObject.h"
 
 
@@ -29,6 +29,7 @@ class SceneManager
 	SubWeapon * weapon;
 	Stair * stair;
 	Door * door;
+	Zombie * zombie;
 
 	ChangeSceneObject * changeScene;
 
@@ -43,23 +44,13 @@ class SceneManager
 	vector<LPGAMEOBJECT> listGrounds;
 	vector<LPGAMEOBJECT> listItems;
 	vector<LPGAMEOBJECT> listDoors;
+	vector<LPGAMEOBJECT> listZombies;
 	
 	vector<LPCHANGESCENEOBJ> listChangeSceneObjs;
 
 	bool isSetSimonAutoWalk = false;
 	bool isMovingCamera = false;
 	int countDxCamera = 0;
-
-	D3DXVECTOR3 lastCameraPosition; 
-	D3DXVECTOR3 curCameraPosition;
-
-	int lastIndexTileMap = 0;
-	int curIndexTileMap = 0;
-
-	D3DXVECTOR2 lastSimonPosition;
-	D3DXVECTOR2 curSimonPosition;
-
-	int lastSimonState = 0;
 
 public:
 	SceneManager(Game * game, int idScene);

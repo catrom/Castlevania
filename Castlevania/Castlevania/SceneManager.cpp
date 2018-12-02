@@ -5,15 +5,6 @@ SceneManager::SceneManager(Game * game, int idScene)
 {
 	this->game = game;
 	IDScene = idScene;
-
-	curCameraPosition = D3DXVECTOR3(0, 0, 0);
-	lastCameraPosition = D3DXVECTOR3(0, 0, 0);
-
-	lastIndexTileMap = 0;
-	curIndexTileMap = 0;
-
-	lastSimonPosition = D3DXVECTOR2(-1, -1);
-	curSimonPosition = D3DXVECTOR2(-1, -1);
 }
 
 
@@ -50,6 +41,10 @@ void SceneManager::LoadResources()
 	door = new Door();
 	door->LoadResources(textures, sprites, animations);
 
+	zombie = new Zombie();
+	zombie->LoadResources(textures, sprites, animations);
+
+
 	tilemaps->Add(SCENE_1, FILEPATH_TEX_MAP_SCENE_1, FILEPATH_DATA_MAP_SCENE_1, 1536, 320, 32, 32);
 	tilemaps->Add(SCENE_2, FILEPATH_TEX_MAP_SCENE_2, FILEPATH_DATA_MAP_SCENE_2, 5632, 352, 32, 32);
 	tilemaps->Add(SCENE_3, FILEPATH_TEX_MAP_SCENE_3, FILEPATH_DATA_MAP_SCENE_3, 1024, 352, 32, 32);
@@ -68,6 +63,7 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 	listGrounds.clear();
 	listItems.clear();
 	listDoors.clear();
+	listZombies.clear();
 
 	fstream fs;
 	fs.open(FilePath, ios::in);
@@ -124,7 +120,6 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 			door->SetState(state);
 			door->SetEnable(isEnable);
 			door->SetIDItem(idItem);
-			door->SetIsRenderAnimation(false);
 			listDoors.push_back(door);
 			Objects.push_back(door);
 			break;
@@ -134,6 +129,26 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 	}
 
 	fs.close();
+
+
+	// Test
+	zombie = new Zombie();
+	zombie->SetPosition(400, 336);
+	zombie->isEnable = true;
+	zombie->SetIDItem(5);
+	listZombies.push_back(zombie);
+	Objects.push_back(zombie);
+
+	//zombie = new Zombie();
+	//zombie->SetPosition(450, 336);
+	//zombie->isEnable = true;
+	//zombie->SetIDItem(6);
+	//listZombies.push_back(zombie);
+	//Objects.push_back(zombie);
+
+
+
+	////////
 
 	Objects.push_back(simon);
 
@@ -324,6 +339,14 @@ void SceneManager::Update(DWORD dt)
 				coObjects.push_back(ground);
 			}
 
+			for (auto zombie : listZombies)
+			{
+				if (zombie->IsEnable() == false)
+					continue;
+
+				coObjects.push_back(zombie);
+			}
+
 			for (auto door : listDoors)
 			{
 				if (door->IsEnable() == false)
@@ -331,6 +354,7 @@ void SceneManager::Update(DWORD dt)
 
 				coObjects.push_back(door);
 			}
+
 
 			simon->Update(dt, &Objects, &coObjects);
 			simon->CheckCollisionWithItem(&listItems);
@@ -406,6 +430,15 @@ void SceneManager::Render()
 
 		item->Render();
 		item->RenderBoundingBox();
+	}
+
+	for (auto zombie : listZombies)
+	{
+		if (zombie->IsEnable() == false)
+			continue;
+
+		zombie->Render();
+		zombie->RenderBoundingBox();
 	}
 
 	simon->Render();
