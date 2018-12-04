@@ -57,15 +57,19 @@ void Candle::GetBoundingBox(float & left, float & top, float & right, float & bo
 	left = x;
 	top = y;
 
-	if (state == BIG_CANDLE)
+	switch (state)
 	{
+	case BIG_CANDLE:
 		right = left + CANDLE_BBOX_WIDTH;
 		bottom = top + CANDLE_BBOX_HEIGHT;
-	}
-	
-	else if (state == SMALL_CANDLE)
-	{
+		break;
+	case SMALL_CANDLE:
 		right = left + SMALL_CANDLE_BBOX_WIDTH;
 		bottom = top + SMALL_CANDLE_BBOX_HEIGHT;
+		break;
+	default:
+		right = left;
+		bottom = top;
+		break;
 	}
 }

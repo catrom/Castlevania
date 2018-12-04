@@ -10,6 +10,8 @@
 
 #define MAX_FRAME_RATE			150
 
+#define PI 3.14159265
+
 // Input
 #define DIRECTINPUT_VERSION		0x0800
 #define KEYBOARD_BUFFER_SIZE	1024
@@ -33,6 +35,8 @@
 #define ID_TEX_DOOR					28
 #define ID_TEX_GATE					29
 #define ID_TEX_ZOMBIE				30
+#define ID_TEX_BLACK_LEOPARD		31
+#define ID_TEX_VAMPIRE_BAT			32
 
 //Items
 #define ID_TEX_ITEM_STOP_WATCH		8
@@ -77,6 +81,8 @@
 #define FILEPATH_TEX_DOOR			L"Textures\\Door.png"
 #define FILEPATH_TEX_GATE			L"Textures\\Gate.png"
 #define FILEPATH_TEX_ZOMBIE			L"Textures\\Zombie.png"
+#define FILEPATH_TEX_BLACK_LEOPARD	L"Textures\\BlackLeopard.png"
+#define FILEPATH_TEX_VAMPIRE_BAT	L"Textures\\VampireBat.png"
 
 // Items
 #define FILEPATH_TEX_ITEM_STOP_WATCH			L"Textures\\Items\\Stopwatch.png"
@@ -189,9 +195,27 @@
 #define DOOR_2_IDLE			1
 #define DOOR_2_OPEN			2
 
+// Enemy (chung cho Zombie, Black Leopard, Bat...)
+#define ACTIVE			0
+#define DESTROYED		1
+#define INACTIVE		2
+
 // Zombie
-#define ZOMBIE		0
+#define ZOMBIE_ACTIVE		0
 #define ZOMBIE_DESTROYED	1
+#define ZOMBIE_INACTIVE		2
+
+// Black Leopard
+#define BLACK_LEOPARD_ACTIVE		0    
+#define BLACK_LEOPARD_DESTROYED		1
+#define BLACK_LEOPARD_INACTIVE		2
+#define BLACK_LEOPARD_IDLE			3
+#define BLACK_LEOPARD_JUMP			4
+
+// Vampire Bat
+#define VAMPIRE_BAT_ACTIVE		0
+#define VAMPIRE_BAT_DESTROYED	1
+#define VAMPIRE_BAT_INACTIVE		2
 
 #pragma endregion
 
@@ -265,27 +289,36 @@
 
 // Zombie
 #define ZOMBIE_ANI				1001
+
+// Black Leopard
+#define BLACK_LEOPARD_ACTIVE_ANI		1101
+#define BLACK_LEOPARD_INACTIVE_ANI		1102
+#define BLACK_LEOPARD_IDLE_ANI			1103
+#define BLACK_LEOPARD_JUMP_ANI			1104
+
+// Vampire Bat
+#define VAMPIRE_BAT_ANI			1201
 #pragma endregion
 
 
 #pragma region Properties
 
 // Simon
-#define SIMON_UNTOUCHABLE_TIME		3000
-#define SIMON_WALKING_SPEED			0.15f
+#define SIMON_UNTOUCHABLE_TIME		2000
+#define SIMON_WALKING_SPEED			0.13f
 #define SIMON_WALKING_SPEED_LOWER	0.05f
 #define SIMON_JUMP_SPEED_Y			0.5f
 #define SIMON_GRAVITY				0.002f
 #define SIMON_GRAVITY_LOWER			0.001f
 #define SIMON_STAIR_SPEED_X			0.08f
 #define SIMON_STAIR_SPEED_Y			0.08f
-#define SIMON_DEFLECT_SPEED_X		0.15f
+#define SIMON_DEFLECT_SPEED_X		0.13f
 #define SIMON_DEFLECT_SPEED_Y		0.3f
 
 
 // Item
 #define ITEM_FALLING_SPEED			0.2f
-#define ITEM_TIME_DESTROYED			5000
+#define ITEM_TIME_DESTROYED			3000
 
 // SubWeapons
 #define WEAPONS_DAGGER_SPEED		0.3f
@@ -300,15 +333,28 @@
 
 // Zombie
 #define ZOMBIE_WALKING_SPEED		0.1f
+#define ZOMBIE_RESPAWN_TIME			5000
+#define ZOMBIE_GRAVITY				0.002f
+
+// Black Leopard
+#define BLACK_LEOPARD_RUNNING_SPEED_X		0.3f
+#define BLACK_LEOPARD_RUNNING_SPEED_Y		0.2f
+#define BLACK_LEOPARD_GRAVITY				0.001f
+#define BLACK_LEOPARD_RESPAWN_TIME			20000
+
+// Vampire Bat
+#define VAMPIRE_BAT_FLYING_SPEED_X	0.12f
+#define VAMPIRE_BAT_FLYING_SPEED_Y	0.1f
+#define VAMPIRE_BAT_SPEED_VARIATION 0.004f
+#define VAMPIRE_BAT_RESPAWN_TIME	5000
 #pragma endregion
 
 
 #pragma region BBox Size
 
 // Simon
-#define SIMON_BBOX_WIDTH			34
+#define SIMON_BBOX_WIDTH			30
 #define SIMON_BBOX_HEIGHT			62
-#define SIMON_JUMPING_BBOX_HEIGHT	62
 
 // Ground
 #define GROUND_BBOX_WIDTH			32
@@ -339,8 +385,22 @@
 #define CHANGE_SCENE_BBOX_HEIGHT	32
 
 // Zombie
-#define ZOMBIE_BBOX_WIDTH			32
+#define ZOMBIE_BBOX_WIDTH			10
 #define ZOMBIE_BBOX_HEIGHT			64
+#define ZOMBIE_ACTIVE_BBOX_WIDTH			260
+#define ZOMBIE_ACTIVE_BBOX_HEIGHT			100
+
+// Black Leopard
+#define BLACK_LEOPARD_BBOX_WIDTH			10
+#define BLACK_LEOPARD_BBOX_HEIGHT			32
+#define BLACK_LEOPARD_ACTIVE_BBOX_WIDTH		100
+#define BLACK_LEOPARD_ACTIVE_BBOX_HEIGHT	200
+
+// Vampire Bat
+#define VAMPIRE_BAT_BBOX_WIDTH			10
+#define VAMPIRE_BAT_BBOX_HEIGHT			32
+#define VAMPIRE_BAT_ACTIVE_BBOX_WIDTH			450 
+#define VAMPIRE_BAT_ACTIVE_BBOX_HEIGHT			200
 #pragma endregion
 
 
@@ -350,6 +410,8 @@
 #define	GROUND		1
 #define STAIR		2
 #define DOOR		3
+#define ZOMBIE		4
+#define BLACK_LEOPARD	5
 
 #pragma endregion
 

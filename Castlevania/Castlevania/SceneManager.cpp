@@ -44,6 +44,11 @@ void SceneManager::LoadResources()
 	zombie = new Zombie();
 	zombie->LoadResources(textures, sprites, animations);
 
+	leopard = new BlackLeopard();
+	leopard->LoadResources(textures, sprites, animations);
+
+	bat = new VampireBat();
+	bat->LoadResources(textures, sprites, animations);
 
 	tilemaps->Add(SCENE_1, FILEPATH_TEX_MAP_SCENE_1, FILEPATH_DATA_MAP_SCENE_1, 1536, 320, 32, 32);
 	tilemaps->Add(SCENE_2, FILEPATH_TEX_MAP_SCENE_2, FILEPATH_DATA_MAP_SCENE_2, 5632, 352, 32, 32);
@@ -64,6 +69,8 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 	listItems.clear();
 	listDoors.clear();
 	listZombies.clear();
+	listBlackLeopards.clear();
+	listVampireBats.clear();
 
 	fstream fs;
 	fs.open(FilePath, ios::in);
@@ -123,6 +130,24 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 			listDoors.push_back(door);
 			Objects.push_back(door);
 			break;
+		/*case ZOMBIE:
+			zombie = new Zombie();
+			zombie->SetEntryPosition(pos_x, pos_y);
+			zombie->SetState(ZOMBIE_INACTIVE);
+			zombie->SetEnable(isEnable);
+			zombie->SetIDItem(idItem);
+			listZombies.push_back(zombie);
+			Objects.push_back(zombie);
+		case BLACK_LEOPARD:
+			leopard = new BlackLeopard();
+			leopard->SetEntryPosition(pos_x, pos_y);
+			leopard->SetPosition(pos_x, pos_y);
+			leopard->SetState(state);
+			leopard->SetIsRespawnWaiting(false);
+			leopard->SetEnable(true);
+			listBlackLeopards.push_back(leopard);
+			Objects.push_back(leopard);*/
+
 		default:
 			break;
 		}
@@ -130,25 +155,16 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 
 	fs.close();
 
-
-	// Test
-	zombie = new Zombie();
-	zombie->SetPosition(400, 336);
-	zombie->isEnable = true;
-	zombie->SetIDItem(5);
-	listZombies.push_back(zombie);
-	Objects.push_back(zombie);
-
-	//zombie = new Zombie();
-	//zombie->SetPosition(450, 336);
-	//zombie->isEnable = true;
-	//zombie->SetIDItem(6);
-	//listZombies.push_back(zombie);
-	//Objects.push_back(zombie);
+	// 
+	bat = new VampireBat();
+	bat->SetEntryPosition(0.0f, 150.0f);
+	bat->SetState(VAMPIRE_BAT_ACTIVE);
+	bat->SetEnable(isEnable);
+	bat->SetIDItem(-1);
+	listVampireBats.push_back(bat);
+	Objects.push_back(bat);
 
 
-
-	////////
 
 	Objects.push_back(simon);
 
@@ -209,7 +225,7 @@ void SceneManager::Update(DWORD dt)
 
 		if (isSetSimonAutoWalk == false)  // AutoWalk
 		{
-			isSetSimonAutoWalk = true;  
+			isSetSimonAutoWalk = true;
 
 			simon->SetState(WALK);
 			simon->vy = 0;
@@ -233,16 +249,17 @@ void SceneManager::Update(DWORD dt)
 					isSetSimonAutoWalk = false;
 					countDxCamera = 0;
 
-					tilemaps->Get(IDScene)->index += 1;
+					tilemaps->Get(IDScene)->index += 1;  // tăng giới hạn của tilemap
 				}
 			}
 		}
 	}
 
 	// Khi Simon va chạm với ChangScene objects, tiến hành thay đổi, cập nhật trạng thái
+
 	if (simon->GetChangeScene() != -1)
 	{
-		if (IDScene == SCENE_1 || 
+		if (IDScene == SCENE_1 ||
 			(IDScene == SCENE_2 && simon->GetState() == STAIR_DOWN) ||
 			(IDScene == SCENE_3 && simon->GetState() == STAIR_UP))
 		{
@@ -290,33 +307,16 @@ void SceneManager::Update(DWORD dt)
 		}
 	}
 
+	// Cập nhật trạng thái hoạt động khi object đi ra khỏi viewport
+	SetInactivationByPosition();
+
+	// Cập nhật danh sách Objects theo delta time
+
 	for (UINT i = 0; i < Objects.size(); i++)
 	{
 		LPGAMEOBJECT object = Objects[i];
 
-		if (object->IsEnable() == false)
-		{
-			if (dynamic_cast<Candle*>(object))
-			{
-				if (object->idItem != -1)
-				{
-					// Tạo một item theo id và thêm vào Objects
-
-					item = new Items();
-					item->SetEnable(true);
-					item->SetPosition(object->x, object->y);
-					item->SetItem(object->idItem);
-
-					listItems.push_back(item);
-					Objects.push_back(item);
-				}
-			}
-
-			Objects.erase(Objects.begin() + i);
-			i--;
-
-			continue;
-		}
+		SetDropItems(object); 
 
 
 		vector<LPGAMEOBJECT> coObjects;
@@ -341,10 +341,18 @@ void SceneManager::Update(DWORD dt)
 
 			for (auto zombie : listZombies)
 			{
-				if (zombie->IsEnable() == false)
+				if (zombie->GetState() == ZOMBIE_INACTIVE)
 					continue;
 
 				coObjects.push_back(zombie);
+			}
+
+			for (auto leopard : listBlackLeopards)
+			{
+				if (leopard->GetState() == BLACK_LEOPARD_INACTIVE)
+					continue;
+
+				coObjects.push_back(leopard);
 			}
 
 			for (auto door : listDoors)
@@ -359,18 +367,12 @@ void SceneManager::Update(DWORD dt)
 			simon->Update(dt, &Objects, &coObjects);
 			simon->CheckCollisionWithItem(&listItems);
 			simon->CheckChangeScene(&listChangeSceneObjs);
+			simon->CheckCollisionWithEnemyActiveArea(&listZombies);
+			simon->CheckCollisionWithEnemyActiveArea(&listBlackLeopards);
 		}
 		else if (dynamic_cast<Items*>(object))
 		{
-			for (auto ground : listGrounds)
-			{
-				if (ground->IsEnable() == false)
-					continue;
-
-				coObjects.push_back(ground);
-			}
-
-			object->Update(dt, &Objects, &coObjects);
+			object->Update(dt, &Objects, &listGrounds);
 		}
 		else if (dynamic_cast<SubWeapon*>(object))
 		{
@@ -385,13 +387,21 @@ void SceneManager::Update(DWORD dt)
 			//	}
 			//}
 		}
+		else if (dynamic_cast<Zombie*>(object))
+		{
+			if (object->GetState() != ZOMBIE_INACTIVE)
+				object->Update(dt, &Objects, &listGrounds);
+		}
+		else if (dynamic_cast<BlackLeopard*>(object))
+		{
+			if (object->GetState() != BLACK_LEOPARD_INACTIVE)
+				object->Update(dt, &Objects, &listGrounds);
+		}
 		else
 		{
 			object->Update(dt, &Objects, &coObjects);
 		}
 	}
-
-
 
 	// update camera
 
@@ -403,7 +413,7 @@ void SceneManager::Update(DWORD dt)
 		simon->x + SCREEN_WIDTH / 2 < tilemaps->Get(IDScene)->GetMapWidth())
 	{
 		if (simon->x >= min_col * 32 + (SCREEN_WIDTH / 2 - 16) &&
-			simon->x <= max_col * 32 - (SCREEN_WIDTH/ 2 - 16))
+			simon->x <= max_col * 32 - (SCREEN_WIDTH / 2 - 16))
 		{
 			game->SetCameraPosition(simon->x - SCREEN_WIDTH / 2, 0);
 		}
@@ -434,11 +444,29 @@ void SceneManager::Render()
 
 	for (auto zombie : listZombies)
 	{
-		if (zombie->IsEnable() == false)
+		if (zombie->GetState() == ZOMBIE_INACTIVE)
 			continue;
 
 		zombie->Render();
 		zombie->RenderBoundingBox();
+	}
+
+	for (auto leopard : listBlackLeopards)
+	{
+		if (leopard->GetState() == BLACK_LEOPARD_INACTIVE)
+			continue;
+
+		leopard->Render();
+		leopard->RenderBoundingBox();
+	}
+
+	for (auto bat : listVampireBats)
+	{
+		if (bat->GetState() == VAMPIRE_BAT_INACTIVE)
+			continue;
+
+		bat->Render();
+		bat->RenderBoundingBox();
 	}
 
 	simon->Render();
@@ -451,6 +479,61 @@ void SceneManager::Render()
 
 		door->Render();
 		door->RenderBoundingBox();
+	}
+}
+
+void SceneManager::SetDropItems(LPGAMEOBJECT object)
+{
+	if (object->IsEnable() == false ||
+	   (dynamic_cast<Zombie*>(object) && object->GetState() == ZOMBIE_DESTROYED))
+	{
+		if (object->idItem != -1 && object->IsDroppedItem() == false)
+		{
+			object->SetIsDroppedItem(true);
+
+			// Tạo một item theo id
+
+			item = new Items();
+			item->SetEnable(true);
+			item->SetPosition(object->x, object->y);
+			item->SetItem(object->idItem);
+
+			listItems.push_back(item);
+			Objects.push_back(item);
+		}
+	}
+}
+
+void SceneManager::SetInactivationByPosition()
+{
+	D3DXVECTOR2 entryViewPort = game->GetCameraPositon();
+
+	for (auto zombie : listZombies)
+	{
+		if (zombie->GetState() == ZOMBIE_ACTIVE)
+		{
+			float zx, zy;
+			zombie->GetPosition(zx, zy);
+
+			if (zx + ZOMBIE_ACTIVE_BBOX_WIDTH < entryViewPort.x || zx > entryViewPort.x + SCREEN_WIDTH)
+			{
+				zombie->SetState(ZOMBIE_INACTIVE);
+			}
+		}
+	}
+
+	for (auto leopard : listBlackLeopards)
+	{
+		if(leopard->GetState() == BLACK_LEOPARD_ACTIVE)
+		{
+			float lx, ly;
+			leopard->GetPosition(lx, ly);
+
+			if (lx + BLACK_LEOPARD_ACTIVE_BBOX_WIDTH < entryViewPort.x || lx > entryViewPort.x + SCREEN_WIDTH)
+			{
+				leopard->SetState(BLACK_LEOPARD_INACTIVE);
+			}
+		}
 	}
 }
 
@@ -475,7 +558,7 @@ void SceneManager::ChangeScene(int scene)
 	case SCENE_3:
 		LoadObjectsFromFile(FILEPATH_OBJECTS_SCENE_3);
 		CreateListChangeSceneObjects();
- 		simon->SetPosition(93.0f, 48.0f);
+		simon->SetPosition(93.0f, 48.0f);
 		simon->SetState(STAIR_DOWN);
 		game->SetCameraPosition(0.0f, 0.0f);
 		break;

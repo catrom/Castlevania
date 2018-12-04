@@ -80,8 +80,7 @@ void Input::KeyState(BYTE *state)
 				return;
 			}
 
-			
-
+		
 			simon->SetOrientation(-simon->GetStairDirection());
 			simon->SetState(STAIR_DOWN);
 

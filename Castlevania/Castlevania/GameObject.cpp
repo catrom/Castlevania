@@ -27,7 +27,7 @@ void GameObject::RenderBoundingBox()
 	rect.right = (int)r - (int)l;
 	rect.bottom = (int)b - (int)t;
 
-	Game::GetInstance()->Draw(1, 0, l, t, bbox, 0, 0, rect.right, rect.bottom, 32);
+	Game::GetInstance()->Draw(1, 0, l, t, bbox, 0, 0, rect.right, rect.bottom, 100);
 }
 
 bool GameObject::AABB(float left_a, float top_a, float right_a, float bottom_a, float left_b, float top_b, float right_b, float bottom_b)

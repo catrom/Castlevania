@@ -7,7 +7,7 @@ Whip::Whip() : GameObject()
 	AddAnimation(SHORT_CHAIN_ANI);
 	AddAnimation(LONG_CHAIN_ANI);
 
-	SetState(NORMAL_WHIP);
+	SetState(LONG_CHAIN);
 }
 
 void Whip::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &animations)

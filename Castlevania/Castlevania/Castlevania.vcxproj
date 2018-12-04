@@ -146,6 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BlackLeopard.cpp" />
     <ClCompile Include="Candle.cpp" />
     <ClCompile Include="ChangeSceneObject.cpp" />
     <ClCompile Include="Debug.cpp" />
@@ -165,10 +166,12 @@
     <ClCompile Include="SubWeapon.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="TileMap.cpp" />
+    <ClCompile Include="VampireBat.cpp" />
     <ClCompile Include="Whip.cpp" />
     <ClCompile Include="Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BlackLeopard.h" />
     <ClInclude Include="Candle.h" />
     <ClInclude Include="ChangeSceneObject.h" />
     <ClInclude Include="Debug.h" />
@@ -188,6 +191,7 @@
     <ClInclude Include="SubWeapon.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="TileMap.h" />
+    <ClInclude Include="VampireBat.h" />
     <ClInclude Include="Whip.h" />
     <ClInclude Include="Zombie.h" />
   </ItemGroup>

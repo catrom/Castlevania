@@ -11,6 +11,8 @@
 #include "Stair.h"
 #include "Door.h"
 #include "Zombie.h"
+#include "BlackLeopard.h"
+#include "VampireBat.h"
 #include "ChangeSceneObject.h"
 
 
@@ -30,6 +32,8 @@ class SceneManager
 	Stair * stair;
 	Door * door;
 	Zombie * zombie;
+	BlackLeopard * leopard;
+	VampireBat * bat;
 
 	ChangeSceneObject * changeScene;
 
@@ -45,6 +49,8 @@ class SceneManager
 	vector<LPGAMEOBJECT> listItems;
 	vector<LPGAMEOBJECT> listDoors;
 	vector<LPGAMEOBJECT> listZombies;
+	vector<LPGAMEOBJECT> listBlackLeopards;
+	vector<LPGAMEOBJECT> listVampireBats;
 	
 	vector<LPCHANGESCENEOBJ> listChangeSceneObjs;
 
@@ -62,6 +68,9 @@ public:
 
 	virtual void Update(DWORD dt);
 	virtual void Render();
+
+	void SetDropItems(LPGAMEOBJECT object);
+	void SetInactivationByPosition();  // Nếu object ra khỏi toạ độ viewport thì set unable / inactive
 
 	void ChangeScene(int scene);
 	int GetIDScene() { return this->IDScene; }

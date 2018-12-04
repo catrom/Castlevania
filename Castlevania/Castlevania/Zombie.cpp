@@ -6,11 +6,6 @@ Zombie::Zombie()
 {
 	AddAnimation(ZOMBIE_ANI);
 	AddAnimation(EFFECT_ANI);
-
-	SetState(ZOMBIE);
-
-	nx = -1;
-	vx = -ZOMBIE_WALKING_SPEED;
 }
 
 void Zombie::LoadResources(Textures *& textures, Sprites *& sprites, Animations *& animations)
@@ -24,36 +19,64 @@ void Zombie::LoadResources(Textures *& textures, Sprites *& sprites, Animations 
 
 	LPANIMATION ani;
 
-	ani = new Animation(200);
-	ani->Add(120001, 150);
-	ani->Add(120002, 150);
+	ani = new Animation(150);
+	ani->Add(120001);
+	ani->Add(120002);
 	animations->Add(ZOMBIE_ANI, ani);
 }
 
 void Zombie::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject)
 {
-	if (state == ZOMBIE_DESTROYED && animations[state]->IsOver(150)) 
+	DWORD now = GetTickCount();
+
+	if (state == ZOMBIE_DESTROYED && animations[state]->IsOver(150) == true) 
 	{
-		this->isEnable = false;
+		SetState(ZOMBIE_INACTIVE);
 		return;
 	}
 
 	GameObject::Update(dt);
 
-	x += dx;
+	// Check collision between zombie and ground (falling on ground)
+	vector<LPCOLLISIONEVENT> coEvents;
+	vector<LPCOLLISIONEVENT> coEventsResult;
 
-	if (x <= 0)
+	coEvents.clear();
+
+	CalcPotentialCollisions(coObject, coEvents);
+
+	if (coEvents.size() == 0)
 	{
-		x = 0;
-		vx = ZOMBIE_WALKING_SPEED;
-		nx = 1;
+		x += dx;
+		y += dy;
 	}
-	else if (x >= 500)
+	else
 	{
-		x = 500;
-		vx = -ZOMBIE_WALKING_SPEED;
-		nx = -1;
+		float min_tx, min_ty, nx = 0, ny;
+
+		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
+
+		x += dx;
+		y += min_ty*dy + ny*0.1f;
+
+		if (nx != 0)
+		{
+			this->nx *= -1;
+			this->vx *= -1;
+		}
+
+		if (ny != 0)
+		{
+			this->vy = 0;
+		}
+		else
+		{
+			this->vy += ZOMBIE_GRAVITY*dt;
+		}
 	}
+
+	// clean up collision events
+	for (int i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
 
 void Zombie::Render()
@@ -61,12 +84,58 @@ void Zombie::Render()
 	animations[state]->Render(1, nx, x, y);
 }
 
+void Zombie::SetState(int state)
+{
+	GameObject::SetState(state);
+
+	switch (state)
+	{
+	case ZOMBIE_ACTIVE:
+		x = entryPosition.x;
+		y = entryPosition.y;
+		if (nx > 0) vx = ZOMBIE_WALKING_SPEED;
+		else vx = -ZOMBIE_WALKING_SPEED;
+		vy = 0;
+		isDroppedItem = false;
+		respawnTime_Start = 0;
+		isRespawnWaiting = false;
+		break;
+	case ZOMBIE_DESTROYED:
+		vx = 0;
+		break;
+	case ZOMBIE_INACTIVE:
+		vx = 0;
+		StartRespawnTimeCounter();
+		break;
+	default:
+		break;
+	}
+}
+
 void Zombie::GetBoundingBox(float & left, float & top, float & right, float & bottom)
 {
-	left = x;
+	left = x + 11;  // (10/32)
 	top = y;
 	right = left + ZOMBIE_BBOX_WIDTH;
 	bottom = top + ZOMBIE_BBOX_HEIGHT;
+}
+
+void Zombie::GetActiveBoundingBox(float & left, float & top, float & right, float & bottom)
+{
+	left = entryPosition.x - ZOMBIE_ACTIVE_BBOX_WIDTH;
+	right = entryPosition.x + ZOMBIE_ACTIVE_BBOX_WIDTH;
+	top = entryPosition.y - ZOMBIE_ACTIVE_BBOX_HEIGHT;
+	bottom = entryPosition.y + ZOMBIE_ACTIVE_BBOX_HEIGHT;
+}
+
+bool Zombie::IsAbleToActivate()
+{
+	DWORD now = GetTickCount();
+
+	if (isRespawnWaiting == true && now - respawnTime_Start >= ZOMBIE_RESPAWN_TIME)
+		return true;
+
+	return false;
 }
 
 

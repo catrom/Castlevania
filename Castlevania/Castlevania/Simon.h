@@ -12,6 +12,7 @@
 #include "Items.h"
 #include "Door.h"
 #include "Zombie.h"
+#include "BlackLeopard.h"
 #include "ChangeSceneObject.h"
 
 using namespace std;
@@ -86,6 +87,8 @@ public:
 	LPGAMEOBJECT GetStairCollided() { return this->stairCollided; }
 
 	bool CheckCollisionWithItem(vector<LPGAMEOBJECT> * listItem);
+
+	void CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT> * listEnemy);
 	
 	bool CheckChangeScene(vector<LPCHANGESCENEOBJ> * listChangeScene);
 

@@ -84,6 +84,12 @@
     <ClCompile Include="Zombie.cpp">
       <Filter>Source Files\Objects</Filter>
     </ClCompile>
+    <ClCompile Include="BlackLeopard.cpp">
+      <Filter>Source Files\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="VampireBat.cpp">
+      <Filter>Source Files\Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Debug.h">
@@ -147,6 +153,12 @@
       <Filter>Header Files\Objects</Filter>
     </ClInclude>
     <ClInclude Include="Zombie.h">
+      <Filter>Header Files\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="BlackLeopard.h">
+      <Filter>Header Files\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="VampireBat.h">
       <Filter>Header Files\Objects</Filter>
     </ClInclude>
   </ItemGroup>

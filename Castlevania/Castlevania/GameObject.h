@@ -49,7 +49,7 @@ public:
 	float dy;
 
 	float vx;		// velocity
-	float vy;	
+	float vy;
 
 	int nx;			// orientation (left / right)
 
@@ -61,6 +61,11 @@ public:
 	int idItem;		// id của item mà object đó chứa (-1: no item)
 
 	bool isRenderAnimation;
+
+	bool isDroppedItem = false;
+
+	D3DXVECTOR2 entryPosition; // đưa enemy về vị trí entry sau thời gian respawn
+	
 
 	vector<LPANIMATION> animations;
 
@@ -74,6 +79,8 @@ public:
 	void SetOrientation(int nx) { this->nx = nx; }
 	void SetIDItem(int id) { this->idItem = id; }
 	void SetEnable(bool enable) { this->isEnable = enable; }
+	void SetIsDroppedItem(bool x) { this->isDroppedItem = x; }
+	void SetEntryPosition(float x, float y) { entryPosition.x = x; entryPosition.y = y; }
 
 	bool GetIsRenderAnimation() { return this->isRenderAnimation; }
 	void SetIsRenderAnimation(bool x) { this->isRenderAnimation = x; }
@@ -82,10 +89,11 @@ public:
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }
 	int GetState() { return this->state; }
 	int GetOrientation() { return this->nx; }
+	bool IsDroppedItem() { return this->isDroppedItem; }
 	bool IsEnable() { return this->isEnable; }
-
+	D3DXVECTOR2 GetEntryPosition() { return this->entryPosition; }
 	void RenderBoundingBox();
-	
+
 	// check collision of 2 static object (ex: whip and candle)
 	bool AABB(
 		float left_a, float top_a, float right_a, float bottom_a,
@@ -112,6 +120,10 @@ public:
 	void AddAnimation(int aniID);
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom) = 0;
+
+	// Lấy boundingbox vùng va chạm với simon để khiến enemy active
+	virtual void GetActiveBoundingBox(float &left, float &top, float &right, float &bottom) {};
+
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *Objects = NULL, vector<LPGAMEOBJECT> *coObject = NULL);
 	virtual void Render() = 0;
 };

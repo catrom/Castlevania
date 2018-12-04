@@ -18,7 +18,7 @@ Simon::Simon() : GameObject()
 	AddAnimation(HIT_STAIR_DOWN_ANI);
 	AddAnimation(WALK_ANI);  // for auto - walk
 	AddAnimation(DEFLECT_ANI);
-	
+
 	whip = new Whip();
 
 	score = 0;
@@ -262,7 +262,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>
 					AutoWalk(80, STAND, 1);
 				}
 			}
-			else if (dynamic_cast<Zombie*>(e->obj))
+			else if (dynamic_cast<Zombie*>(e->obj) || dynamic_cast<BlackLeopard*>(e->obj))
 			{
 				if (isUntouchable == false)
 				{
@@ -276,6 +276,11 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>
 					StartUntouchable();
 
 					//HP = HP - 2;
+				}
+				else
+				{
+					if (e->nx != 0) x += dx;
+					if (e->ny != 0) y += dy;
 				}
 			}
 			else
@@ -315,13 +320,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>
 
 					e->GetBoundingBox(left, top, right, bottom);
 
-					//DebugOut(L"%f %f %f %f\n", left, top, right, bottom);
-
-
 					if (whip->CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và nến
 					{
-						//DebugOut(L"collision\n");
-
 						e->SetState(CANDLE_DESTROYED);
 						e->animations[CANDLE_DESTROYED]->SetAniStartTime(GetTickCount());
 					}
@@ -334,16 +334,26 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>
 
 					e->GetBoundingBox(left, top, right, bottom);
 
-					//DebugOut(L"%f %f %f %f\n", left, top, right, bottom);
-
-
-					if (whip->CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và nến
+					if (whip->CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và zombie
 					{
-						//DebugOut(L"collision\n");
-
 						e->vx = 0;
 						e->SetState(ZOMBIE_DESTROYED);
 						e->animations[ZOMBIE_DESTROYED]->SetAniStartTime(GetTickCount());
+					}
+				}
+				else if (dynamic_cast<BlackLeopard*>(obj))
+				{
+					BlackLeopard * e = dynamic_cast<BlackLeopard*> (obj);
+
+					float left, top, right, bottom;
+
+					e->GetBoundingBox(left, top, right, bottom);
+
+					if (whip->CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và black leopard
+					{
+						e->vx = 0;
+						e->SetState(BLACK_LEOPARD_DESTROYED);
+						e->animations[BLACK_LEOPARD_DESTROYED]->SetAniStartTime(GetTickCount());
 					}
 				}
 			}
@@ -364,7 +374,7 @@ void Simon::Render()
 	{
 		animations[state]->Render(1, nx, x, y);
 	}
-	
+
 	if (state == HIT_SIT || state == HIT_STAND)
 	{
 		whip->Render(animations[state]->GetCurrentFrame());
@@ -395,6 +405,7 @@ void Simon::SetState(int state)
 		isStandOnStair = false;
 		isStand = true;
 		vy = -SIMON_JUMP_SPEED_Y;
+		animations[state]->SetAniStartTime(GetTickCount());
 		break;
 	case SIT:
 		isStandOnStair = false;
@@ -448,12 +459,11 @@ void Simon::SetState(int state)
 void Simon::GetBoundingBox(float & left, float & top, float & right, float & bottom)
 {
 	// sprite có kích thước là 60x66, bbox là 40x62
-	left = x + 13;
-	top = y + 2;
+	left = x + 15; //30,60
+	top = y + 2;  //62,66
 	right = left + SIMON_BBOX_WIDTH;
+	bottom = top + SIMON_BBOX_HEIGHT;
 
-	if (state != JUMP) bottom = top + SIMON_BBOX_HEIGHT;
-	else bottom = top + SIMON_JUMPING_BBOX_HEIGHT;
 }
 
 bool Simon::CheckCollisionWithStair(vector<LPGAMEOBJECT>* listStair)
@@ -612,6 +622,60 @@ bool Simon::CheckCollisionWithItem(vector<LPGAMEOBJECT> * listItem)
 			}
 
 			return true;
+		}
+	}
+}
+
+void Simon::CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT>* listEnemy)
+{
+	float simon_l, simon_t, simon_r, simon_b;
+
+	GetBoundingBox(simon_l, simon_t, simon_r, simon_b);
+
+	for (UINT i = 0; i < listEnemy->size(); i++)
+	{
+		LPGAMEOBJECT enemy = listEnemy->at(i);
+
+		// Không cần xét vùng active nữa khi nó đang active / destroyed
+		if (enemy->GetState() == ACTIVE || enemy->GetState() == DESTROYED)
+			continue;
+
+		float enemy_l, enemy_t, enemy_r, enemy_b;
+		enemy->GetActiveBoundingBox(enemy_l, enemy_t, enemy_r, enemy_b);
+
+		if (GameObject::AABB(simon_l, simon_t, simon_r, simon_b, enemy_l, enemy_t, enemy_r, enemy_b) == true)
+		{
+			D3DXVECTOR2 enemyEntryPostion = enemy->GetEntryPosition();
+
+			if (dynamic_cast<Zombie*>(enemy))
+			{
+				Zombie * zombie = dynamic_cast<Zombie*>(enemy);
+
+				if (zombie->IsAbleToActivate() == true)
+				{
+					// Để đảm bảo zombie xuất hiện và đi từ cuối màn hình ra, do đó cần giới hạn lại khoảng cách của 
+					// Simon và zombie để có thể set active cho zombie
+					if ((enemyEntryPostion.x > x && enemyEntryPostion.x - x > 220 && enemyEntryPostion.x - x < 250) ||
+						(enemyEntryPostion.x < x && x - enemyEntryPostion.x > 230 && x - enemyEntryPostion.x < 260))
+					{
+						if (enemyEntryPostion.x < x) zombie->SetOrientation(1);
+						else zombie->SetOrientation(-1);
+
+						zombie->SetState(ZOMBIE_ACTIVE);
+					}
+				}
+			}
+			else if (dynamic_cast<BlackLeopard*>(enemy))
+			{
+				BlackLeopard * leopard = dynamic_cast<BlackLeopard*>(enemy);
+
+				if (leopard->GetState() == BLACK_LEOPARD_IDLE ||
+					(leopard->GetState() == BLACK_LEOPARD_INACTIVE && leopard->IsAbleToActivate() == true))
+				{
+					leopard->SetState(BLACK_LEOPARD_ACTIVE);
+				}
+			}
+
 		}
 	}
 }
