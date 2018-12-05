@@ -147,11 +147,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BlackLeopard.cpp" />
+    <ClCompile Include="Bubbles.cpp" />
     <ClCompile Include="Candle.cpp" />
     <ClCompile Include="ChangeSceneObject.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="FireBall.cpp" />
+    <ClCompile Include="FishMan.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Ground.cpp" />
@@ -172,12 +175,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BlackLeopard.h" />
+    <ClInclude Include="Bubbles.h" />
     <ClInclude Include="Candle.h" />
     <ClInclude Include="ChangeSceneObject.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Door.h" />
     <ClInclude Include="Effect.h" />
+    <ClInclude Include="FireBall.h" />
+    <ClInclude Include="FishMan.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Ground.h" />

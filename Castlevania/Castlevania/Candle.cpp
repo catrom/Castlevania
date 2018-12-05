@@ -52,6 +52,23 @@ void Candle::Render()
 	animations[state]->Render(1, nx, x, y);
 }
 
+void Candle::SetState(int state)
+{
+	GameObject::SetState(state);
+
+	switch (state)
+	{
+	case BIG_CANDLE:
+	case SMALL_CANDLE:
+		break;
+	case CANDLE_DESTROYED:
+		animations[state]->SetAniStartTime(GetTickCount());
+		break;
+	default:
+		break;
+	}
+}
+
 void Candle::GetBoundingBox(float & left, float & top, float & right, float & bottom)
 {
 	left = x;

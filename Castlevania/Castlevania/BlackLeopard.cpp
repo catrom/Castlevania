@@ -124,6 +124,7 @@ void BlackLeopard::SetState(int state)
 		break;
 	case BLACK_LEOPARD_DESTROYED:
 		vx = 0;
+		animations[state]->SetAniStartTime(GetTickCount());
 		break;
 	case BLACK_LEOPARD_INACTIVE:
 		vx = 0;

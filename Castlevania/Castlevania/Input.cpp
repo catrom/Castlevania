@@ -197,6 +197,8 @@ void Input::OnKeyDown(int KeyCode)
 			simon->LoseEnergy(1);
 			simon->SetState(HIT);
 		}
+
+		break;
 	case DIK_C:
 		scene->GetSimon()->SetState(WALK);
 		scene->GetSimon()->AutoWalk(100, STAND, -1);

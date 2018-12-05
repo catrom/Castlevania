@@ -13,6 +13,9 @@
 #include "Door.h"
 #include "Zombie.h"
 #include "BlackLeopard.h"
+#include "VampireBat.h"
+#include "FishMan.h"
+#include "FireBall.h"
 #include "ChangeSceneObject.h"
 
 using namespace std;

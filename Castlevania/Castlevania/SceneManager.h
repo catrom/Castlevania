@@ -13,6 +13,9 @@
 #include "Zombie.h"
 #include "BlackLeopard.h"
 #include "VampireBat.h"
+#include "FishMan.h"
+#include "FireBall.h"
+#include "Bubbles.h"
 #include "ChangeSceneObject.h"
 
 
@@ -22,18 +25,21 @@ class SceneManager
 
 	Game * game;
 
-	Simon * simon;
-	Candle * candle;
-	Ground * ground;
-	Items * item;
-	Whip * whip;
-	Effect * effect;
-	SubWeapon * weapon;
-	Stair * stair;
-	Door * door;
-	Zombie * zombie;
-	BlackLeopard * leopard;
-	VampireBat * bat;
+	Simon * simon = new Simon();
+	Candle * candle = new Candle();
+	Ground * ground = new Ground();
+	Items * item = new Items();
+	Whip * whip = new Whip();
+	Effect * effect = new Effect();
+	SubWeapon * weapon = new SubWeapon();
+	Stair * stair = new Stair();
+	Door * door = new Door();
+	Zombie * zombie = new Zombie();
+	BlackLeopard * leopard = new BlackLeopard();
+	VampireBat * bat = new VampireBat();
+	FishMan * fishman = new FishMan();
+	FireBall * fireball = new FireBall();
+	Bubble * bubble = new Bubble();
 
 	ChangeSceneObject * changeScene;
 
@@ -51,7 +57,9 @@ class SceneManager
 	vector<LPGAMEOBJECT> listZombies;
 	vector<LPGAMEOBJECT> listBlackLeopards;
 	vector<LPGAMEOBJECT> listVampireBats;
-	
+	vector<LPGAMEOBJECT> listFishMans;
+	vector<LPGAMEOBJECT> listFireBalls;
+
 	vector<LPCHANGESCENEOBJ> listChangeSceneObjs;
 
 	bool isSetSimonAutoWalk = false;

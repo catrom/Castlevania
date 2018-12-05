@@ -10,8 +10,6 @@
 
 #define MAX_FRAME_RATE			150
 
-#define PI 3.14159265
-
 // Input
 #define DIRECTINPUT_VERSION		0x0800
 #define KEYBOARD_BUFFER_SIZE	1024
@@ -37,6 +35,9 @@
 #define ID_TEX_ZOMBIE				30
 #define ID_TEX_BLACK_LEOPARD		31
 #define ID_TEX_VAMPIRE_BAT			32
+#define ID_TEX_FISHMAN				33
+#define ID_TEX_FIREBALL				34
+#define ID_TEX_BUBBLES				35
 
 //Items
 #define ID_TEX_ITEM_STOP_WATCH		8
@@ -83,6 +84,9 @@
 #define FILEPATH_TEX_ZOMBIE			L"Textures\\Zombie.png"
 #define FILEPATH_TEX_BLACK_LEOPARD	L"Textures\\BlackLeopard.png"
 #define FILEPATH_TEX_VAMPIRE_BAT	L"Textures\\VampireBat.png"
+#define FILEPATH_TEX_FISHMAN		L"Textures\\FishMan.png"
+#define FILEPATH_TEX_FIREBALL		L"Textures\\FireBall.png"
+#define FILEPATH_TEX_BUBBLES		L"Textures\\Bubbles.png"
 
 // Items
 #define FILEPATH_TEX_ITEM_STOP_WATCH			L"Textures\\Items\\Stopwatch.png"
@@ -217,6 +221,18 @@
 #define VAMPIRE_BAT_DESTROYED	1
 #define VAMPIRE_BAT_INACTIVE		2
 
+// Fish man
+#define FISHMAN_ACTIVE		0
+#define FISHMAN_DESTROYED	1
+#define FISHMAN_INACTIVE	2
+#define FISHMAN_JUMP		3
+#define FISHMAN_HIT			4
+
+// Fire ball
+#define FIREBALL			0
+
+// Bubbles
+#define BUBBLES				0
 #pragma endregion
 
 #pragma region Animation ID
@@ -298,6 +314,18 @@
 
 // Vampire Bat
 #define VAMPIRE_BAT_ANI			1201
+
+// Fish man
+#define FISHMAN_ACTIVE_ANI		1301
+#define FISHMAN_INACTIVE_ANI	1302
+#define FISHMAN_JUMP_ANI		1303
+#define FISHMAN_HIT_ANI			1304
+
+// Fire ball
+#define FIREBALL_ANI			1401
+
+// Bubbles
+#define BUBBLES_ANI				1501
 #pragma endregion
 
 
@@ -314,7 +342,6 @@
 #define SIMON_STAIR_SPEED_Y			0.08f
 #define SIMON_DEFLECT_SPEED_X		0.13f
 #define SIMON_DEFLECT_SPEED_Y		0.3f
-
 
 // Item
 #define ITEM_FALLING_SPEED			0.2f
@@ -347,6 +374,22 @@
 #define VAMPIRE_BAT_FLYING_SPEED_Y	0.1f
 #define VAMPIRE_BAT_SPEED_VARIATION 0.004f
 #define VAMPIRE_BAT_RESPAWN_TIME	5000
+
+// Fish man
+#define FISHMAN_JUMP_SPEED_Y		0.7f
+#define FISHMAN_GRAVITY				0.0015f
+#define FISHMAN_WALKING_SPEED_X		0.1f
+#define FISHMAN_RESPAWN_TIME		5000
+
+// Fire ball
+#define FIREBALL_SPEED				0.13f
+
+// Bubbles
+#define BUBBLES_SPEED_X				0.07f
+#define BUBBLES_SPEED_Y				0.1f
+#define BUBBLES_SPEED_X2			0.03f
+#define BUBBLES_SPEED_Y2			0.2f
+#define BUBBLES_GRAVITY				0.0005f
 #pragma endregion
 
 
@@ -399,8 +442,22 @@
 // Vampire Bat
 #define VAMPIRE_BAT_BBOX_WIDTH			10
 #define VAMPIRE_BAT_BBOX_HEIGHT			32
-#define VAMPIRE_BAT_ACTIVE_BBOX_WIDTH			450 
+#define VAMPIRE_BAT_ACTIVE_BBOX_WIDTH			400 
 #define VAMPIRE_BAT_ACTIVE_BBOX_HEIGHT			200
+
+// Fish man
+#define FISHMAN_BBOX_WIDTH			10
+#define FISHMAN_BBOX_HEIGHT			64
+#define FISHMAN_ACTIVE_BBOX_WIDTH			100
+#define FISHMAN_ACTIVE_BBOX_HEIGHT			300
+
+// Fire ball
+#define FIREBALL_BBOX_WIDTH				14
+#define FIREBALL_BBOX_HEIGHT			12
+
+// Bubbles
+#define BUBBLES_BBOX_WIDTH			14
+#define BUBBLES_BBOX_HEIGHT			28
 #pragma endregion
 
 
@@ -412,6 +469,8 @@
 #define DOOR		3
 #define ZOMBIE		4
 #define BLACK_LEOPARD	5
+#define VAMPIRE_BAT		6
+#define FISHMAN			7
 
 #pragma endregion
 

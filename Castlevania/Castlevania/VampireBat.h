@@ -7,6 +7,7 @@ class VampireBat : public GameObject
 	DWORD respawnTime_Start = 0;
 	bool isRespawnWaiting = false;
 	float velocityVariation = VAMPIRE_BAT_SPEED_VARIATION;
+	bool isSettedPosition = false;
 
 public:
 	VampireBat();
@@ -22,8 +23,14 @@ public:
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	void GetActiveBoundingBox(float &left, float &top, float &right, float &bottom);
 
-	void SetIsRespawnWaiting(bool x) { isRespawnWaiting = x; }
 	bool IsRespawnWaiting() { return isRespawnWaiting; }
+	void SetIsRespawnWaiting(bool x) { isRespawnWaiting = x; }
+
+	bool IsSettedPosition() { return isSettedPosition; }
+	void SetIsSettedPosition(bool x) { isSettedPosition = x; }
+
 	bool IsAbleToActivate();
+
+	DWORD get() { return this->respawnTime_Start; }
 };
 

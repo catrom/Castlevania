@@ -14,41 +14,21 @@ SceneManager::~SceneManager()
 
 void SceneManager::LoadResources()
 {
-	simon = new Simon();
 	simon->LoadResources(textures, sprites, animations);
-
-	candle = new Candle();
 	candle->LoadResources(textures, sprites, animations);
-
-	effect = new Effect();
 	effect->LoadResources(textures, sprites, animations);
-
-	ground = new Ground();
 	ground->LoadResources(textures, sprites, animations);
-
-	item = new Items();
 	item->LoadResources(textures, sprites, animations);
-
-	whip = new Whip();
 	whip->LoadResources(textures, sprites, animations);
-
-	weapon = new SubWeapon();
 	weapon->LoadResources(textures, sprites, animations);
-
-	stair = new Stair();
 	stair->LoadResources(textures, sprites, animations);
-
-	door = new Door();
 	door->LoadResources(textures, sprites, animations);
-
-	zombie = new Zombie();
 	zombie->LoadResources(textures, sprites, animations);
-
-	leopard = new BlackLeopard();
 	leopard->LoadResources(textures, sprites, animations);
-
-	bat = new VampireBat();
 	bat->LoadResources(textures, sprites, animations);
+	fishman->LoadResources(textures, sprites, animations);
+	fireball->LoadResources(textures, sprites, animations);
+	bubble->LoadResources(textures, sprites, animations);
 
 	tilemaps->Add(SCENE_1, FILEPATH_TEX_MAP_SCENE_1, FILEPATH_DATA_MAP_SCENE_1, 1536, 320, 32, 32);
 	tilemaps->Add(SCENE_2, FILEPATH_TEX_MAP_SCENE_2, FILEPATH_DATA_MAP_SCENE_2, 5632, 352, 32, 32);
@@ -130,7 +110,7 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 			listDoors.push_back(door);
 			Objects.push_back(door);
 			break;
-		/*case ZOMBIE:
+		case ZOMBIE:
 			zombie = new Zombie();
 			zombie->SetEntryPosition(pos_x, pos_y);
 			zombie->SetState(ZOMBIE_INACTIVE);
@@ -138,6 +118,7 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 			zombie->SetIDItem(idItem);
 			listZombies.push_back(zombie);
 			Objects.push_back(zombie);
+			break;
 		case BLACK_LEOPARD:
 			leopard = new BlackLeopard();
 			leopard->SetEntryPosition(pos_x, pos_y);
@@ -146,24 +127,32 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 			leopard->SetIsRespawnWaiting(false);
 			leopard->SetEnable(true);
 			listBlackLeopards.push_back(leopard);
-			Objects.push_back(leopard);*/
-
+			Objects.push_back(leopard);
+			break;
+		case VAMPIRE_BAT:
+			bat = new VampireBat();
+			bat->SetEntryPosition(pos_x, pos_y);
+			bat->SetState(VAMPIRE_BAT_INACTIVE);
+			bat->SetEnable(true);
+			bat->SetIDItem(idItem);
+			listVampireBats.push_back(bat);
+			Objects.push_back(bat);
+			break;
+		case FISHMAN:
+			fishman = new FishMan();
+			fishman->SetEntryPosition(pos_x, pos_y);
+			fishman->SetState(FISHMAN_INACTIVE);
+			fishman->SetEnable(true);
+			fishman->SetIDItem(idItem);
+			listFishMans.push_back(fishman);
+			Objects.push_back(fishman);
+			break;
 		default:
 			break;
 		}
 	}
 
 	fs.close();
-
-	// 
-	bat = new VampireBat();
-	bat->SetEntryPosition(0.0f, 150.0f);
-	bat->SetState(VAMPIRE_BAT_ACTIVE);
-	bat->SetEnable(isEnable);
-	bat->SetIDItem(-1);
-	listVampireBats.push_back(bat);
-	Objects.push_back(bat);
-
 
 
 	Objects.push_back(simon);
@@ -355,6 +344,30 @@ void SceneManager::Update(DWORD dt)
 				coObjects.push_back(leopard);
 			}
 
+			for (auto bat : listVampireBats)
+			{
+				if (bat->GetState() == VAMPIRE_BAT_INACTIVE)
+					continue;
+
+				coObjects.push_back(bat);
+			}
+
+			for (auto fishman : listFishMans)
+			{
+				if (fishman->GetState() == FISHMAN_INACTIVE)
+					continue;
+
+				coObjects.push_back(fishman);
+			}
+
+			for (auto fireball : listFireBalls)
+			{
+				if (fireball->IsEnable() == false)
+					continue;
+
+				coObjects.push_back(fireball);
+			}
+
 			for (auto door : listDoors)
 			{
 				if (door->IsEnable() == false)
@@ -369,6 +382,8 @@ void SceneManager::Update(DWORD dt)
 			simon->CheckChangeScene(&listChangeSceneObjs);
 			simon->CheckCollisionWithEnemyActiveArea(&listZombies);
 			simon->CheckCollisionWithEnemyActiveArea(&listBlackLeopards);
+			simon->CheckCollisionWithEnemyActiveArea(&listVampireBats);
+			simon->CheckCollisionWithEnemyActiveArea(&listFishMans);
 		}
 		else if (dynamic_cast<Items*>(object))
 		{
@@ -396,6 +411,61 @@ void SceneManager::Update(DWORD dt)
 		{
 			if (object->GetState() != BLACK_LEOPARD_INACTIVE)
 				object->Update(dt, &Objects, &listGrounds);
+		}
+		else if (dynamic_cast<VampireBat*>(object))
+		{
+			if (object->GetState() != VAMPIRE_BAT_INACTIVE)
+			{
+				bat = dynamic_cast<VampireBat*>(object);
+
+				if (bat->IsSettedPosition() == false)
+				{
+					bat->SetIsSettedPosition(true);
+
+					// set vị trí cho dơi luôn 
+					// dơi bay ngang tầm simon, từ phía cuối của 2 đầu màn hình)
+					float bx, by;
+
+					by = simon->y;
+
+					if (bat->GetOrientation() == -1) bx = game->GetCameraPositon().x + SCREEN_WIDTH - VAMPIRE_BAT_BBOX_WIDTH;
+					else bx = game->GetCameraPositon().x;
+
+					bat->SetPosition(bx, by);
+				}
+
+				bat->Update(dt);
+			}
+				
+		}
+		else if (dynamic_cast<FishMan*>(object))
+		{
+			fishman = dynamic_cast<FishMan*>(object);
+
+			if (fishman->GetState() == FISHMAN_ACTIVE && 
+				fishman->IsAbleToShoot() == true && 
+				GetTickCount() - fishman->GetStartTime() >= fishman->GetDeltaTimeToShoot())
+			{
+				fishman->SetIsAbleToShoot(false);
+				fishman->SetState(FISHMAN_HIT);
+
+				// Tạo fireball
+				float fx, fy, nx;
+				fishman->GetPosition(fx, fy);
+				nx = fishman->GetOrientation();
+
+				fireball = new FireBall();
+				fireball->SetPosition(nx == 1 ? fx : fx + FISHMAN_BBOX_WIDTH, fy);
+				fireball->SetOrientation(nx);
+				fireball->SetState(FIREBALL);
+				fireball->SetEnable(true);
+				listFireBalls.push_back(fireball);
+				Objects.push_back(fireball);
+			}
+			else 
+			{
+				object->Update(dt, &Objects, &listGrounds);
+			}
 		}
 		else
 		{
@@ -469,10 +539,27 @@ void SceneManager::Render()
 		bat->RenderBoundingBox();
 	}
 
+	for (auto fireball : listFireBalls)
+	{
+		if (fireball->IsEnable() == false)
+			continue;
+
+		fireball->Render();
+		fireball->RenderBoundingBox();
+	}
+
+	for (auto fishman : listFishMans)
+	{
+		fishman->Render();
+
+		if (fishman->GetState() != FISHMAN_INACTIVE)
+			fishman->RenderBoundingBox();
+	}
+
 	simon->Render();
 	simon->RenderBoundingBox();
 
-	for (auto door : listDoors)
+	for (auto door : listDoors)  // render door sau để chồng lên Simon
 	{
 		if (door->IsEnable() == false)
 			continue;
@@ -485,7 +572,9 @@ void SceneManager::Render()
 void SceneManager::SetDropItems(LPGAMEOBJECT object)
 {
 	if (object->IsEnable() == false ||
-	   (dynamic_cast<Zombie*>(object) && object->GetState() == ZOMBIE_DESTROYED))
+	   (dynamic_cast<Zombie*>(object) && object->GetState() == ZOMBIE_DESTROYED) ||
+		(dynamic_cast<VampireBat*>(object) && object->GetState() == VAMPIRE_BAT_DESTROYED) || 
+		(dynamic_cast<FishMan*>(object) && object->GetState() == FISHMAN_DESTROYED))
 	{
 		if (object->idItem != -1 && object->IsDroppedItem() == false)
 		{
@@ -510,28 +599,80 @@ void SceneManager::SetInactivationByPosition()
 
 	for (auto zombie : listZombies)
 	{
-		if (zombie->GetState() == ZOMBIE_ACTIVE)
+		Zombie * zb = dynamic_cast<Zombie*>(zombie);
+
+		if (zb->GetState() == ZOMBIE_ACTIVE)
 		{
 			float zx, zy;
-			zombie->GetPosition(zx, zy);
+			zb->GetPosition(zx, zy);
 
-			if (zx + ZOMBIE_ACTIVE_BBOX_WIDTH < entryViewPort.x || zx > entryViewPort.x + SCREEN_WIDTH)
+			if (zx + ZOMBIE_BBOX_WIDTH < entryViewPort.x || zx > entryViewPort.x + SCREEN_WIDTH)
 			{
-				zombie->SetState(ZOMBIE_INACTIVE);
+				zb->SetState(ZOMBIE_INACTIVE);
 			}
 		}
 	}
 
 	for (auto leopard : listBlackLeopards)
 	{
-		if(leopard->GetState() == BLACK_LEOPARD_ACTIVE)
+		BlackLeopard * bl = dynamic_cast<BlackLeopard*>(leopard);
+
+		if(bl->GetState() == BLACK_LEOPARD_ACTIVE)
 		{
 			float lx, ly;
-			leopard->GetPosition(lx, ly);
+			bl->GetPosition(lx, ly);
 
-			if (lx + BLACK_LEOPARD_ACTIVE_BBOX_WIDTH < entryViewPort.x || lx > entryViewPort.x + SCREEN_WIDTH)
+			if (lx + BLACK_LEOPARD_BBOX_WIDTH < entryViewPort.x || lx > entryViewPort.x + SCREEN_WIDTH)
 			{
-				leopard->SetState(BLACK_LEOPARD_INACTIVE);
+				bl->SetState(BLACK_LEOPARD_INACTIVE);
+			}
+		}
+	}
+
+	for (auto bat : listVampireBats)
+	{
+		VampireBat * vb = dynamic_cast<VampireBat*>(bat);
+
+		if (vb->GetState() == VAMPIRE_BAT_ACTIVE && vb->IsSettedPosition() == true)
+		{
+			float bx, by;
+			vb->GetPosition(bx, by);
+
+			if (bx + VAMPIRE_BAT_BBOX_WIDTH < entryViewPort.x || bx > entryViewPort.x + SCREEN_WIDTH)
+			{
+				vb->SetState(VAMPIRE_BAT_INACTIVE);
+			}
+		}
+	}
+
+	for (auto fishman : listFishMans)
+	{
+		FishMan * fm = dynamic_cast<FishMan*>(fishman);
+
+		if (fm->GetState() == FISHMAN_ACTIVE || fm->GetState() == FISHMAN_JUMP || fm->GetState() == FISHMAN_HIT)
+		{
+			float fx, fy;
+			fm->GetPosition(fx, fy);
+
+			if (fx + FISHMAN_BBOX_WIDTH < entryViewPort.x || fx > entryViewPort.x + SCREEN_WIDTH ||
+				fy > (fm->GetEntryPosition()).y)
+			{
+				fm->SetIsNeedToCreateBubbles(true);
+				fm->SetState(FISHMAN_INACTIVE);
+			}
+		}
+	}
+
+	for (auto fireball : listFireBalls)
+	{
+		if (fireball->IsEnable() == true)
+		{
+			float fx, fy;
+			fireball->GetPosition(fx, fy);
+
+			if (fx + FIREBALL_BBOX_WIDTH < entryViewPort.x || fx > entryViewPort.x + SCREEN_WIDTH)
+			{
+				fireball->SetEnable(false);
 			}
 		}
 	}

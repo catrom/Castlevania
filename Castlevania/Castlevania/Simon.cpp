@@ -262,10 +262,23 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>
 					AutoWalk(80, STAND, 1);
 				}
 			}
-			else if (dynamic_cast<Zombie*>(e->obj) || dynamic_cast<BlackLeopard*>(e->obj))
+			else if (dynamic_cast<FireBall*>(e->obj))
+			{
+				HP = HP - 2;
+				e->obj->SetEnable(false);
+			}
+			else if (dynamic_cast<Zombie*>(e->obj) || dynamic_cast<BlackLeopard*>(e->obj) 
+				|| dynamic_cast<VampireBat*>(e->obj) || dynamic_cast<FishMan*>(e->obj))
 			{
 				if (isUntouchable == false)
 				{
+					// nếu dơi tông trúng simon thì cho huỷ
+					if (dynamic_cast<VampireBat*>(e->obj))
+					{
+						e->obj->SetState(VAMPIRE_BAT_DESTROYED);
+					}
+
+					// đặt trạng thái deflect cho simon
 					if (e->nx != 0)
 					{
 						if (e->nx == 1.0f && this->nx == 1) this->nx = -1;
@@ -281,7 +294,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>
 				{
 					if (e->nx != 0) x += dx;
 					if (e->ny != 0) y += dy;
-				}
+				}	
 			}
 			else
 			{
@@ -304,10 +317,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>
 		whip->SetOrientation(nx);
 		whip->SetWhipPosition(D3DXVECTOR3(x, y, 0), isStand);
 
-
-		//DebugOut(L"current: %d\n", animations[state]->GetCurrentFrame());
-
-		if (animations[state]->GetCurrentFrame() == animations[state]->GetFramesSize() - 1) // chỉ xét va chạm khi render tới sprite cuối cùng của roi
+		if (animations[state]->GetCurrentFrame() == animations[state]->GetFramesSize() - 1) // chỉ xét va chạm khi render tới sprite cuối cùng của simon
 		{
 			for (UINT i = 0; i < coObjects->size(); i++)
 			{
@@ -323,7 +333,6 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>
 					if (whip->CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và nến
 					{
 						e->SetState(CANDLE_DESTROYED);
-						e->animations[CANDLE_DESTROYED]->SetAniStartTime(GetTickCount());
 					}
 				}
 				else if (dynamic_cast<Zombie*>(obj))
@@ -336,9 +345,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>
 
 					if (whip->CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và zombie
 					{
-						e->vx = 0;
 						e->SetState(ZOMBIE_DESTROYED);
-						e->animations[ZOMBIE_DESTROYED]->SetAniStartTime(GetTickCount());
 					}
 				}
 				else if (dynamic_cast<BlackLeopard*>(obj))
@@ -351,9 +358,33 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>
 
 					if (whip->CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và black leopard
 					{
-						e->vx = 0;
 						e->SetState(BLACK_LEOPARD_DESTROYED);
-						e->animations[BLACK_LEOPARD_DESTROYED]->SetAniStartTime(GetTickCount());
+					}
+				}
+				else if (dynamic_cast<VampireBat*>(obj))
+				{
+					VampireBat * e = dynamic_cast<VampireBat*> (obj);
+
+					float left, top, right, bottom;
+
+					e->GetBoundingBox(left, top, right, bottom);
+
+					if (whip->CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và vampire bat
+					{
+						e->SetState(VAMPIRE_BAT_DESTROYED);
+					}
+				}
+				else if (dynamic_cast<FishMan*>(obj))
+				{
+					FishMan * e = dynamic_cast<FishMan*> (obj);
+
+					float left, top, right, bottom;
+
+					e->GetBoundingBox(left, top, right, bottom);
+
+					if (whip->CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và fishman
+					{
+						e->SetState(FISHMAN_DESTROYED);
 					}
 				}
 			}
@@ -489,8 +520,6 @@ bool Simon::CheckCollisionWithStair(vector<LPGAMEOBJECT>* listStair)
 
 		if (GameObject::AABB(simon_l, simon_t, simon_r, simon_b, stair_l, stair_t, stair_r, stair_b) == true)
 		{
-			//DebugOut(L"collision\n");
-
 			if (listStair->at(i)->GetState() == 0) stairDirection = 1;
 			else stairDirection = -1;
 
@@ -675,7 +704,41 @@ void Simon::CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT>* listEnemy)
 					leopard->SetState(BLACK_LEOPARD_ACTIVE);
 				}
 			}
+			else if (dynamic_cast<VampireBat*>(enemy))
+			{
+				VampireBat * bat = dynamic_cast<VampireBat*>(enemy);
 
+				if (bat->IsAbleToActivate() == true)
+				{
+
+					// set random hướng cho dơi
+
+					int listNx[2] = { -1, 1 };
+					int rndIndex = rand() % 2;
+					bat->SetOrientation(listNx[rndIndex]);
+
+					bat->SetState(VAMPIRE_BAT_ACTIVE);
+				}
+			}
+			else if (dynamic_cast<FishMan*>(enemy))
+			{
+				FishMan * fishman = dynamic_cast<FishMan*>(enemy);
+
+				if (fishman->IsAbleToActivate() == true)
+				{
+					// Giảm độ khó xuất hiện của fishman
+					if (abs(this->x - (fishman->GetEntryPosition()).x <= 50.0f))
+						return;
+
+					float fx = fishman->GetEntryPosition().x;
+
+					if (fx < this->x) fishman->SetOrientation(1);
+					else fishman->SetOrientation(-1);
+
+					fishman->SetIsAbleToShoot(rand() % 2);
+					fishman->SetState(FISHMAN_JUMP);
+				}
+			}
 		}
 	}
 }
@@ -691,14 +754,6 @@ bool Simon::CheckChangeScene(vector<LPCHANGESCENEOBJ>* listChangeScene)
 	{
 		listChangeScene->at(i)->GetBoundingBox(obj_l, obj_t, obj_r, obj_b);
 
-		/*if (GameObject::AABB(simon_l, simon_t, simon_r, simon_b, obj_l, obj_t, obj_r, obj_b) == true)
-		{
-			changeScene = listChangeScene->at(i)->GetIDNextScene();
-			DebugOut(L"collision\n");
-
-			return true;
-		}*/
-
 		float t, nx, ny;
 		GameObject::SweptAABB(simon_l, simon_t, simon_r, simon_b, dx, dy, obj_l, obj_t, obj_r, obj_b, t, nx, ny);
 		bool collision = GameObject::AABB(simon_l, simon_t, simon_r, simon_b, obj_l, obj_t, obj_r, obj_b);
@@ -706,8 +761,6 @@ bool Simon::CheckChangeScene(vector<LPCHANGESCENEOBJ>* listChangeScene)
 		if (nx != 0 || ny != 0 || collision == true)
 		{
 			changeScene = listChangeScene->at(i)->GetIDNextScene();
-			DebugOut(L"collision\n");
-
 			return true;
 		}
 	}

@@ -27,8 +27,6 @@ void Zombie::LoadResources(Textures *& textures, Sprites *& sprites, Animations 
 
 void Zombie::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject)
 {
-	DWORD now = GetTickCount();
-
 	if (state == ZOMBIE_DESTROYED && animations[state]->IsOver(150) == true) 
 	{
 		SetState(ZOMBIE_INACTIVE);
@@ -52,11 +50,11 @@ void Zombie::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT
 	}
 	else
 	{
-		float min_tx, min_ty, nx = 0, ny;
+		float min_tx, min_ty, nx = 0, ny = 0;
 
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
 
-		x += dx;
+		x += min_tx*dx + nx*0.1f;
 		y += min_ty*dy + ny*0.1f;
 
 		if (nx != 0)
@@ -102,6 +100,7 @@ void Zombie::SetState(int state)
 		break;
 	case ZOMBIE_DESTROYED:
 		vx = 0;
+		animations[state]->SetAniStartTime(GetTickCount());
 		break;
 	case ZOMBIE_INACTIVE:
 		vx = 0;
