@@ -7,10 +7,11 @@ class FishMan : public GameObject
 {
 	DWORD respawnTime_Start = 0;
 	bool isRespawnWaiting = false;
-	bool isAbleToShoot = false; // random để biết fishman có khả năng bắn hay không
 	
-	DWORD startTime = 0; // thời gian xuất hiện
+	DWORD lastTimeShoot = 0; // thời gian kể từ lúc vừa bắn xong đến lần bắn tiếp theo
 	DWORD deltaTimeToShoot = 0; // khoảng thời gian kể từ lúc fishman xuất hiện đến lúc bắn 
+
+	int nxAfterShoot = 0; // Hướng quay mặt sau khi bắn (để luôn quay mặt về phía Simon)
 
 	// Hiệu ứng bọt nước
 	bool isNeedToCreateBubbles = false;
@@ -37,12 +38,12 @@ public:
 
 	bool IsAbleToActivate();
 
-	bool IsAbleToShoot() { return isAbleToShoot; }
-	void SetIsAbleToShoot(bool x) { isAbleToShoot = x; }
-
-	int GetStartTime() { return startTime; }
+	int GetLastTimeShoot() { return lastTimeShoot; }
 	int GetDeltaTimeToShoot() { return deltaTimeToShoot; }
 
 	void SetIsNeedToCreateBubbles(bool x) { isNeedToCreateBubbles = x; }
+	void SetNxAfterShoot(int x) { nxAfterShoot = x; }
+
+	bool IsRenderingBubbles() { return isRenderingBubbles; }
 };
 

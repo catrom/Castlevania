@@ -34,6 +34,8 @@ void SceneManager::LoadResources()
 	tilemaps->Add(SCENE_2, FILEPATH_TEX_MAP_SCENE_2, FILEPATH_DATA_MAP_SCENE_2, 5632, 352, 32, 32);
 	tilemaps->Add(SCENE_3, FILEPATH_TEX_MAP_SCENE_3, FILEPATH_DATA_MAP_SCENE_3, 1024, 352, 32, 32);
 
+	tilemaps->Get(SCENE_2)->index = 2;
+
 	textures->Add(ID_TEX_BBOX, FILEPATH_TEX_BBOX, D3DCOLOR_XRGB(255, 255, 255));
 
 	simon = new Simon();
@@ -51,6 +53,8 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 	listZombies.clear();
 	listBlackLeopards.clear();
 	listVampireBats.clear();
+	listFishMans.clear();
+	listFireBalls.clear();
 
 	fstream fs;
 	fs.open(FilePath, ios::in);
@@ -426,7 +430,7 @@ void SceneManager::Update(DWORD dt)
 					// dơi bay ngang tầm simon, từ phía cuối của 2 đầu màn hình)
 					float bx, by;
 
-					by = simon->y;
+					by = simon->y + 30;
 
 					if (bat->GetOrientation() == -1) bx = game->GetCameraPositon().x + SCREEN_WIDTH - VAMPIRE_BAT_BBOX_WIDTH;
 					else bx = game->GetCameraPositon().x;
@@ -443,10 +447,8 @@ void SceneManager::Update(DWORD dt)
 			fishman = dynamic_cast<FishMan*>(object);
 
 			if (fishman->GetState() == FISHMAN_ACTIVE && 
-				fishman->IsAbleToShoot() == true && 
-				GetTickCount() - fishman->GetStartTime() >= fishman->GetDeltaTimeToShoot())
+				GetTickCount() - fishman->GetLastTimeShoot() >= fishman->GetDeltaTimeToShoot())
 			{
-				fishman->SetIsAbleToShoot(false);
 				fishman->SetState(FISHMAN_HIT);
 
 				// Tạo fireball
@@ -461,6 +463,13 @@ void SceneManager::Update(DWORD dt)
 				fireball->SetEnable(true);
 				listFireBalls.push_back(fireball);
 				Objects.push_back(fireball);
+
+				// Đặt hướng quay mặt của Fishman sau khi bắn (quay về phía simon)
+				float sx, sy;
+				simon->GetPosition(sx, sy);
+
+				if (fx < sx) fishman->SetNxAfterShoot(1);
+				else fishman->SetNxAfterShoot(-1);
 			}
 			else 
 			{
@@ -473,21 +482,7 @@ void SceneManager::Update(DWORD dt)
 		}
 	}
 
-	// update camera
-
-	TileMap * map = tilemaps->Get(IDScene);
-	int min_col = map->min_max_col_to_draw[map->index][0];
-	int max_col = map->min_max_col_to_draw[map->index][1];
-
-	if (simon->x > SCREEN_WIDTH / 2 &&
-		simon->x + SCREEN_WIDTH / 2 < tilemaps->Get(IDScene)->GetMapWidth())
-	{
-		if (simon->x >= min_col * 32 + (SCREEN_WIDTH / 2 - 16) &&
-			simon->x <= max_col * 32 - (SCREEN_WIDTH / 2 - 16))
-		{
-			game->SetCameraPosition(simon->x - SCREEN_WIDTH / 2, 0);
-		}
-	}
+	UpdateCameraPosition();
 }
 
 void SceneManager::Render()
@@ -548,16 +543,23 @@ void SceneManager::Render()
 		fireball->RenderBoundingBox();
 	}
 
-	for (auto fishman : listFishMans)
+	for (auto fish : listFishMans)
 	{
-		fishman->Render();
+		fishman = dynamic_cast<FishMan*>(fish);
 
-		if (fishman->GetState() != FISHMAN_INACTIVE)
-			fishman->RenderBoundingBox();
+		if (fishman->GetState() == FISHMAN_INACTIVE)
+		{
+			if (fishman->IsRenderingBubbles() == true)
+				fishman->Render();
+			continue;
+		}
+
+		fishman->Render();
+		fishman->RenderBoundingBox();
 	}
 
 	simon->Render();
-	simon->RenderBoundingBox();
+	//simon->RenderBoundingBox();
 
 	for (auto door : listDoors)  // render door sau để chồng lên Simon
 	{
@@ -566,6 +568,34 @@ void SceneManager::Render()
 
 		door->Render();
 		door->RenderBoundingBox();
+	}
+}
+
+void SceneManager::UpdateCameraPosition()
+{
+	if (isBossFighting == true) // Boss fight -> not moving camera
+		return;
+
+	if (IDScene == SCENE_2 &&
+		tilemaps->Get(IDScene)->index == 2 &&
+		simon->x + SCREEN_WIDTH / 2 >= tilemaps->Get(IDScene)->GetMapWidth())
+	{
+		isBossFighting = true;
+		return; // Boss fight
+	}
+
+	if (simon->x > SCREEN_WIDTH / 2 &&
+		simon->x + SCREEN_WIDTH / 2 < tilemaps->Get(IDScene)->GetMapWidth())
+	{
+		TileMap * map = tilemaps->Get(IDScene);
+		int min_col = map->min_max_col_to_draw[map->index][0];
+		int max_col = map->min_max_col_to_draw[map->index][1];
+
+		if (simon->x >= min_col * 32 + (SCREEN_WIDTH / 2 - 16) &&
+			simon->x <= max_col * 32 - (SCREEN_WIDTH / 2 - 16))
+		{
+			game->SetCameraPosition(simon->x - SCREEN_WIDTH / 2, 0);
+		}
 	}
 }
 
@@ -657,7 +687,9 @@ void SceneManager::SetInactivationByPosition()
 			if (fx + FISHMAN_BBOX_WIDTH < entryViewPort.x || fx > entryViewPort.x + SCREEN_WIDTH ||
 				fy > (fm->GetEntryPosition()).y)
 			{
-				fm->SetIsNeedToCreateBubbles(true);
+				if (fy > (fm->GetEntryPosition()).y) // rớt xuống nước mới có bọt nước
+					fm->SetIsNeedToCreateBubbles(true);
+				
 				fm->SetState(FISHMAN_INACTIVE);
 			}
 		}
@@ -693,8 +725,10 @@ void SceneManager::ChangeScene(int scene)
 	case SCENE_2:
 		LoadObjectsFromFile(FILEPATH_OBJECTS_SCENE_2);
 		CreateListChangeSceneObjects();
-		simon->SetPosition(0.0f, 335.0f);
-		game->SetCameraPosition(0.0f, 0.0f);
+		/*simon->SetPosition(0.0f, 335.0f);
+		game->SetCameraPosition(0.0f, 0.0f);*/
+		simon->SetPosition(4160.0f, 143.0f);
+		game->SetCameraPosition(4080.0f, 0.0f); 
 		break;
 	case SCENE_3:
 		LoadObjectsFromFile(FILEPATH_OBJECTS_SCENE_3);

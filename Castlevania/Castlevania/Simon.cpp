@@ -685,7 +685,7 @@ void Simon::CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT>* listEnemy)
 					// Để đảm bảo zombie xuất hiện và đi từ cuối màn hình ra, do đó cần giới hạn lại khoảng cách của 
 					// Simon và zombie để có thể set active cho zombie
 					if ((enemyEntryPostion.x > x && enemyEntryPostion.x - x > 220 && enemyEntryPostion.x - x < 250) ||
-						(enemyEntryPostion.x < x && x - enemyEntryPostion.x > 230 && x - enemyEntryPostion.x < 260))
+						(enemyEntryPostion.x < x && x - enemyEntryPostion.x > 230 && x - enemyEntryPostion.x < 270))
 					{
 						if (enemyEntryPostion.x < x) zombie->SetOrientation(1);
 						else zombie->SetOrientation(-1);
@@ -727,16 +727,15 @@ void Simon::CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT>* listEnemy)
 				if (fishman->IsAbleToActivate() == true)
 				{
 					// Giảm độ khó xuất hiện của fishman
-					if (abs(this->x - (fishman->GetEntryPosition()).x <= 50.0f))
-						return;
+					if (abs(this->x - (fishman->GetEntryPosition()).x >= 80.0f))
+					{
+						float fx = fishman->GetEntryPosition().x;
 
-					float fx = fishman->GetEntryPosition().x;
+						if (fx < this->x) fishman->SetOrientation(1);
+						else fishman->SetOrientation(-1);
 
-					if (fx < this->x) fishman->SetOrientation(1);
-					else fishman->SetOrientation(-1);
-
-					fishman->SetIsAbleToShoot(rand() % 2);
-					fishman->SetState(FISHMAN_JUMP);
+						fishman->SetState(FISHMAN_JUMP);
+					}
 				}
 			}
 		}

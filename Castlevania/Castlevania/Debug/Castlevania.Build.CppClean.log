@@ -1,8 +1,8 @@
 c:\users\admin\desktop\mygame\castlevania\castlevania\debug\vc140.pdb
 c:\users\admin\desktop\mygame\castlevania\castlevania\debug\vc140.idb
-c:\users\admin\desktop\mygame\castlevania\castlevania\debug\debug.obj
-c:\users\admin\desktop\mygame\castlevania\castlevania\debug\door.obj
 c:\users\admin\desktop\mygame\castlevania\castlevania\debug\effect.obj
+c:\users\admin\desktop\mygame\castlevania\castlevania\debug\fireball.obj
+c:\users\admin\desktop\mygame\castlevania\castlevania\debug\fishman.obj
 c:\users\admin\desktop\mygame\castlevania\castlevania\debug\game.obj
 c:\users\admin\desktop\mygame\castlevania\castlevania\debug\gameobject.obj
 c:\users\admin\desktop\mygame\castlevania\castlevania\debug\ground.obj
@@ -21,11 +21,11 @@ c:\users\admin\desktop\mygame\castlevania\castlevania\debug\vampirebat.obj
 c:\users\admin\desktop\mygame\castlevania\castlevania\debug\whip.obj
 c:\users\admin\desktop\mygame\castlevania\castlevania\debug\zombie.obj
 c:\users\admin\desktop\mygame\castlevania\castlevania\debug\blackleopard.obj
+c:\users\admin\desktop\mygame\castlevania\castlevania\debug\bubbles.obj
 c:\users\admin\desktop\mygame\castlevania\castlevania\debug\candle.obj
 c:\users\admin\desktop\mygame\castlevania\castlevania\debug\changesceneobject.obj
-c:\users\admin\desktop\mygame\castlevania\castlevania\debug\fishman.obj
-c:\users\admin\desktop\mygame\castlevania\castlevania\debug\fireball.obj
-c:\users\admin\desktop\mygame\castlevania\castlevania\debug\bubbles.obj
+c:\users\admin\desktop\mygame\castlevania\castlevania\debug\debug.obj
+c:\users\admin\desktop\mygame\castlevania\castlevania\debug\door.obj
 c:\users\admin\desktop\mygame\castlevania\debug\castlevania.ilk
 c:\users\admin\desktop\mygame\castlevania\debug\castlevania.exe
 c:\users\admin\desktop\mygame\castlevania\debug\castlevania.pdb

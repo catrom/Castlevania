@@ -38,6 +38,7 @@
 #define ID_TEX_FISHMAN				33
 #define ID_TEX_FIREBALL				34
 #define ID_TEX_BUBBLES				35
+#define ID_TEX_BOSS					36
 
 //Items
 #define ID_TEX_ITEM_STOP_WATCH		8
@@ -87,6 +88,7 @@
 #define FILEPATH_TEX_FISHMAN		L"Textures\\FishMan.png"
 #define FILEPATH_TEX_FIREBALL		L"Textures\\FireBall.png"
 #define FILEPATH_TEX_BUBBLES		L"Textures\\Bubbles.png"
+#define FILEPATH_TEX_BOSS			L"Textures\\Boss.png"
 
 // Items
 #define FILEPATH_TEX_ITEM_STOP_WATCH			L"Textures\\Items\\Stopwatch.png"
@@ -228,6 +230,11 @@
 #define FISHMAN_JUMP		3
 #define FISHMAN_HIT			4
 
+// Boss (Phantom Bat)
+#define BOSS_ACTIVE			0
+#define BOSS_DESTROYED		1
+#define BOSS_INACTIVE		2
+
 // Fire ball
 #define FIREBALL			0
 
@@ -321,6 +328,11 @@
 #define FISHMAN_JUMP_ANI		1303
 #define FISHMAN_HIT_ANI			1304
 
+// Boss
+#define BOSS_ACTIVE_ANI			1601
+#define BOSS_DESTROYED_ANI		1602
+#define BOSS_INACTIVE_ANI		1603
+
 // Fire ball
 #define FIREBALL_ANI			1401
 
@@ -381,6 +393,9 @@
 #define FISHMAN_WALKING_SPEED_X		0.1f
 #define FISHMAN_RESPAWN_TIME		5000
 
+// Boss
+#define BOSS_
+
 // Fire ball
 #define FIREBALL_SPEED				0.13f
 
@@ -429,9 +444,9 @@
 
 // Zombie
 #define ZOMBIE_BBOX_WIDTH			10
-#define ZOMBIE_BBOX_HEIGHT			64
+#define ZOMBIE_BBOX_HEIGHT			60
 #define ZOMBIE_ACTIVE_BBOX_WIDTH			260
-#define ZOMBIE_ACTIVE_BBOX_HEIGHT			100
+#define ZOMBIE_ACTIVE_BBOX_HEIGHT			150
 
 // Black Leopard
 #define BLACK_LEOPARD_BBOX_WIDTH			10
@@ -447,9 +462,9 @@
 
 // Fish man
 #define FISHMAN_BBOX_WIDTH			10
-#define FISHMAN_BBOX_HEIGHT			64
-#define FISHMAN_ACTIVE_BBOX_WIDTH			100
-#define FISHMAN_ACTIVE_BBOX_HEIGHT			300
+#define FISHMAN_BBOX_HEIGHT			60
+#define FISHMAN_ACTIVE_BBOX_WIDTH			150
+#define FISHMAN_ACTIVE_BBOX_HEIGHT			350
 
 // Fire ball
 #define FIREBALL_BBOX_WIDTH				14

@@ -22,6 +22,7 @@
 class SceneManager
 {
 	int IDScene;
+	bool isBossFighting = false;
 
 	Game * game;
 
@@ -76,6 +77,7 @@ public:
 
 	virtual void Update(DWORD dt);
 	virtual void Render();
+	void UpdateCameraPosition();
 
 	void SetDropItems(LPGAMEOBJECT object);
 	void SetInactivationByPosition();  // Nếu object ra khỏi toạ độ viewport thì set unable / inactive

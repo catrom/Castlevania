@@ -154,16 +154,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	game = Game::GetInstance();
 	game->Init(hWnd);
 	
-	scenes = new SceneManager(game, SCENE_3);
+	scenes = new SceneManager(game, SCENE_2);
 	scenes->LoadResources();
-	scenes->ChangeScene(SCENE_3);
+	scenes->ChangeScene(SCENE_2);
 
 	input = new Input(game, scenes);
 	game->InitKeyboard(input);
 
 	player = new Player(scenes, game);
 	player->Init();
-
+	
 	Run();
 
 
