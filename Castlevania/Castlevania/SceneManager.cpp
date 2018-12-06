@@ -34,7 +34,7 @@ void SceneManager::LoadResources()
 	tilemaps->Add(SCENE_2, FILEPATH_TEX_MAP_SCENE_2, FILEPATH_DATA_MAP_SCENE_2, 5632, 352, 32, 32);
 	tilemaps->Add(SCENE_3, FILEPATH_TEX_MAP_SCENE_3, FILEPATH_DATA_MAP_SCENE_3, 1024, 352, 32, 32);
 
-	tilemaps->Get(SCENE_2)->index = 2;
+	//tilemaps->Get(SCENE_2)->index = 2;
 
 	textures->Add(ID_TEX_BBOX, FILEPATH_TEX_BBOX, D3DCOLOR_XRGB(255, 255, 255));
 
@@ -559,7 +559,7 @@ void SceneManager::Render()
 	}
 
 	simon->Render();
-	//simon->RenderBoundingBox();
+	simon->RenderBoundingBox();
 
 	for (auto door : listDoors)  // render door sau để chồng lên Simon
 	{
@@ -725,10 +725,10 @@ void SceneManager::ChangeScene(int scene)
 	case SCENE_2:
 		LoadObjectsFromFile(FILEPATH_OBJECTS_SCENE_2);
 		CreateListChangeSceneObjects();
-		/*simon->SetPosition(0.0f, 335.0f);
-		game->SetCameraPosition(0.0f, 0.0f);*/
-		simon->SetPosition(4160.0f, 143.0f);
-		game->SetCameraPosition(4080.0f, 0.0f); 
+		simon->SetPosition(1184.0f, 335.0f);
+		game->SetCameraPosition(0.0f, 0.0f);
+		/*simon->SetPosition(4160.0f, 143.0f);
+		game->SetCameraPosition(4080.0f, 0.0f); */
 		break;
 	case SCENE_3:
 		LoadObjectsFromFile(FILEPATH_OBJECTS_SCENE_3);

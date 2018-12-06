@@ -25,7 +25,7 @@ Simon::Simon() : GameObject()
 	item = -1;
 	energy = 99;
 	life = 3;
-	subWeapon = BOOMERANG;
+	subWeapon = DAGGER;
 	HP = 10;
 }
 
@@ -146,12 +146,13 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>
 {
 	GameObject::Update(dt);
 
-	if (state != STAIR_UP && state != STAIR_DOWN && isAutoWalk != true)
+	if (state != STAIR_UP && state != STAIR_DOWN && 
+		state != HIT_STAIR_UP && state != HIT_STAIR_DOWN && 
+		isAutoWalk != true)
 	{
 		if (vy < -0.2f || vy > 0.2f)
 			vy += SIMON_GRAVITY*dt;
 		else vy += SIMON_GRAVITY_LOWER*dt;
-
 	}
 
 	// Auto walk conditions
@@ -267,7 +268,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>
 				HP = HP - 2;
 				e->obj->SetEnable(false);
 			}
-			else if (dynamic_cast<Zombie*>(e->obj) || dynamic_cast<BlackLeopard*>(e->obj) 
+			else if (dynamic_cast<Zombie*>(e->obj) || dynamic_cast<BlackLeopard*>(e->obj)
 				|| dynamic_cast<VampireBat*>(e->obj) || dynamic_cast<FishMan*>(e->obj))
 			{
 				if (isUntouchable == false)
@@ -294,7 +295,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>
 				{
 					if (e->nx != 0) x += dx;
 					if (e->ny != 0) y += dy;
-				}	
+				}
 			}
 			else
 			{
@@ -310,7 +311,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>
 
 
 	// Check collision when fighting
-	if (state == HIT_SIT || state == HIT_STAND)
+	if (state == HIT_SIT || state == HIT_STAND || state == HIT_STAIR_UP || state == HIT_STAIR_DOWN)
 	{
 		// lấy vị trí của simon để set vị trí cho roi
 
@@ -406,7 +407,7 @@ void Simon::Render()
 		animations[state]->Render(1, nx, x, y);
 	}
 
-	if (state == HIT_SIT || state == HIT_STAND)
+	if (state == HIT_SIT || state == HIT_STAND || state == HIT_STAIR_UP || state == HIT_STAIR_DOWN)
 	{
 		whip->Render(animations[state]->GetCurrentFrame());
 	}
@@ -479,6 +480,14 @@ void Simon::SetState(int state)
 		vy = -SIMON_DEFLECT_SPEED_Y;
 		if (nx > 0) vx = -SIMON_DEFLECT_SPEED_X;
 		else vx = SIMON_DEFLECT_SPEED_X;
+		animations[state]->Reset();
+		animations[state]->SetAniStartTime(GetTickCount());
+		break;
+	case HIT_STAIR_UP:
+	case HIT_STAIR_DOWN:
+		isStand = true;
+		vx = 0;
+		vy = 0;
 		animations[state]->Reset();
 		animations[state]->SetAniStartTime(GetTickCount());
 		break;
