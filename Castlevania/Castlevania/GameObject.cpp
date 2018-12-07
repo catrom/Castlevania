@@ -221,7 +221,7 @@ void GameObject::AddAnimation(int aniID)
 	animations.push_back(ani);
 }
 
-void GameObject::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>* coObject)
+void GameObject::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
 	this->dt = dt;
 	/*x += vx * dt;

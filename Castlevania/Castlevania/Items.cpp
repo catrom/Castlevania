@@ -181,7 +181,7 @@ void Items::Render()
 	animations[state]->Render(1, -1, x, y);
 }
 
-void Items::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>* coObject)
+void Items::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
 	if (timeAppear == -1)
 	{

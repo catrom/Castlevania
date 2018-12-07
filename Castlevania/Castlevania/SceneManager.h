@@ -16,6 +16,7 @@
 #include "FishMan.h"
 #include "FireBall.h"
 #include "Bubbles.h"
+#include "Items.h"
 #include "ChangeSceneObject.h"
 
 
@@ -67,6 +68,9 @@ class SceneManager
 	bool isMovingCamera = false;
 	int countDxCamera = 0;
 
+	bool isUsingStopWatch = false; // xác định xem là có đang dùng stopwatch hay không
+	int stopWatchCounter = 0;
+
 public:
 	SceneManager(Game * game, int idScene);
 	~SceneManager();
@@ -88,5 +92,10 @@ public:
 	Simon * GetSimon() { return this->simon; }
 	SubWeapon * GetWeapon() { return this->weapon; }
 	vector<LPGAMEOBJECT> * GetListStairs() { return &(this->listStairs); }
+
+	void SetWeapon(SubWeapon * x) { this->weapon = x; }
+
+	bool IsUsingStopWatch() { return isUsingStopWatch; }
+	void StartStopWatch() { isUsingStopWatch = true; stopWatchCounter = GetTickCount(); }
 };
 

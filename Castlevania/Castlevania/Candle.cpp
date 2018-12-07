@@ -39,7 +39,7 @@ void Candle::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &
 
 }
 
-void Candle::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject)
+void Candle::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
 	if (state == CANDLE_DESTROYED && animations[state]->IsOver(150)) 	//nếu render xong hết đốm lửa rồi thì set enable = false -> biến mất
 	{

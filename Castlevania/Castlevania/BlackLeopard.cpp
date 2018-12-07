@@ -19,8 +19,8 @@ void BlackLeopard::LoadResources(Textures *& textures, Sprites *& sprites, Anima
 
 	sprites->Add(130001, 0, 0, 64, 32, texLeopard);
 	sprites->Add(130002, 64, 0, 128, 32, texLeopard);
-	sprites->Add(130003, 128, 0, 196, 32, texLeopard);
-	sprites->Add(130004, 196, 0, 256, 32, texLeopard);
+	sprites->Add(130003, 128, 0, 192, 32, texLeopard);
+	sprites->Add(130004, 192, 0, 256, 32, texLeopard);
 
 	LPANIMATION ani;
 
@@ -28,6 +28,7 @@ void BlackLeopard::LoadResources(Textures *& textures, Sprites *& sprites, Anima
 	ani->Add(130002);
 	ani->Add(130003);
 	ani->Add(130004);
+	ani->Add(130003);
 	animations->Add(BLACK_LEOPARD_ACTIVE_ANI, ani);
 
 	ani = new Animation(200);
@@ -39,7 +40,7 @@ void BlackLeopard::LoadResources(Textures *& textures, Sprites *& sprites, Anima
 	animations->Add(BLACK_LEOPARD_JUMP_ANI, ani);
 }
 
-void BlackLeopard::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject)
+void BlackLeopard::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
 	DWORD now = GetTickCount();
 
@@ -48,6 +49,9 @@ void BlackLeopard::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAME
 		SetState(BLACK_LEOPARD_INACTIVE);
 		return;
 	}
+
+	if (stopMovement == true)
+		return;
 
 	vy += BLACK_LEOPARD_GRAVITY*dt;
 	GameObject::Update(dt);

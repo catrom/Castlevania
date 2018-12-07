@@ -25,8 +25,8 @@ public:
 	void Simon_Jump();
 	void Simon_Hit();
 	void Simon_Hit_SubWeapon();
-	bool Simon_Stair_Down();
-	bool Simon_Stair_Up();
+	void Simon_Stair_Down();
+	void Simon_Stair_Up();
 	bool Simon_Stair_Stand();
 
 	bool StairCollisionsDetection();

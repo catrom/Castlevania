@@ -24,9 +24,6 @@ void Input::KeyState(BYTE *state)
 		if (simon->GetState() == POWER && simon->animations[POWER]->IsOver(450) == false)
 			return;
 
-		if (simon->GetState() == HIT && simon->animations[HIT]->IsOver(300) == false)
-			return;
-
 		if (simon->GetState() == STAIR_UP && simon->animations[STAIR_UP]->IsOver(200) == false)
 			return;
 
@@ -66,7 +63,7 @@ void Input::KeyState(BYTE *state)
 		// do đó cần reset lại animation start time về 0
 		simon->animations[simon->GetState()]->SetAniStartTime(0);
 	}
-	
+
 
 	// Xét trạng thái phím
 	if (game->IsKeyDown(DIK_RIGHT))
@@ -127,6 +124,8 @@ void Input::KeyState(BYTE *state)
 	}
 	else
 	{
+		simon->SetHitSubWeapons(false);
+
 		if (StairCollisionsDetection() == true)
 		{
 			if (Simon_Stair_Stand() == true)
@@ -134,7 +133,7 @@ void Input::KeyState(BYTE *state)
 				return;
 			}
 		}
-		
+
 		simon->SetState(STAND);
 	}
 }
@@ -145,6 +144,21 @@ void Input::OnKeyDown(int KeyCode)
 
 	switch (KeyCode)
 	{
+	case DIK_0:
+		scene->GetSimon()->SetSubWeapon(WEAPONS_STOP_WATCH);
+		break;
+	case DIK_1:
+		scene->GetSimon()->SetSubWeapon(WEAPONS_DAGGER);
+		break;
+	case DIK_2:
+		scene->GetSimon()->SetSubWeapon(WEAPONS_AXE);
+		break;
+	case DIK_3:
+		scene->GetSimon()->SetSubWeapon(WEAPONS_HOLY_WATER);
+		break;
+	case DIK_4:
+		scene->GetSimon()->SetSubWeapon(WEAPONS_BOOMERANG);
+		break;
 	case DIK_SPACE:
 		Simon_Jump();
 		break;
@@ -190,6 +204,7 @@ void Input::Simon_Hit()
 {
 	if ((scene->GetSimon()->GetState() == HIT_STAND || scene->GetSimon()->GetState() == HIT_SIT))
 		return;
+
 	if (scene->GetSimon()->GetState() == STAND || scene->GetSimon()->GetState() == JUMP)
 	{
 		scene->GetSimon()->SetState(HIT_STAND);
@@ -210,93 +225,147 @@ void Input::Simon_Hit()
 
 void Input::Simon_Hit_SubWeapon()
 {
-	if (scene->GetSimon()->GetSubWeapon() == -1 || scene->GetSimon()->GetEnergy() == 0) // không có vũ khí hoặc enery = 0
+	Simon * simon = scene->GetSimon();
+	SubWeapon * weapon = scene->GetWeapon();
+
+	if (simon->GetSubWeapon() == -1 || simon->GetEnergy() == 0) // không có vũ khí hoặc enery = 0
 		return;
-	if (scene->GetSimon()->GetState() == STAND || scene->GetSimon()->GetState() == JUMP)
+
+	if (simon->GetSubWeapon() == STOP_WATCH && simon->GetEnergy() < 5)
+		return;
+
+	if (weapon->GetState() != STOP_WATCH && weapon->IsEnable() == true) // đang phóng rồi
+		return;
+
+	if (weapon->GetState() == STOP_WATCH && scene->IsUsingStopWatch() == true) // đang sử dụng stop watch
+		return;
+
+	if (simon->GetState() == STAND || simon->GetState() == JUMP ||
+		simon->GetState() == SIT || simon->GetState() == STAIR_UP ||
+		simon->GetState() == STAIR_DOWN)
 	{
-		Simon * simon = scene->GetSimon();
-		SubWeapon * weapon = scene->GetWeapon();
 		float sx, sy;
 
 		// position
 		simon->GetPosition(sx, sy);
-		weapon->SetPosition(sx, sy);
+		
+		if (simon->GetState() == SIT) sy += 25.0f; // khớp vị trí tay
+		else sy += 10.0f;
+		if (simon->GetOrientation() < 0) sx += 30.0f;
+
+		weapon->SetPosition(sx, sy); 
 
 		// orientation
 		weapon->SetOrientation(simon->GetOrientation());
 
 		// state weapon
 		weapon->SetState(simon->GetSubWeapon());
-
 		weapon->SetEnable(true);
-		simon->LoseEnergy(1);
-		simon->SetState(HIT);
+
+		if (weapon->GetState() == STOP_WATCH)
+		{
+			simon->LoseEnergy(5);
+			scene->StartStopWatch();
+		}
+		else
+		{
+			simon->LoseEnergy(1);
+			simon->SetHitSubWeapons(true);
+			Simon_Hit();
+		}
 	}
 }
 
-bool Input::Simon_Stair_Down()
+void Input::Simon_Stair_Down()
 {
 	Simon * simon = scene->GetSimon();
 	int prevState = simon->GetState();
-
+	int stairDirection = simon->GetStairDirection();
+	
 	if (simon->IsMovingDown() == false)
 	{
 		simon->SetState(STAND);
-
-		return true;
+		return;
 	}
 
-
-	simon->SetOrientation(-simon->GetStairDirection());
-	simon->SetState(STAIR_DOWN);
-
-
+	// Auto-walk của Simon đi đến đúng đầu cầu thang rồi mới bước lên
 	if (simon->IsStandOnStair() == false)
 	{
+		float stair_x, simon_x, temp_y;
+
+		simon->GetStairCollided()->GetPosition(stair_x, temp_y);
+		simon->GetPosition(simon_x, temp_y);
+
+		if (stairDirection == -1) stair_x -= 28.0f;
+
+		if (stair_x < simon_x) simon->SetOrientation(-1);
+		else if (stair_x > simon_x) simon->SetOrientation(1);
+		else return;
+
+		simon->SetState(WALK);
+		simon->vy = 0;
+		simon->AutoWalk(stair_x - simon_x, STAIR_DOWN, -stairDirection);
 		simon->SetStandOnStair(true);
-		simon->PositionCorrection();
+
+		return;
 	}
-	else if (prevState == STAIR_UP)
+	else
 	{
-		simon->PositionCorrection(prevState);
+		simon->SetOrientation(-simon->GetStairDirection());
+		simon->SetState(STAIR_DOWN);
 	}
 
-	return true;
+	return;
 }
 
-bool Input::Simon_Stair_Up()
+void Input::Simon_Stair_Up()
 {
 	Simon * simon = scene->GetSimon();
 	int prevState = simon->GetState();
+	int stairDirection = simon->GetStairDirection();
 
 	if (simon->IsMovingUp() == false)
 	{
 		if (prevState == STAIR_UP || prevState == STAIR_DOWN)
 		{
-			int nx = simon->GetOrientation();
+			int nx = simon->GetStairDirection();
+			simon->SetOrientation(nx);
 			simon->SetState(STAIR_UP);
 			simon->AutoWalk(16 * nx, STAND, nx);
 		}
 
-		return true;
+		return;
 	}
 
-
-	simon->SetOrientation(simon->GetStairDirection());
-	simon->SetState(STAIR_UP);
-
-
+	// Auto-walk của Simon đi đến đúng chân cầu thang rồi mới bước lên
 	if (simon->IsStandOnStair() == false)
 	{
+		float stair_x, simon_x, temp_y;
+
+		simon->GetStairCollided()->GetPosition(stair_x, temp_y);
+		simon->GetPosition(simon_x, temp_y);
+
+		if (stairDirection == 1) stair_x -= 31.0f;
+		else stair_x += 5.0f;
+
+		if (stair_x < simon_x) simon->SetOrientation(-1);
+		else if (stair_x > simon_x)  simon->SetOrientation(1);
+		else return;
+
+		simon->SetState(WALK);
+		simon->vy = 0;
+		simon->AutoWalk(stair_x - simon_x, STAIR_UP, stairDirection);
 		simon->SetStandOnStair(true);
-		simon->PositionCorrection();
+
+		return;
 	}
-	else if (prevState == STAIR_DOWN)
+	else
 	{
-		simon->PositionCorrection(prevState);
+		simon->SetOrientation(stairDirection);
+		simon->SetState(STAIR_UP);
 	}
 
-	return true;
+	return;
 }
 
 bool Input::Simon_Stair_Stand()
@@ -311,12 +380,12 @@ bool Input::Simon_Stair_Stand()
 			simon->SetState(STAIR_UP);
 			isNeedToWaitingAnimation = false;
 		}
-		else if (simon->GetState() == HIT_STAIR_DOWN) 
+		else if (simon->GetState() == HIT_STAIR_DOWN)
 		{
 			simon->SetState(STAIR_DOWN);
 			isNeedToWaitingAnimation = false;
 		}
-			
+
 		simon->StandOnStair();
 		simon->animations[simon->GetState()]->Reset();
 

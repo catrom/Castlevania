@@ -73,7 +73,7 @@ void Door::GetBoundingBox(float & l, float & t, float & r, float & b)
 		break;
 	case DOOR_2_IDLE:
 	case DOOR_2_OPEN:
-		l = x - 32;
+		l = x - 16;
 		t = y;
 		r = l + DOOR_BBOX_WIDTH;
 		b = t + DOOR_BBOX_HEIGHT;

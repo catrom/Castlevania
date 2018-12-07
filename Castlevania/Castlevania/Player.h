@@ -44,7 +44,7 @@ public:
 	~Player();
 
 	void Init();
-	void Update(DWORD dt);
+	void Update(DWORD dt, bool stopwatch);
 	void Render();
 };
 

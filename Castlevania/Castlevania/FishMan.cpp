@@ -42,13 +42,13 @@ void FishMan::LoadResources(Textures *& textures, Sprites *& sprites, Animations
 	animations->Add(FISHMAN_JUMP_ANI, ani);
 }
 
-void FishMan::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject)
+void FishMan::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
-	DWORD now = GetTickCount();
-
 	// Update bubbles
-	if (isRenderingBubbles == true)
+	if (isRenderingBubbles == true && stopMovement == false)
 	{
+		DWORD now = GetTickCount();
+
 		if (now - startTimeRenderBubbles <= 1000)
 		{
 			bubbles->Update(dt);
@@ -66,13 +66,18 @@ void FishMan::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJEC
 		SetState(FISHMAN_INACTIVE);
 		return;
 	}
-	else if (state == FISHMAN_HIT && animations[state]->IsOver(1000) == true)
+	
+	if (stopMovement == true)
+		return;
+
+	if (state == FISHMAN_HIT && animations[state]->IsOver(1000) == true)
 	{
 		nx = nxAfterShoot;
 		SetState(FISHMAN_ACTIVE);
 		return;
 	}
-	else if (state == FISHMAN_INACTIVE)
+	
+	if (state == FISHMAN_INACTIVE)
 	{
 		return;
 	}
@@ -145,7 +150,7 @@ void FishMan::SetState(int state)
 		if (nx > 0) vx = FISHMAN_WALKING_SPEED_X;
 		else vx = -FISHMAN_WALKING_SPEED_X;
 		lastTimeShoot = GetTickCount();
-		deltaTimeToShoot = 2000 + rand() % 3000; // Random trong khoảng thời gian là 2 - 5s
+		deltaTimeToShoot = 500 + rand() % 2000; // Random trong khoảng thời gian là 0.5 - 2s
 		break;
 	case FISHMAN_JUMP:
 		x = entryPosition.x;

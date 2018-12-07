@@ -28,7 +28,7 @@ void Bubble::LoadResources(Textures *& textures, Sprites *& sprites, Animations 
 	animations->Add(BUBBLES_ANI, ani);
 }
 
-void Bubble::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject)
+void Bubble::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
 	GameObject::Update(dt);
 	vy += BUBBLES_GRAVITY*dt;

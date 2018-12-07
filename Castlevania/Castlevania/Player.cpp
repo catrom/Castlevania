@@ -68,7 +68,7 @@ void Player::Init()
 	information +="ENEMY                   -00\n";
 }
 
-void Player::Update(DWORD dt)
+void Player::Update(DWORD dt, bool stopwatch)
 {
 	score = simon->GetScore();
 	energy = simon->GetEnergy();
@@ -77,7 +77,8 @@ void Player::Update(DWORD dt)
 	subWeapon = simon->GetSubWeapon();
 	scene = scenes->GetIDScene() + 1; // (based 1)
 	simonHP = simon->GetHP();
-	time += dt;
+	
+	if (stopwatch == false) time += dt; // khi sử dụng stop watch thì không đếm thời gian
 
 	int remainTime = DEFAULT_TIME_PLAY - time / 1000;
 
@@ -117,7 +118,7 @@ void Player::Render()
 
 	if (subWeapon != -1) // simon get subweapon
 	{
-		subWeaponList[subWeapon]->Draw(0, -1, 303, 40);
+		subWeaponList[subWeapon]->Draw(0, -1, 305, 40);
 	}
 
 	for (int i = 0; i < simonHP; i++)

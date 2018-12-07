@@ -29,8 +29,11 @@ void FireBall::LoadResources(Textures *& textures, Sprites *& sprites, Animation
 	animations->Add(FIREBALL_ANI, ani);
 }
 
-void FireBall::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject)
+void FireBall::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
+	if (stopMovement == true)
+		return;
+
 	GameObject::Update(dt);
 	x += dx;
 }

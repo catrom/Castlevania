@@ -25,13 +25,16 @@ void Zombie::LoadResources(Textures *& textures, Sprites *& sprites, Animations 
 	animations->Add(ZOMBIE_ANI, ani);
 }
 
-void Zombie::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject)
+void Zombie::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
 	if (state == ZOMBIE_DESTROYED && animations[state]->IsOver(150) == true) 
 	{
 		SetState(ZOMBIE_INACTIVE);
 		return;
 	}
+
+	if (stopMovement == true)
+		return;
 
 	GameObject::Update(dt);
 

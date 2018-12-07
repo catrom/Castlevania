@@ -13,11 +13,8 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\Objects">
-      <UniqueIdentifier>{bb905845-d00d-4ed5-b1b6-c6bae8a1febe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Objects">
-      <UniqueIdentifier>{d7f44f9c-b966-447d-b4bc-d1e2fa25ab54}</UniqueIdentifier>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{e794b551-3793-4f4a-aebb-17ec747e33c7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -42,62 +39,62 @@
     <ClCompile Include="TileMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Candle.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Effect.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Ground.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Items.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Simon.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Whip.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
     <ClCompile Include="Input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SubWeapon.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
     <ClCompile Include="SceneManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Stair.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Door.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="ChangeSceneObject.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Zombie.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
     <ClCompile Include="BlackLeopard.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="VampireBat.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="FireBall.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="FishMan.cpp">
-      <Filter>Source Files\Objects</Filter>
+      <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="Bubbles.cpp">
-      <Filter>Source Files\Objects</Filter>
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Candle.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="ChangeSceneObject.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Door.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="FireBall.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="FishMan.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Ground.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Items.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Simon.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Stair.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="SubWeapon.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="VampireBat.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Whip.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Zombie.cpp">
+      <Filter>Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -122,62 +119,62 @@
     <ClInclude Include="TileMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Candle.h">
-      <Filter>Header Files\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Effect.h">
-      <Filter>Header Files\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Ground.h">
-      <Filter>Header Files\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Items.h">
-      <Filter>Header Files\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Whip.h">
-      <Filter>Header Files\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Simon.h">
-      <Filter>Header Files\Objects</Filter>
-    </ClInclude>
     <ClInclude Include="Input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SubWeapon.h">
-      <Filter>Header Files\Objects</Filter>
-    </ClInclude>
     <ClInclude Include="SceneManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Stair.h">
-      <Filter>Header Files\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Door.h">
-      <Filter>Header Files\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="ChangeSceneObject.h">
-      <Filter>Header Files\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Zombie.h">
-      <Filter>Header Files\Objects</Filter>
-    </ClInclude>
     <ClInclude Include="BlackLeopard.h">
-      <Filter>Header Files\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="VampireBat.h">
-      <Filter>Header Files\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="FireBall.h">
-      <Filter>Header Files\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="FishMan.h">
-      <Filter>Header Files\Objects</Filter>
+      <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="Bubbles.h">
-      <Filter>Header Files\Objects</Filter>
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Candle.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="ChangeSceneObject.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Door.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="FireBall.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="FishMan.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Ground.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Items.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Simon.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Stair.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="SubWeapon.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="VampireBat.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Whip.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Zombie.h">
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

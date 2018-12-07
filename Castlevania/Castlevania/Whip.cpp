@@ -1,5 +1,10 @@
 ﻿#include "Whip.h"
-
+#include "Candle.h"
+#include "Zombie.h"
+#include "BlackLeopard.h"
+#include "VampireBat.h"
+#include "FishMan.h"
+#include "FireBall.h"
 
 Whip::Whip() : GameObject()
 {
@@ -7,7 +12,7 @@ Whip::Whip() : GameObject()
 	AddAnimation(SHORT_CHAIN_ANI);
 	AddAnimation(LONG_CHAIN_ANI);
 
-	SetState(LONG_CHAIN);
+	SetState(NORMAL_WHIP);
 }
 
 void Whip::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &animations)
@@ -67,6 +72,84 @@ void Whip::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &an
 	animations->Add(LONG_CHAIN_ANI, ani);
 }
 
+void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
+{
+	for (UINT i = 0; i < coObjects->size(); i++)
+	{
+		LPGAMEOBJECT obj = coObjects->at(i);
+
+		if (dynamic_cast<Candle*>(obj))
+		{
+			Candle * e = dynamic_cast<Candle*> (obj);
+
+			float left, top, right, bottom;
+
+			e->GetBoundingBox(left, top, right, bottom);
+
+			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và nến
+			{
+				e->SetState(CANDLE_DESTROYED);
+			}
+		}
+		else if (dynamic_cast<Zombie*>(obj))
+		{
+			Zombie * e = dynamic_cast<Zombie*> (obj);
+
+			float left, top, right, bottom;
+
+			e->GetBoundingBox(left, top, right, bottom);
+
+			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và zombie
+			{
+				e->SetState(ZOMBIE_DESTROYED);
+			}
+		}
+		else if (dynamic_cast<BlackLeopard*>(obj))
+		{
+			BlackLeopard * e = dynamic_cast<BlackLeopard*> (obj);
+
+			float left, top, right, bottom;
+
+			e->GetBoundingBox(left, top, right, bottom);
+
+			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và black leopard
+			{
+				e->SetState(BLACK_LEOPARD_DESTROYED);
+			}
+		}
+		else if (dynamic_cast<VampireBat*>(obj))
+		{
+			VampireBat * e = dynamic_cast<VampireBat*> (obj);
+
+			float left, top, right, bottom;
+
+			e->GetBoundingBox(left, top, right, bottom);
+
+			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và vampire bat
+			{
+				e->SetState(VAMPIRE_BAT_DESTROYED);
+			}
+		}
+		else if (dynamic_cast<FishMan*>(obj))
+		{
+			FishMan * e = dynamic_cast<FishMan*> (obj);
+
+			float left, top, right, bottom;
+
+			e->GetBoundingBox(left, top, right, bottom);
+
+			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và fishman
+			{
+				e->SetState(FISHMAN_DESTROYED);
+			}
+		}
+		else if (dynamic_cast<FireBall*>(obj))
+		{
+			obj->SetEnable(false);
+		}
+	}
+}
+
 void Whip::Render(int currentID)
 {
 	animations[state]->RenderByID(currentID, nx, x, y);
@@ -113,6 +196,12 @@ void Whip::GetBoundingBox(float & left, float & top, float & right, float & bott
 	if (state != LONG_CHAIN)
 		right = left + WHIP_BBOX_WIDTH;
 	else  right = left + LONG_CHAIN_BBOX_WIDTH;
+}
+
+void Whip::PowerUp()
+{
+	if (state == NORMAL_WHIP) SetState(SHORT_CHAIN);
+	else if (state == SHORT_CHAIN) SetState(LONG_CHAIN);
 }
 
 

@@ -1,4 +1,14 @@
 ﻿#include "Simon.h"
+#include "Candle.h"
+#include "Effect.h"
+#include "Ground.h"
+#include "Items.h"
+#include "Door.h"
+#include "Zombie.h"
+#include "BlackLeopard.h"
+#include "VampireBat.h"
+#include "FishMan.h"
+#include "FireBall.h"
 
 Simon::Simon() : GameObject()
 {
@@ -10,7 +20,6 @@ Simon::Simon() : GameObject()
 	AddAnimation(JUMP_ANI);
 	AddAnimation(HIT_SIT_ANI);
 	AddAnimation(HIT_STAND_ANI);
-	AddAnimation(HIT_STAND_ANI);
 	AddAnimation(POWER_ANI);
 	AddAnimation(STAIR_UP_ANI);
 	AddAnimation(STAIR_DOWN_ANI);
@@ -19,13 +28,11 @@ Simon::Simon() : GameObject()
 	AddAnimation(WALK_ANI);  // for auto - walk
 	AddAnimation(DEFLECT_ANI);
 
-	whip = new Whip();
-
 	score = 0;
 	item = -1;
 	energy = 99;
 	life = 3;
-	subWeapon = DAGGER;
+	subWeapon = HOLY_WATER;
 	HP = 10;
 }
 
@@ -142,13 +149,13 @@ void Simon::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &a
 	animations->Add(DEFLECT_ANI, ani);
 }
 
-void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>* coObjects)
+void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 {
 	GameObject::Update(dt);
 
 	if (state != STAIR_UP && state != STAIR_DOWN && 
 		state != HIT_STAIR_UP && state != HIT_STAIR_DOWN && 
-		isAutoWalk != true)
+		isAutoWalk == false)
 	{
 		if (vy < -0.2f || vy > 0.2f)
 			vy += SIMON_GRAVITY*dt;
@@ -171,6 +178,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>
 			nx = nxAfterAutoWalk;
 
 			SetState(state);
+			if (state == STAIR_DOWN) y += 2.0f;
 
 			isAutoWalk = false;
 			autoWalkDistance = 0;
@@ -247,10 +255,14 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>
 			{
 				if (e->obj->GetState() == DOOR_2_IDLE)
 				{
-					e->obj->SetState(DOOR_2_OPEN);
-					e->obj->animations[e->obj->GetState()]->SetAniStartTime(GetTickCount());
+					if (e->nx == 1.0f) vx = 0;
+					else
+					{
+						e->obj->SetState(DOOR_2_OPEN);
+						e->obj->animations[e->obj->GetState()]->SetAniStartTime(GetTickCount());
 
-					isWalkThroughDoor = true;
+						isWalkThroughDoor = true;
+					}
 				}
 				else if (e->obj->GetState() == DOOR_2_OPEN)
 				{
@@ -265,7 +277,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>
 			}
 			else if (dynamic_cast<FireBall*>(e->obj))
 			{
-				HP = HP - 2;
+				//HP = HP - 2;
 				e->obj->SetEnable(false);
 			}
 			else if (dynamic_cast<Zombie*>(e->obj) || dynamic_cast<BlackLeopard*>(e->obj)
@@ -308,89 +320,6 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>
 	// clean up collision events
 	for (int i = 0; i < coEvents.size(); i++)
 		delete coEvents[i];
-
-
-	// Check collision when fighting
-	if (state == HIT_SIT || state == HIT_STAND || state == HIT_STAIR_UP || state == HIT_STAIR_DOWN)
-	{
-		// lấy vị trí của simon để set vị trí cho roi
-
-		whip->SetOrientation(nx);
-		whip->SetWhipPosition(D3DXVECTOR3(x, y, 0), isStand);
-
-		if (animations[state]->GetCurrentFrame() == animations[state]->GetFramesSize() - 1) // chỉ xét va chạm khi render tới sprite cuối cùng của simon
-		{
-			for (UINT i = 0; i < coObjects->size(); i++)
-			{
-				LPGAMEOBJECT obj = coObjects->at(i);
-				if (dynamic_cast<Candle*>(obj))
-				{
-					Candle * e = dynamic_cast<Candle*> (obj);
-
-					float left, top, right, bottom;
-
-					e->GetBoundingBox(left, top, right, bottom);
-
-					if (whip->CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và nến
-					{
-						e->SetState(CANDLE_DESTROYED);
-					}
-				}
-				else if (dynamic_cast<Zombie*>(obj))
-				{
-					Zombie * e = dynamic_cast<Zombie*> (obj);
-
-					float left, top, right, bottom;
-
-					e->GetBoundingBox(left, top, right, bottom);
-
-					if (whip->CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và zombie
-					{
-						e->SetState(ZOMBIE_DESTROYED);
-					}
-				}
-				else if (dynamic_cast<BlackLeopard*>(obj))
-				{
-					BlackLeopard * e = dynamic_cast<BlackLeopard*> (obj);
-
-					float left, top, right, bottom;
-
-					e->GetBoundingBox(left, top, right, bottom);
-
-					if (whip->CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và black leopard
-					{
-						e->SetState(BLACK_LEOPARD_DESTROYED);
-					}
-				}
-				else if (dynamic_cast<VampireBat*>(obj))
-				{
-					VampireBat * e = dynamic_cast<VampireBat*> (obj);
-
-					float left, top, right, bottom;
-
-					e->GetBoundingBox(left, top, right, bottom);
-
-					if (whip->CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và vampire bat
-					{
-						e->SetState(VAMPIRE_BAT_DESTROYED);
-					}
-				}
-				else if (dynamic_cast<FishMan*>(obj))
-				{
-					FishMan * e = dynamic_cast<FishMan*> (obj);
-
-					float left, top, right, bottom;
-
-					e->GetBoundingBox(left, top, right, bottom);
-
-					if (whip->CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và fishman
-					{
-						e->SetState(FISHMAN_DESTROYED);
-					}
-				}
-			}
-		}
-	}
 }
 
 void Simon::Render()
@@ -406,12 +335,6 @@ void Simon::Render()
 	{
 		animations[state]->Render(1, nx, x, y);
 	}
-
-	if (state == HIT_SIT || state == HIT_STAND || state == HIT_STAIR_UP || state == HIT_STAIR_DOWN)
-	{
-		whip->Render(animations[state]->GetCurrentFrame());
-	}
-
 }
 
 void Simon::SetState(int state)
@@ -452,7 +375,11 @@ void Simon::SetState(int state)
 		animations[state]->SetAniStartTime(GetTickCount());
 		break;
 	case HIT_STAND:
-	case HIT:
+		isStandOnStair = false;
+		isStand = true;
+		animations[state]->Reset();
+		animations[state]->SetAniStartTime(GetTickCount());
+		break;
 	case POWER:
 		isStandOnStair = false;
 		isStand = true;
@@ -518,8 +445,6 @@ bool Simon::CheckCollisionWithStair(vector<LPGAMEOBJECT>* listStair)
 	// thu nhỏ vùng xét va chạm, chỉ xét va chạm với chân của Simon
 	simon_t += 55;
 	simon_b += 5;  // bottom +5 để xét cho va chạm với bậc thang đầu tiên khi bước xuống
-	simon_l += 5;
-	simon_r -= 5;
 
 	for (UINT i = 0; i < listStair->size(); i++)
 	{
@@ -629,9 +554,7 @@ bool Simon::CheckCollisionWithItem(vector<LPGAMEOBJECT> * listItem)
 			case CHAIN:
 				SetState(POWER); // đổi trạng thái power - biến hình nhấp nháy các kiểu đà điểu
 				vx = 0;
-				// lên đời whip
-				if (whip->GetState() == NORMAL_WHIP) whip->SetState(SHORT_CHAIN);
-				else if (whip->GetState() == SHORT_CHAIN) whip->SetState(LONG_CHAIN);
+				isGotChainItem = true;
 				break;
 			case MONEY_BAG_RED:
 				score += 100;
@@ -706,12 +629,10 @@ void Simon::CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT>* listEnemy)
 			else if (dynamic_cast<BlackLeopard*>(enemy))
 			{
 				BlackLeopard * leopard = dynamic_cast<BlackLeopard*>(enemy);
-
-				if (leopard->GetState() == BLACK_LEOPARD_IDLE ||
-					(leopard->GetState() == BLACK_LEOPARD_INACTIVE && leopard->IsAbleToActivate() == true))
-				{
+				if (leopard->GetState() == BLACK_LEOPARD_INACTIVE && leopard->IsAbleToActivate() == true)
+					leopard->SetState(BLACK_LEOPARD_IDLE);
+				else if (leopard->GetState() == BLACK_LEOPARD_IDLE)
 					leopard->SetState(BLACK_LEOPARD_ACTIVE);
-				}
 			}
 			else if (dynamic_cast<VampireBat*>(enemy))
 			{
@@ -736,7 +657,7 @@ void Simon::CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT>* listEnemy)
 				if (fishman->IsAbleToActivate() == true)
 				{
 					// Giảm độ khó xuất hiện của fishman
-					if (abs(this->x - (fishman->GetEntryPosition()).x >= 80.0f))
+					if (abs(this->x - (fishman->GetEntryPosition()).x >= 50.0f))
 					{
 						float fx = fishman->GetEntryPosition().x;
 
@@ -774,67 +695,6 @@ bool Simon::CheckChangeScene(vector<LPCHANGESCENEOBJ>* listChangeScene)
 	}
 
 	return false;
-}
-
-void Simon::PositionCorrection(int prevState)
-{
-	float stair_x, stair_y;
-	stairCollided->GetPosition(stair_x, stair_y);
-
-	if (prevState == -1)
-	{
-		if (state == STAIR_UP)
-		{
-			if (stairDirection == 1)
-			{
-				x = stair_x - 34.0f;
-				y = stair_y - 31.0f;
-			}
-			else
-			{
-				x = stair_x + 5.0f;
-				y = stair_y - 31.0f;
-			}
-		}
-		else if (state == STAIR_DOWN)
-		{
-			if (stairDirection == 1)
-			{
-				x = stair_x - 10.0f;
-				y = stair_y - 47.0f;
-			}
-			else
-			{
-				x = stair_x - 18.0f;
-				y = stair_y - 47.0f;
-			}
-		}
-	}
-	else
-	{
-		if (state == STAIR_UP && prevState == STAIR_DOWN)
-		{
-			if (stairDirection == 1)
-			{
-				x -= 3.0f;
-			}
-			else
-			{
-				x += 3.0f;
-			}
-		}
-		else if (state == STAIR_DOWN && prevState == STAIR_UP)
-		{
-			if (stairDirection == 1)
-			{
-				x += 3.0f;
-			}
-			else
-			{
-				x -= 3.0f;
-			}
-		}
-	}
 }
 
 void Simon::StandOnStair()

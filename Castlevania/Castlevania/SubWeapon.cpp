@@ -1,6 +1,12 @@
-#include "SubWeapon.h"
-
-
+﻿#include "SubWeapon.h"
+#include "Candle.h"
+#include "Zombie.h"
+#include "BlackLeopard.h"
+#include "VampireBat.h"
+#include "FishMan.h"
+#include "FireBall.h"
+#include "Simon.h"
+#include "Ground.h"
 
 SubWeapon::SubWeapon()
 {
@@ -9,6 +15,7 @@ SubWeapon::SubWeapon()
 	AddAnimation(WEAPONS_AXE_ANI);
 	AddAnimation(WEAPONS_HOLY_WATER_ANI);
 	AddAnimation(WEAPONS_BOOMERANG_ANI);
+	AddAnimation(WEAPONS_HOLY_WATER_SHATTERED_ANI);
 
 	state = -1; // no subweapon
 }
@@ -61,10 +68,13 @@ void SubWeapon::LoadResources(Textures *& textures, Sprites *& sprites, Animatio
 	animations->Add(WEAPONS_AXE_ANI, ani);
 
 	ani = new Animation();
-	ani->Add(90011, 300);
+	ani->Add(90011);
+	animations->Add(WEAPONS_HOLY_WATER_ANI, ani);
+
+	ani = new Animation();
 	ani->Add(90012);
 	ani->Add(90013);
-	animations->Add(WEAPONS_HOLY_WATER_ANI, ani);
+	animations->Add(WEAPONS_HOLY_WATER_SHATTERED_ANI, ani);
 
 	ani = new Animation();
 	ani->Add(90021);
@@ -73,20 +83,30 @@ void SubWeapon::LoadResources(Textures *& textures, Sprites *& sprites, Animatio
 	animations->Add(WEAPONS_BOOMERANG_ANI, ani);
 }
 
-void SubWeapon::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject)
+void SubWeapon::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
+	if (isHolyWaterShattered == true && 
+		GetTickCount() - holyWaterShatteredCounter > WEAPONS_HOLY_WATER_TIME_EFFECT)
+	{
+		isHolyWaterShattered = false;
+		holyWaterShatteredCounter = 0;
+		this->isEnable = false;
+		return;
+	}
+
 	GameObject::Update(dt);
 
 	switch (state)
 	{
-	case AXE:
-		vy += 0.02f;
+	case WEAPONS_AXE:
+		vy += WEAPONS_AXE_GRAVITY*dt;
 		break;
-	case HOLY_WATER:
-		vy += 0.02f;
+	case WEAPONS_HOLY_WATER:
+		vy += WEAPONS_HOLY_WATER_GRAVITY*dt;
 		break;
-	case BOOMERANG:
-		vx += (-nx * 0.01f);
+	case WEAPONS_BOOMERANG:
+		if (nx > 0) vx -= WEAPONS_BOOMERANG_TURNBACK_SPEED;
+		else vx += WEAPONS_BOOMERANG_TURNBACK_SPEED;
 		break;
 	default:
 		break;
@@ -106,17 +126,84 @@ void SubWeapon::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJ
 	}
 	else
 	{
+		// kiểm tra va chạm với object
 		float min_tx, min_ty, nx = 0, ny;
 
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
 
-		if (state == HOLY_WATER && ny != 0)
+		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
-			SetEnable(false);
-		}
-		else if (state == AXE)
-		{
-			if (y > 350.0f) SetEnable(false);
+			LPCOLLISIONEVENT e = coEventsResult[i];
+
+			if (dynamic_cast<Candle*>(e->obj))
+			{
+				Candle * candle = dynamic_cast<Candle*>(e->obj);
+				candle->SetState(CANDLE_DESTROYED);
+
+				if (state == WEAPONS_DAGGER || state == WEAPONS_AXE || state == WEAPONS_BOOMERANG)
+					this->isEnable = false;
+			}
+			else if (dynamic_cast<FireBall*>(e->obj))
+			{
+				FireBall * fireball = dynamic_cast<FireBall*>(e->obj);
+				fireball->SetEnable(false);
+
+				if (state == WEAPONS_DAGGER || state == WEAPONS_AXE || state == WEAPONS_BOOMERANG)
+					this->isEnable = false;
+			}
+			else if (dynamic_cast<Zombie*>(e->obj))
+			{
+				Zombie * zombie = dynamic_cast<Zombie*>(e->obj);
+				zombie->SetState(ZOMBIE_DESTROYED);
+				scoreReceived = 100;
+				targetTypeHit = ZOMBIE;
+
+				if (state == WEAPONS_DAGGER || state == WEAPONS_AXE || state == WEAPONS_BOOMERANG)
+					this->isEnable = false;
+			}
+			else if (dynamic_cast<BlackLeopard*>(e->obj))
+			{
+				BlackLeopard * blackLeopard = dynamic_cast<BlackLeopard*>(e->obj);
+				blackLeopard->SetState(BLACK_LEOPARD_DESTROYED);
+				scoreReceived = 200;
+				targetTypeHit = BLACK_LEOPARD;
+
+				if (state == WEAPONS_DAGGER || state == WEAPONS_AXE || state == WEAPONS_BOOMERANG)
+					this->isEnable = false;
+			}
+			else if (dynamic_cast<VampireBat*>(e->obj))
+			{
+				VampireBat * vampirebat = dynamic_cast<VampireBat*>(e->obj);
+				vampirebat->SetState(VAMPIRE_BAT_DESTROYED);
+				scoreReceived = 200;
+				targetTypeHit = VAMPIRE_BAT;
+
+				if (state == WEAPONS_DAGGER || state == WEAPONS_AXE || state == WEAPONS_BOOMERANG)
+					this->isEnable = false;
+			}
+			else if (dynamic_cast<FishMan*>(e->obj))
+			{
+				FishMan * fishman = dynamic_cast<FishMan*>(e->obj);
+				fishman->SetState(FISHMAN_DESTROYED);
+				scoreReceived = 300;
+				targetTypeHit = FISHMAN;
+
+				if (state == WEAPONS_DAGGER || state == WEAPONS_AXE || state == WEAPONS_BOOMERANG)
+					this->isEnable = false;
+			}
+			else if (dynamic_cast<Ground*>(e->obj))
+			{
+				if (state == WEAPONS_HOLY_WATER && e->ny == -1)
+					SetState(WEAPONS_HOLY_WATER_SHATTERED);
+
+				x += dx;
+				y += dy;
+			}
+			else if (dynamic_cast<Simon*>(e->obj))
+			{
+				if (state == WEAPONS_BOOMERANG)
+					this->isEnable = false;
+			}
 		}
 	}
 
@@ -126,7 +213,7 @@ void SubWeapon::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJ
 
 void SubWeapon::Render()
 {
-	if (state != STOP_WATCH)
+	if (state != WEAPONS_STOP_WATCH)
 		animations[state]->Render(1, nx, x, y);
 }
 
@@ -134,23 +221,33 @@ void SubWeapon::SetState(int state)
 {
 	GameObject::SetState(state);
 
+	scoreReceived = 0;
+	targetTypeHit = -1;
+
 	switch (state)
 	{
-	case STOP_WATCH:
+	case WEAPONS_STOP_WATCH:
 		break;
-	case DAGGER:
-		vx = nx * WEAPONS_DAGGER_SPEED;
+	case WEAPONS_DAGGER:
+		if (nx > 0) vx = WEAPONS_DAGGER_SPEED;
+		else vx = -WEAPONS_DAGGER_SPEED;
 		vy = 0;
 		break;
-	case AXE:
-		vx = nx * WEAPONS_AXE_SPEED_X;
+	case WEAPONS_AXE:
+		if (nx > 0) vx = WEAPONS_AXE_SPEED_X;
+		else vx = -WEAPONS_AXE_SPEED_X;
 		vy = -WEAPONS_AXE_SPEED_Y;
 		break;
-	case HOLY_WATER:
+	case WEAPONS_HOLY_WATER:
 		vx = nx * WEAPONS_HOLY_WATER_SPEED_X;
 		vy = -WEAPONS_HOLY_WATER_SPEED_Y;
 		break;
-	case BOOMERANG:
+	case WEAPONS_HOLY_WATER_SHATTERED:
+		vx = 0;
+		vy = 0;
+		StartHolyWaterEffect();
+		break;
+	case WEAPONS_BOOMERANG:
 		vx = nx * WEAPONS_BOOMERANG_SPEED;
 		vy = 0;
 		break;
@@ -166,22 +263,29 @@ void SubWeapon::GetBoundingBox(float & left, float & top, float & right, float &
 
 	switch (state)
 	{
-	case STOP_WATCH:
-		right = left + 26;
-		bottom = top + 28;
-	case DAGGER:
-		right = left + 32;
-		bottom = top + 18;
-	case AXE:
-		right = left + 30;
-		bottom = top + 28;
-	case HOLY_WATER:
-		right = left + 32;
-		bottom = top + 32;
-	case BOOMERANG:
-		right = left + 30;
-		bottom = top + 28;
+	case WEAPONS_STOP_WATCH:
+		right = left;  // no need to get boundingbox
+		bottom = top;
+		break;
+	case WEAPONS_DAGGER:
+		right = left + WEAPONS_DAGGER_BBOX_WIDTH;
+		bottom = top + WEAPONS_DAGGER_BBOX_HEIGHT;
+		break;
+	case WEAPONS_AXE:
+		right = left + WEAPONS_AXE_BBOX_WIDTH;
+		bottom = top + WEAPONS_AXE_BBOX_HEIGHT;
+		break;
+	case WEAPONS_HOLY_WATER:
+		right = left + WEAPONS_HOLY_WATER_BBOX_WIDTH;
+		bottom = top + WEAPONS_AXE_BBOX_HEIGHT;
+		break;
+	case WEAPONS_BOOMERANG:
+		right = left + WEAPONS_BOOMERANG_BBOX_WIDTH;
+		bottom = top + WEAPONS_BOOMERANG_BBOX_HEIGHT;
+		break;
 	default:
+		right = left;
+		bottom = top;
 		break;
 	}
 }

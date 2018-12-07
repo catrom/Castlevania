@@ -36,13 +36,16 @@ void VampireBat::LoadResources(Textures *& textures, Sprites *& sprites, Animati
 	animations->Add(VAMPIRE_BAT_ANI, ani);
 }
 
-void VampireBat::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject)
+void VampireBat::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
 	if (state == VAMPIRE_BAT_DESTROYED && animations[state]->IsOver(150) == true)
 	{
 		SetState(VAMPIRE_BAT_INACTIVE);
 		return;
 	}
+
+	if (stopMovement == true)
+		return;
 
 	GameObject::Update(dt);
 
@@ -93,7 +96,7 @@ void VampireBat::SetState(int state)
 void VampireBat::GetBoundingBox(float & left, float & top, float & right, float & bottom)
 {
 	left = x + 11; // 10,32
-	top = y;
+	top = y + 11;
 	right = left + VAMPIRE_BAT_BBOX_WIDTH;
 	bottom = top + VAMPIRE_BAT_BBOX_HEIGHT;
 }
