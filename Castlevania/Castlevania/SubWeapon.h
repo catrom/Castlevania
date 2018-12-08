@@ -22,6 +22,7 @@ public:
 
 	void SetState(int state);
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
+	virtual void GetActiveBoundingBox(float &left, float &top, float &right, float &bottom) {}
 
 	int GetScoreReceived() { return scoreReceived; }
 	int GetTargetTypeHit() { return targetTypeHit; }

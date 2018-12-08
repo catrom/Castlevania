@@ -20,6 +20,7 @@
 #pragma region Texture ID
 
 #define ID_TEX_BBOX					-1
+#define ID_TEX_BBOX_2				-2
 #define ID_TEX_SCENE_1				0
 #define ID_TEX_SIMON				1
 #define ID_TEX_WHIP					2
@@ -73,6 +74,7 @@
 
 // Objects
 #define FILEPATH_TEX_BBOX			L"Textures\\BBox.png"
+#define FILEPATH_TEX_BBOX_2			L"Textures\\BBox2.png"
 #define FILEPATH_TEX_SIMON			L"Textures\\Simon.png"
 #define FILEPATH_TEX_WHIP			L"Textures\\Whip.png"
 #define FILEPATH_TEX_CANDLE			L"Textures\\Candle.png"
@@ -166,6 +168,7 @@
 
 // Flame Effect
 #define	EFFECT		0
+#define EFFECT_2	1
 
 // Ground
 #define GROUND_1	0
@@ -280,6 +283,7 @@
 
 // Flame Effect
 #define	EFFECT_ANI		501
+#define EFFECT_2_ANI	502
 
 // Items
 #define	STOP_WATCH_ANI				601
@@ -408,6 +412,11 @@
 #define FISHMAN_RESPAWN_TIME		5000
 
 // Boss
+#define BOSS_HP						16
+#define BOSS_DEFAULT_VELOCITY		0.1f
+#define BOSS_STOP_TIME_WAITING		2000
+
+// Boss
 #define BOSS_
 
 // Fire ball
@@ -480,6 +489,14 @@
 #define FISHMAN_ACTIVE_BBOX_WIDTH			200
 #define FISHMAN_ACTIVE_BBOX_HEIGHT			400
 
+// Boss
+#define BOSS_BBOX_WIDTH				46
+#define BOSS_BBOX_HEIGHT			46
+#define BOSS_ACTIVE_BBOX_WIDTH		50
+#define BOSS_ACTIVE_BBOX_HEIGHT		400
+#define BOSS_RECT_RANDOMSPOT_BBOX_WIDTH		200
+#define BOSS_RECT_RANDOMSPOT_BBOX_HEIGHT	200
+
 // Fire ball
 #define FIREBALL_BBOX_WIDTH				14
 #define FIREBALL_BBOX_HEIGHT			12
@@ -513,6 +530,7 @@
 #define BLACK_LEOPARD	5
 #define VAMPIRE_BAT		6
 #define FISHMAN			7
+#define	BOSS			8
 
 #pragma endregion
 

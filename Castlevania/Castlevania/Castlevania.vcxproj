@@ -147,6 +147,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BlackLeopard.cpp" />
+    <ClCompile Include="Boss.cpp" />
     <ClCompile Include="Bubbles.cpp" />
     <ClCompile Include="Candle.cpp" />
     <ClCompile Include="ChangeSceneObject.cpp" />
@@ -175,6 +176,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BlackLeopard.h" />
+    <ClInclude Include="Boss.h" />
     <ClInclude Include="Bubbles.h" />
     <ClInclude Include="Candle.h" />
     <ClInclude Include="ChangeSceneObject.h" />

@@ -92,7 +92,9 @@ public:
 	bool IsDroppedItem() { return this->isDroppedItem; }
 	bool IsEnable() { return this->isEnable; }
 	D3DXVECTOR2 GetEntryPosition() { return this->entryPosition; }
+
 	void RenderBoundingBox();
+	void RenderActiveBoundingBox();
 
 	// check collision of 2 static object (ex: whip and candle)
 	bool AABB(
@@ -122,7 +124,7 @@ public:
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom) = 0;
 
 	// Lấy boundingbox vùng va chạm với simon để khiến enemy active
-	virtual void GetActiveBoundingBox(float &left, float &top, float &right, float &bottom) {};
+	virtual void GetActiveBoundingBox(float &left, float &top, float &right, float &bottom) = 0;
 
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *Objects = NULL, vector<LPGAMEOBJECT> *coObject = NULL, bool stopMovement = false);
 	virtual void Render() = 0;

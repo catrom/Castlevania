@@ -9,6 +9,7 @@
 #include "VampireBat.h"
 #include "FishMan.h"
 #include "FireBall.h"
+#include "Boss.h"
 
 Simon::Simon() : GameObject()
 {
@@ -667,6 +668,11 @@ void Simon::CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT>* listEnemy)
 						fishman->SetState(FISHMAN_JUMP);
 					}
 				}
+			}
+			else if (dynamic_cast<Boss*>(enemy))
+			{
+				Boss * boss = dynamic_cast<Boss*>(enemy);
+				boss->SetState(BOSS_ACTIVE);
 			}
 		}
 	}

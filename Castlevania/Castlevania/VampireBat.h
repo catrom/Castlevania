@@ -21,7 +21,7 @@ public:
 	void StartRespawnTimeCounter() { isRespawnWaiting = true; respawnTime_Start = GetTickCount(); }
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
-	void GetActiveBoundingBox(float &left, float &top, float &right, float &bottom);
+	virtual void GetActiveBoundingBox(float &left, float &top, float &right, float &bottom);
 
 	bool IsRespawnWaiting() { return isRespawnWaiting; }
 	void SetIsRespawnWaiting(bool x) { isRespawnWaiting = x; }

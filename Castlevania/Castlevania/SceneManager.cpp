@@ -29,14 +29,16 @@ void SceneManager::LoadResources()
 	fishman->LoadResources(textures, sprites, animations);
 	fireball->LoadResources(textures, sprites, animations);
 	bubble->LoadResources(textures, sprites, animations);
+	boss->LoadResources(textures, sprites, animations);
 
 	tilemaps->Add(SCENE_1, FILEPATH_TEX_MAP_SCENE_1, FILEPATH_DATA_MAP_SCENE_1, 1536, 320, 32, 32);
 	tilemaps->Add(SCENE_2, FILEPATH_TEX_MAP_SCENE_2, FILEPATH_DATA_MAP_SCENE_2, 5632, 352, 32, 32);
 	tilemaps->Add(SCENE_3, FILEPATH_TEX_MAP_SCENE_3, FILEPATH_DATA_MAP_SCENE_3, 1024, 352, 32, 32);
 
-	//tilemaps->Get(SCENE_2)->index = 2;
+	tilemaps->Get(SCENE_2)->index = 2;
 
 	textures->Add(ID_TEX_BBOX, FILEPATH_TEX_BBOX, D3DCOLOR_XRGB(255, 255, 255));
+	textures->Add(ID_TEX_BBOX_2, FILEPATH_TEX_BBOX_2, D3DCOLOR_XRGB(255, 255, 255));
 
 	simon = new Simon();
 	weapon = new SubWeapon();
@@ -150,6 +152,15 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 			fishman->SetIDItem(idItem);
 			listFishMans.push_back(fishman);
 			Objects.push_back(fishman);
+			break;
+		case BOSS:
+			boss = new Boss();
+			boss->SetEntryPosition(pos_x, pos_y);
+			boss->SetPosition(pos_x, pos_y);
+			boss->SetState(BOSS_INACTIVE);
+			boss->SetEnable(true);
+			boss->SetIDItem(idItem);
+			Objects.push_back(boss);
 			break;
 		default:
 			break;
@@ -331,6 +342,11 @@ void SceneManager::Update(DWORD dt)
 
 		if (dynamic_cast<Simon*>(object))
 		{
+			/*if (isBossFighting == true)
+				coObjects.push_back(boss);*/
+
+			coObjects.push_back(boss);
+
 			for (auto candle : listCandles)
 			{
 				if (candle->IsEnable() == false)
@@ -403,6 +419,7 @@ void SceneManager::Update(DWORD dt)
 			simon->CheckCollisionWithEnemyActiveArea(&listBlackLeopards);
 			simon->CheckCollisionWithEnemyActiveArea(&listVampireBats);
 			simon->CheckCollisionWithEnemyActiveArea(&listFishMans);
+			simon->CheckCollisionWithEnemyActiveArea(&coObjects);
 		}
 		else if (dynamic_cast<Items*>(object))
 		{
@@ -623,6 +640,18 @@ void SceneManager::Update(DWORD dt)
 				object->Update(dt, &Objects, &listGrounds, isUsingStopWatch);
 			}
 		}
+		else if (dynamic_cast<Boss*>(object))
+		{
+			if (boss->GetState() == BOSS_INACTIVE)
+				continue;
+
+			// Passing simon's position for boss movement
+			float sx, sy;
+			simon->GetPosition(sx, sy);
+			boss->SetSimonPosition(sx, sy);
+
+			boss->Update(dt);
+		}
 		else
 		{
 			object->Update(dt, &Objects, &coObjects, isUsingStopWatch);
@@ -656,6 +685,8 @@ void SceneManager::Render()
 
 	for (auto zombie : listZombies)
 	{
+		zombie->RenderActiveBoundingBox();
+
 		if (zombie->GetState() == ZOMBIE_INACTIVE)
 			continue;
 
@@ -665,6 +696,8 @@ void SceneManager::Render()
 
 	for (auto leopard : listBlackLeopards)
 	{
+		leopard->RenderActiveBoundingBox();
+
 		if (leopard->GetState() == BLACK_LEOPARD_INACTIVE)
 			continue;
 
@@ -674,6 +707,8 @@ void SceneManager::Render()
 
 	for (auto bat : listVampireBats)
 	{
+		bat->RenderActiveBoundingBox();
+
 		if (bat->GetState() == VAMPIRE_BAT_INACTIVE)
 			continue;
 
@@ -692,6 +727,8 @@ void SceneManager::Render()
 
 	for (auto fish : listFishMans)
 	{
+		fish->RenderActiveBoundingBox();
+
 		fishman = dynamic_cast<FishMan*>(fish);
 
 		if (fishman->GetState() == FISHMAN_INACTIVE)
@@ -721,6 +758,10 @@ void SceneManager::Render()
 		whip->Render(simon->animations[simon->GetState()]->GetCurrentFrame());
 		whip->RenderBoundingBox();
 	}
+
+	boss->Render();
+	boss->RenderBoundingBox();
+	boss->RenderActiveBoundingBox();
 
 	for (auto door : listDoors)  // render door sau để chồng lên Simon
 	{
@@ -898,10 +939,10 @@ void SceneManager::ChangeScene(int scene)
 	case SCENE_2:
 		LoadObjectsFromFile(FILEPATH_OBJECTS_SCENE_2);
 		CreateListChangeSceneObjects();
-		simon->SetPosition(0.0f, 335.0f);
-		game->SetCameraPosition(0.0f, 0.0f);
-		/*simon->SetPosition(4160.0f, 143.0f);
-		game->SetCameraPosition(4080.0f, 0.0f); */
+		//simon->SetPosition(2560.0f, 335.0f);
+		//game->SetCameraPosition(0.0f, 0.0f);
+		simon->SetPosition(5344.0f, 335.0f);
+		game->SetCameraPosition(4080.0f, 0.0f); 
 		break;
 	case SCENE_3:
 		LoadObjectsFromFile(FILEPATH_OBJECTS_SCENE_3);

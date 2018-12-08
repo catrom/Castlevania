@@ -17,6 +17,7 @@
 #include "FireBall.h"
 #include "Bubbles.h"
 #include "Items.h"
+#include "Boss.h"
 #include "ChangeSceneObject.h"
 
 
@@ -42,6 +43,7 @@ class SceneManager
 	FishMan * fishman = new FishMan();
 	FireBall * fireball = new FireBall();
 	Bubble * bubble = new Bubble();
+	Boss * boss = new Boss();
 
 	ChangeSceneObject * changeScene;
 

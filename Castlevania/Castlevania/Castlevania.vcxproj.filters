@@ -96,6 +96,9 @@
     <ClCompile Include="Zombie.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
+    <ClCompile Include="Boss.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Debug.h">
@@ -174,6 +177,9 @@
       <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="Zombie.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss.h">
       <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,9 +1,11 @@
-﻿  Player.cpp
+﻿  SceneManager.cpp
+  c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+c:\users\admin\desktop\mygame\castlevania\castlevania\define.h(14): warning C4005: 'DIRECTINPUT_VERSION': macro redefinition
+  c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h(42): note: see previous definition of 'DIRECTINPUT_VERSION'
 c:\users\admin\desktop\mygame\castlevania\castlevania\tilemap.h(67): warning C4018: '<': signed/unsigned mismatch
 c:\users\admin\desktop\mygame\castlevania\castlevania\tilemap.h(68): warning C4018: '<': signed/unsigned mismatch
-c:\users\admin\desktop\mygame\castlevania\castlevania\player.cpp(126): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\admin\desktop\mygame\castlevania\castlevania\player.cpp(127): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\admin\desktop\mygame\castlevania\castlevania\player.cpp(132): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\admin\desktop\mygame\castlevania\castlevania\player.cpp(137): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\admin\desktop\mygame\castlevania\castlevania\scenemanager.cpp(614): warning C4018: '>=': signed/unsigned mismatch
+c:\users\admin\desktop\mygame\castlevania\castlevania\scenemanager.cpp(621): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\admin\desktop\mygame\castlevania\castlevania\scenemanager.cpp(625): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
   Castlevania.vcxproj -> C:\Users\Admin\Desktop\MyGame\Castlevania\Debug\Castlevania.exe
   Castlevania.vcxproj -> C:\Users\Admin\Desktop\MyGame\Castlevania\Debug\Castlevania.pdb (Full PDB)

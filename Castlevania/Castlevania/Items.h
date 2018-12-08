@@ -19,6 +19,7 @@ public:
 	void SetItem(int idItem);
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
+	virtual void GetActiveBoundingBox(float &left, float &top, float &right, float &bottom) {}
 
 };
 
