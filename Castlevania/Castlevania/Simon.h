@@ -48,12 +48,12 @@ public:
 	Simon();
 
 	virtual void LoadResources(Textures* &textures, Sprites* &sprites, Animations* &animations);
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *Objects = NULL, vector<LPGAMEOBJECT> *coObjects = NULL, bool stopMovement = false);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL, bool stopMovement = false);
 	void Render();
 	void SetState(int state);
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
-	virtual void GetActiveBoundingBox(float &left, float &top, float &right, float &bottom) {}
+	virtual void GetActiveBoundingBox(float &left, float &top, float &right, float &bottom);
 
 	void StartUntouchable() { isUntouchable = true; untouchable_start = GetTickCount(); }
 
@@ -78,7 +78,8 @@ public:
 	bool IsMovingUp() { return this->isMovingUp; }
 	bool IsMovingDown() { return this->isMovingDown; }
 
-	void LoseEnergy(int amount) { energy -= amount; }
+	void LoseEnergy(int x) { energy -= x; }
+	void LoseHP(int x);
 
 	// Kiểm tra va chạm của Simon với list bậc thang
 	bool CheckCollisionWithStair(vector<LPGAMEOBJECT> * listStair);

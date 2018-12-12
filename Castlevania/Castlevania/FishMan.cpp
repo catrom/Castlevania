@@ -42,7 +42,7 @@ void FishMan::LoadResources(Textures *& textures, Sprites *& sprites, Animations
 	animations->Add(FISHMAN_JUMP_ANI, ani);
 }
 
-void FishMan::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
+void FishMan::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
 	// Update bubbles
 	if (isRenderingBubbles == true && stopMovement == false)
@@ -115,7 +115,6 @@ void FishMan::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJEC
 				if (state == FISHMAN_JUMP) // jump xong chạm đất -> walk
 				{
 					SetState(FISHMAN_ACTIVE);
-					
 				}
 			}
 			else
@@ -169,14 +168,17 @@ void FishMan::SetState(int state)
 		animations[state]->SetAniStartTime(GetTickCount());
 		break;
 	case FISHMAN_INACTIVE:
-		vx = vy = 0;
-		StartRespawnTimeCounter();
 		if (isNeedToCreateBubbles == true)
 		{
 			bubbles = new Bubbles(x, y + 32);
 			isRenderingBubbles = true;
 			startTimeRenderBubbles = GetTickCount();
 		}
+		x = entryPosition.x;
+		y = entryPosition.y;
+		vx = vy = 0;
+		isSettedPosition = false;
+		StartRespawnTimeCounter();
 		break;
 	case FISHMAN_HIT:
 		vx = vy = 0;

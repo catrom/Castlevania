@@ -45,3 +45,8 @@ void Stair::GetBoundingBox(float & l, float & t, float & r, float & b)
 	r = l + STAIR_BBOX_WIDTH;
 	b = t + STAIR_BBOX_HEIGHT;
 }
+
+void Stair::GetActiveBoundingBox(float & left, float & top, float & right, float & bottom)
+{
+	GetBoundingBox(left, top, right, bottom);
+}

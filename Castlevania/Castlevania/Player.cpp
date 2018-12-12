@@ -7,6 +7,7 @@ Player::Player(SceneManager * scenes, Game * game)
 	this->scenes = scenes;
 	this->game = game;
 	this->simon = scenes->GetSimon();
+	this->boss = scenes->GetBoss();
 
 	time = 0;
 }
@@ -77,6 +78,7 @@ void Player::Update(DWORD dt, bool stopwatch)
 	subWeapon = simon->GetSubWeapon();
 	scene = scenes->GetIDScene() + 1; // (based 1)
 	simonHP = simon->GetHP();
+	bossHP = boss->GetHP();
 	
 	if (stopwatch == false) time += dt; // khi sử dụng stop watch thì không đếm thời gian
 
@@ -124,7 +126,6 @@ void Player::Render()
 	for (int i = 0; i < simonHP; i++)
 	{
 		playerHP[i]->Draw(0, -1, 105 + i * 9, 31);
-		enemyHP[i]->Draw(0, -1, 106 + i * 9, 47);
 	}
 
 	for (int i = simonHP; i < 16; i++)
@@ -132,9 +133,14 @@ void Player::Render()
 		loseHP[i]->Draw(0, -1, 105 + i * 9, 31);
 	}
 
-	for (int i = 0; i < 16; i++)
+	for (int i = 0; i < bossHP; i++)
 	{
 		enemyHP[i]->Draw(0, -1, 106 + i * 9, 47);
+	}
+
+	for (int i = bossHP; i < 16; i++)
+	{
+		loseHP[i]->Draw(0, -1, 106 + i * 9, 47);
 	}
 }
 

@@ -181,20 +181,23 @@ void Items::Render()
 	animations[state]->Render(1, -1, x, y);
 }
 
-void Items::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
+void Items::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
-	if (timeAppear == -1)
+	if (state != MAGIC_CRYSTAL)
 	{
-		timeAppear = GetTickCount();
-	}
-	else
-	{
-		DWORD now = GetTickCount();
-
-		if (now - timeAppear > ITEM_TIME_DESTROYED)
+		if (timeAppear == -1)
 		{
-			isEnable = false;
-			return;
+			timeAppear = GetTickCount();
+		}
+		else
+		{
+			DWORD now = GetTickCount();
+
+			if (now - timeAppear > ITEM_TIME_DESTROYED)
+			{
+				isEnable = false;
+				return;
+			}
 		}
 	}
 
@@ -305,4 +308,9 @@ void Items::GetBoundingBox(float & left, float & top, float & right, float & bot
 		bottom = top;
 		break;
 	}
+}
+
+void Items::GetActiveBoundingBox(float & left, float & top, float & right, float & bottom)
+{
+	GetBoundingBox(left, top, right, bottom);
 }

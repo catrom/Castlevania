@@ -6,6 +6,7 @@
 #include "FishMan.h"
 #include "FireBall.h"
 #include "Simon.h"
+#include "Boss.h"
 #include "Ground.h"
 
 SubWeapon::SubWeapon()
@@ -83,7 +84,7 @@ void SubWeapon::LoadResources(Textures *& textures, Sprites *& sprites, Animatio
 	animations->Add(WEAPONS_BOOMERANG_ANI, ani);
 }
 
-void SubWeapon::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
+void SubWeapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
 	if (isHolyWaterShattered == true && 
 		GetTickCount() - holyWaterShatteredCounter > WEAPONS_HOLY_WATER_TIME_EFFECT)
@@ -155,7 +156,7 @@ void SubWeapon::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJ
 			{
 				Zombie * zombie = dynamic_cast<Zombie*>(e->obj);
 				zombie->SetState(ZOMBIE_DESTROYED);
-				scoreReceived = 100;
+				scoreReceived = SCORE_ZOMBIE;
 				targetTypeHit = ZOMBIE;
 
 				if (state == WEAPONS_DAGGER || state == WEAPONS_AXE || state == WEAPONS_BOOMERANG)
@@ -165,7 +166,7 @@ void SubWeapon::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJ
 			{
 				BlackLeopard * blackLeopard = dynamic_cast<BlackLeopard*>(e->obj);
 				blackLeopard->SetState(BLACK_LEOPARD_DESTROYED);
-				scoreReceived = 200;
+				scoreReceived = SCORE_BLACK_LEOPARD;
 				targetTypeHit = BLACK_LEOPARD;
 
 				if (state == WEAPONS_DAGGER || state == WEAPONS_AXE || state == WEAPONS_BOOMERANG)
@@ -175,7 +176,7 @@ void SubWeapon::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJ
 			{
 				VampireBat * vampirebat = dynamic_cast<VampireBat*>(e->obj);
 				vampirebat->SetState(VAMPIRE_BAT_DESTROYED);
-				scoreReceived = 200;
+				scoreReceived = SCORE_VAMPIRE_BAT;
 				targetTypeHit = VAMPIRE_BAT;
 
 				if (state == WEAPONS_DAGGER || state == WEAPONS_AXE || state == WEAPONS_BOOMERANG)
@@ -185,8 +186,17 @@ void SubWeapon::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJ
 			{
 				FishMan * fishman = dynamic_cast<FishMan*>(e->obj);
 				fishman->SetState(FISHMAN_DESTROYED);
-				scoreReceived = 300;
+				scoreReceived = SCORE_FISHMAN;
 				targetTypeHit = FISHMAN;
+
+				if (state == WEAPONS_DAGGER || state == WEAPONS_AXE || state == WEAPONS_BOOMERANG)
+					this->isEnable = false;
+			}
+			else if (dynamic_cast<Boss*>(e->obj))
+			{
+				Boss * boss = dynamic_cast<Boss*>(e->obj);
+				boss->LoseHP(2);
+				targetTypeHit = BOSS;
 
 				if (state == WEAPONS_DAGGER || state == WEAPONS_AXE || state == WEAPONS_BOOMERANG)
 					this->isEnable = false;
@@ -288,6 +298,11 @@ void SubWeapon::GetBoundingBox(float & left, float & top, float & right, float &
 		bottom = top;
 		break;
 	}
+}
+
+void SubWeapon::GetActiveBoundingBox(float & left, float & top, float & right, float & bottom)
+{
+	GetBoundingBox(left, top, right, bottom);
 }
 
 

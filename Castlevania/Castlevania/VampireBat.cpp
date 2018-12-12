@@ -36,7 +36,7 @@ void VampireBat::LoadResources(Textures *& textures, Sprites *& sprites, Animati
 	animations->Add(VAMPIRE_BAT_ANI, ani);
 }
 
-void VampireBat::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
+void VampireBat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
 	if (state == VAMPIRE_BAT_DESTROYED && animations[state]->IsOver(150) == true)
 	{
@@ -60,7 +60,8 @@ void VampireBat::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOB
 
 void VampireBat::Render()
 {
-	animations[state]->Render(1, nx, x, y);
+	if (state != VAMPIRE_BAT_INACTIVE)
+		animations[state]->Render(1, nx, x, y);
 }
 
 void VampireBat::SetState(int state)
@@ -83,6 +84,8 @@ void VampireBat::SetState(int state)
 		animations[state]->SetAniStartTime(GetTickCount());
 		break;
 	case VAMPIRE_BAT_INACTIVE:
+		x = entryPosition.x;
+		y = entryPosition.y;
 		vx = 0;
 		vy = 0;
 		isSettedPosition = false;

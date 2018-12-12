@@ -37,11 +37,16 @@ void Boss::LoadResources(Textures *& textures, Sprites *& sprites, Animations *&
 	animations->Add(BOSS_INACTIVE_ANI, ani);
 }
 
-void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
+void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
-	if (state == BOSS_DESTROYED && animations[state]->IsOver(300) == true)
+	if (state == BOSS_DESTROYED)
 	{
-		SetState(BOSS_INACTIVE);
+		if (animations[state]->IsOver(1500) == true)
+		{
+			//this->isEnable = false;
+			dropItem = true;
+		}
+
 		return;
 	}
 
@@ -174,9 +179,11 @@ void Boss::GetVelocity()
 	else ny = -1;
 
 	// tính vận tốc
-	vx = nx * BOSS_DEFAULT_VELOCITY;
-	vy = ny * BOSS_DEFAULT_VELOCITY * (dy / dx);
-
+	vx = BOSS_DEFAULT_VELOCITY;
+	vy = BOSS_DEFAULT_VELOCITY * (dy / dx);
+	
+	vx *= nx;
+	vy *= ny;
 }
 
 void Boss::GetBoundingBox(float & left, float & top, float & right, float & bottom)
@@ -189,9 +196,18 @@ void Boss::GetBoundingBox(float & left, float & top, float & right, float & bott
 
 void Boss::GetActiveBoundingBox(float & left, float & top, float & right, float & bottom)
 {
-	left = entryPosition.x - BOSS_ACTIVE_BBOX_WIDTH;
-	right = entryPosition.x + BOSS_ACTIVE_BBOX_WIDTH;
+	left = entryPosition.x + 100;
+	right = left + BOSS_ACTIVE_BBOX_WIDTH;
 	top = entryPosition.y;
 	bottom = entryPosition.y + BOSS_ACTIVE_BBOX_HEIGHT;
+}
+
+void Boss::LoseHP(int x)
+{
+	HP -= x;
+	if (HP < 0) {
+		HP = 0;
+		SetState(BOSS_DESTROYED);
+	}
 }
 

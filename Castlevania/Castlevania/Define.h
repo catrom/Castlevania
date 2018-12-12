@@ -8,6 +8,9 @@
 #define SCREEN_WIDTH			512
 #define SCREEN_HEIGHT			480
 
+#define DEFAULT_CELL_WIDTH		256
+#define DEFAULT_CELL_HEIGHT		240
+
 #define MAX_FRAME_RATE			150
 
 // Input
@@ -414,6 +417,8 @@
 // Boss
 #define BOSS_HP						16
 #define BOSS_DEFAULT_VELOCITY		0.1f
+#define BOSS_MIN_VELOCITY			0.7f
+#define BOSS_MAX_VELOCITY			0.13f
 #define BOSS_STOP_TIME_WAITING		2000
 
 // Boss
@@ -432,6 +437,9 @@
 
 
 #pragma region BBox Size
+
+#define ENEMY_DEFAULT_BBOX_WIDTH			32
+#define ENEMY_DEFAULT_BBOX_HEIGHT			32
 
 // Simon
 #define SIMON_BBOX_WIDTH			30
@@ -468,8 +476,8 @@
 // Zombie
 #define ZOMBIE_BBOX_WIDTH			10
 #define ZOMBIE_BBOX_HEIGHT			60
-#define ZOMBIE_ACTIVE_BBOX_WIDTH			260
-#define ZOMBIE_ACTIVE_BBOX_HEIGHT			150
+#define ZOMBIE_ACTIVE_BBOX_WIDTH			200
+#define ZOMBIE_ACTIVE_BBOX_HEIGHT			200
 
 // Black Leopard
 #define BLACK_LEOPARD_BBOX_WIDTH			10
@@ -480,14 +488,14 @@
 // Vampire Bat
 #define VAMPIRE_BAT_BBOX_WIDTH			10
 #define VAMPIRE_BAT_BBOX_HEIGHT			10
-#define VAMPIRE_BAT_ACTIVE_BBOX_WIDTH			400 
+#define VAMPIRE_BAT_ACTIVE_BBOX_WIDTH			250 
 #define VAMPIRE_BAT_ACTIVE_BBOX_HEIGHT			200
 
 // Fish man
 #define FISHMAN_BBOX_WIDTH			10
 #define FISHMAN_BBOX_HEIGHT			60
-#define FISHMAN_ACTIVE_BBOX_WIDTH			200
-#define FISHMAN_ACTIVE_BBOX_HEIGHT			400
+#define FISHMAN_ACTIVE_BBOX_WIDTH			100
+#define FISHMAN_ACTIVE_BBOX_HEIGHT			200
 
 // Boss
 #define BOSS_BBOX_WIDTH				46
@@ -518,6 +526,15 @@
 #define WEAPONS_BOOMERANG_BBOX_WIDTH			28
 #define WEAPONS_BOOMERANG_BBOX_HEIGHT			28
 #pragma endregion
+
+
+#pragma region Score
+#define SCORE_ZOMBIE				100
+#define SCORE_VAMPIRE_BAT			200
+#define SCORE_BLACK_LEOPARD			200
+#define SCORE_FISHMAN				300
+#pragma endregion
+
 
 
 #pragma region ID objects to load from file

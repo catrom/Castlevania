@@ -5,6 +5,7 @@
 #include "VampireBat.h"
 #include "FishMan.h"
 #include "FireBall.h"
+#include "Boss.h"
 
 Whip::Whip() : GameObject()
 {
@@ -12,7 +13,7 @@ Whip::Whip() : GameObject()
 	AddAnimation(SHORT_CHAIN_ANI);
 	AddAnimation(LONG_CHAIN_ANI);
 
-	SetState(NORMAL_WHIP);
+	SetState(LONG_CHAIN);
 }
 
 void Whip::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &animations)
@@ -72,7 +73,7 @@ void Whip::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &an
 	animations->Add(LONG_CHAIN_ANI, ani);
 }
 
-void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
+void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 {
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
@@ -103,6 +104,9 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>*
 			{
 				e->SetState(ZOMBIE_DESTROYED);
 			}
+
+			scoreReceived = SCORE_ZOMBIE;
+			targetTypeHit = ZOMBIE;
 		}
 		else if (dynamic_cast<BlackLeopard*>(obj))
 		{
@@ -116,6 +120,9 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>*
 			{
 				e->SetState(BLACK_LEOPARD_DESTROYED);
 			}
+
+			scoreReceived = SCORE_BLACK_LEOPARD;
+			targetTypeHit = BLACK_LEOPARD;
 		}
 		else if (dynamic_cast<VampireBat*>(obj))
 		{
@@ -129,6 +136,9 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>*
 			{
 				e->SetState(VAMPIRE_BAT_DESTROYED);
 			}
+
+			scoreReceived = SCORE_VAMPIRE_BAT;
+			targetTypeHit = VAMPIRE_BAT;
 		}
 		else if (dynamic_cast<FishMan*>(obj))
 		{
@@ -142,10 +152,36 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>*
 			{
 				e->SetState(FISHMAN_DESTROYED);
 			}
+
+			scoreReceived = SCORE_FISHMAN;
+			targetTypeHit = FISHMAN;
+		}
+		else if (dynamic_cast<Boss*>(obj))
+		{
+			Boss * e = dynamic_cast<Boss*> (obj);
+
+			float left, top, right, bottom;
+
+			e->GetBoundingBox(left, top, right, bottom);
+
+			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và boss
+			{
+				e->LoseHP(1);
+				targetTypeHit = BOSS;
+			}
 		}
 		else if (dynamic_cast<FireBall*>(obj))
 		{
-			obj->SetEnable(false);
+			FireBall * e = dynamic_cast<FireBall*> (obj);
+
+			float left, top, right, bottom;
+
+			e->GetBoundingBox(left, top, right, bottom);
+
+			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và boss
+			{
+				e->SetEnable(false);
+			}
 		}
 	}
 }
@@ -196,6 +232,11 @@ void Whip::GetBoundingBox(float & left, float & top, float & right, float & bott
 	if (state != LONG_CHAIN)
 		right = left + WHIP_BBOX_WIDTH;
 	else  right = left + LONG_CHAIN_BBOX_WIDTH;
+}
+
+void Whip::GetActiveBoundingBox(float & left, float & top, float & right, float & bottom)
+{
+	GetBoundingBox(left, top, right, bottom);
 }
 
 void Whip::PowerUp()

@@ -18,6 +18,7 @@ private:
 	SceneManager * scenes;
 	Game * game;
 	Simon * simon;
+	Boss * boss;
 
 	ID3DXFont * font;
 	string information;

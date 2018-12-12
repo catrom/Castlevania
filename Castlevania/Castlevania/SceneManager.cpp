@@ -42,22 +42,12 @@ void SceneManager::LoadResources()
 
 	simon = new Simon();
 	weapon = new SubWeapon();
+	weapon->SetEnable(false);
+	whip = new Whip();
 }
 
 void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 {
-	Objects.clear();
-	listCandles.clear();
-	listStairs.clear();
-	listGrounds.clear();
-	listItems.clear();
-	listDoors.clear();
-	listZombies.clear();
-	listBlackLeopards.clear();
-	listVampireBats.clear();
-	listFishMans.clear();
-	listFireBalls.clear();
-
 	fstream fs;
 	fs.open(FilePath, ios::in);
 	if (fs.fail())
@@ -86,8 +76,7 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 			candle->SetState(state);
 			candle->SetEnable(isEnable);
 			candle->SetIDItem(idItem);
-			listCandles.push_back(candle);
-			Objects.push_back(candle);
+			unit = new Unit(grid, candle, pos_x, pos_y);
 			break;
 		case GROUND:
 			ground = new Ground();
@@ -95,8 +84,7 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 			ground->SetState(state);
 			ground->SetEnable(isEnable);
 			ground->SetIDItem(idItem);
-			listGrounds.push_back(ground);
-			Objects.push_back(ground);
+			unit = new Unit(grid, ground, pos_x, pos_y);
 			break;
 		case STAIR:
 			stair = new Stair();
@@ -105,7 +93,7 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 			stair->SetEnable(isEnable);
 			stair->SetIDItem(idItem);
 			listStairs.push_back(stair);
-			Objects.push_back(stair);
+			unit = new Unit(grid, stair, pos_x, pos_y);
 			break;
 		case DOOR:
 			door = new Door();
@@ -113,8 +101,7 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 			door->SetState(state);
 			door->SetEnable(isEnable);
 			door->SetIDItem(idItem);
-			listDoors.push_back(door);
-			Objects.push_back(door);
+			unit = new Unit(grid, door, pos_x, pos_y);
 			break;
 		case ZOMBIE:
 			zombie = new Zombie();
@@ -122,8 +109,7 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 			zombie->SetState(ZOMBIE_INACTIVE);
 			zombie->SetEnable(isEnable);
 			zombie->SetIDItem(idItem);
-			listZombies.push_back(zombie);
-			Objects.push_back(zombie);
+			unit = new Unit(grid, zombie, pos_x, pos_y);
 			break;
 		case BLACK_LEOPARD:
 			leopard = new BlackLeopard();
@@ -132,8 +118,7 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 			leopard->SetState(state);
 			leopard->SetIsRespawnWaiting(false);
 			leopard->SetEnable(true);
-			listBlackLeopards.push_back(leopard);
-			Objects.push_back(leopard);
+			unit = new Unit(grid, leopard, pos_x, pos_y);
 			break;
 		case VAMPIRE_BAT:
 			bat = new VampireBat();
@@ -141,8 +126,7 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 			bat->SetState(VAMPIRE_BAT_INACTIVE);
 			bat->SetEnable(true);
 			bat->SetIDItem(idItem);
-			listVampireBats.push_back(bat);
-			Objects.push_back(bat);
+			unit = new Unit(grid, bat, pos_x, pos_y);
 			break;
 		case FISHMAN:
 			fishman = new FishMan();
@@ -150,8 +134,7 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 			fishman->SetState(FISHMAN_INACTIVE);
 			fishman->SetEnable(true);
 			fishman->SetIDItem(idItem);
-			listFishMans.push_back(fishman);
-			Objects.push_back(fishman);
+			unit = new Unit(grid, fishman, pos_x, pos_y);
 			break;
 		case BOSS:
 			boss = new Boss();
@@ -160,7 +143,7 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 			boss->SetState(BOSS_INACTIVE);
 			boss->SetEnable(true);
 			boss->SetIDItem(idItem);
-			Objects.push_back(boss);
+			unit = new Unit(grid, boss, pos_x, pos_y);
 			break;
 		default:
 			break;
@@ -169,16 +152,7 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 
 	fs.close();
 
-	// Simon
-	Objects.push_back(simon);
-
-	// Subweapons
-	weapon->SetEnable(false);
-	Objects.push_back(weapon);
-
-	// Whip
-	whip = new Whip();
-	Objects.push_back(whip);
+	//grid->Out();
 }
 
 void SceneManager::CreateListChangeSceneObjects()
@@ -205,6 +179,33 @@ void SceneManager::CreateListChangeSceneObjects()
 		break;
 	default:
 		break;
+	}
+}
+
+void SceneManager::GetObjectFromGrid()
+{
+	listUnits.clear();
+	listObjects.clear();
+	listStaticObjectsToRender.clear();
+	listMovingObjectsToRender.clear();
+
+	grid->Get(game->GetCameraPositon(), listUnits);
+
+	DebugOut(L"%d \n", listUnits.size());
+
+	for (int i = 0; i < listUnits.size(); i++)
+	{
+		LPGAMEOBJECT obj = listUnits[i]->GetObj();
+
+		if (dynamic_cast<Candle*>(obj) || dynamic_cast<Door*>(obj))
+			listStaticObjectsToRender.push_back(obj);
+		else if (dynamic_cast<Zombie*>(obj) || dynamic_cast<BlackLeopard*>(obj) ||
+			dynamic_cast<VampireBat*>(obj) || dynamic_cast<FishMan*>(obj) ||
+			dynamic_cast<FireBall*>(obj) || dynamic_cast<Boss*>(obj) ||
+			dynamic_cast<Items*>(obj))
+			listMovingObjectsToRender.push_back(obj);
+
+		listObjects.push_back(obj);
 	}
 }
 
@@ -316,430 +317,89 @@ void SceneManager::Update(DWORD dt)
 		}
 	}
 
-	// Cập nhật trạng thái hoạt động khi object đi ra khỏi viewport
-
-	SetInactivationByPosition();
-
 	// Stop Watch
+
 	if (isUsingStopWatch == true && GetTickCount() - stopWatchCounter > WEAPONS_STOP_WATCH_TIME)
 	{
 		isUsingStopWatch = false;
 		stopWatchCounter = 0;
 	}
 
-	// Cập nhật danh sách Objects theo delta time
+	// get object from grid by camera position
+	GetObjectFromGrid();
 
-	for (UINT i = 0; i < Objects.size(); i++)
+	// Update
+	Simon_Update(dt);
+	Whip_Update(dt);
+	Weapon_Update(dt);
+
+	for (UINT i = 0; i < listObjects.size(); i++)
 	{
-		LPGAMEOBJECT object = Objects[i];
+		LPGAMEOBJECT object = listObjects[i];
 
-		// Drop item cho các object bị huỷ
+		SetDropItems(object);
 
-		SetDropItems(object); 
-
-
-		vector<LPGAMEOBJECT> coObjects;
-
-		if (dynamic_cast<Simon*>(object))
+		if (dynamic_cast<Items*>(object))
 		{
-			/*if (isBossFighting == true)
-				coObjects.push_back(boss);*/
-
-			coObjects.push_back(boss);
-
-			for (auto candle : listCandles)
-			{
-				if (candle->IsEnable() == false)
-					continue;
-
-				coObjects.push_back(candle);
-			}
-
-			for (auto ground : listGrounds)
-			{
-				if (ground->IsEnable() == false)
-					continue;
-
-				coObjects.push_back(ground);
-			}
-
-			for (auto zombie : listZombies)
-			{
-				if (zombie->GetState() == ZOMBIE_INACTIVE)
-					continue;
-
-				coObjects.push_back(zombie);
-			}
-
-			for (auto leopard : listBlackLeopards)
-			{
-				if (leopard->GetState() == BLACK_LEOPARD_INACTIVE)
-					continue;
-
-				coObjects.push_back(leopard);
-			}
-
-			for (auto bat : listVampireBats)
-			{
-				if (bat->GetState() == VAMPIRE_BAT_INACTIVE)
-					continue;
-
-				coObjects.push_back(bat);
-			}
-
-			for (auto fishman : listFishMans)
-			{
-				if (fishman->GetState() == FISHMAN_INACTIVE)
-					continue;
-
-				coObjects.push_back(fishman);
-			}
-
-			for (auto fireball : listFireBalls)
-			{
-				if (fireball->IsEnable() == false)
-					continue;
-
-				coObjects.push_back(fireball);
-			}
-
-			for (auto door : listDoors)
-			{
-				if (door->IsEnable() == false)
-					continue;
-
-				coObjects.push_back(door);
-			}
-
-
-			simon->Update(dt, &Objects, &coObjects);
-			simon->CheckCollisionWithItem(&listItems);
-			simon->CheckChangeScene(&listChangeSceneObjs);
-			simon->CheckCollisionWithEnemyActiveArea(&listZombies);
-			simon->CheckCollisionWithEnemyActiveArea(&listBlackLeopards);
-			simon->CheckCollisionWithEnemyActiveArea(&listVampireBats);
-			simon->CheckCollisionWithEnemyActiveArea(&listFishMans);
-			simon->CheckCollisionWithEnemyActiveArea(&coObjects);
-		}
-		else if (dynamic_cast<Items*>(object))
-		{
-			object->Update(dt, &Objects, &listGrounds);
-		}
-		else if (dynamic_cast<Whip*>(object))
-		{
-			if (simon->IsGotChainItem() == true) // update trạng thái của whip
-			{
-				simon->SetGotChainItem(false);
-				whip->PowerUp();
-			}
-
-			// lấy vị trí và phương của simon cho whip
-			float simon_x, simon_y;
-			simon->GetPosition(simon_x, simon_y);
-
-			whip->SetOrientation(simon->GetOrientation());
-			whip->SetWhipPosition(D3DXVECTOR3(simon_x, simon_y, 0), simon->IsStand());
-
-			// chỉ xét va chạm khi render tới sprite cuối cùng của simon (vung tay tới)
-			if ((simon->GetState() == HIT_STAND || simon->GetState() == HIT_SIT ||
-				simon->GetState() == HIT_STAIR_UP || simon->GetState() == HIT_STAIR_DOWN) &&
-				simon->animations[simon->GetState()]->IsRenderingLastFrame() == true &&
-				simon->IsHitSubWeapons() == false) 
-			{
-				// Lấy vector coobjects
-				for (auto candle : listCandles)
-				{
-					if (candle->IsEnable() == false)
-						continue;
-
-					coObjects.push_back(candle);
-				}
-
-				for (auto zombie : listZombies)
-				{
-					if (zombie->GetState() == ZOMBIE_INACTIVE)
-						continue;
-
-					coObjects.push_back(zombie);
-				}
-
-				for (auto leopard : listBlackLeopards)
-				{
-					if (leopard->GetState() == BLACK_LEOPARD_INACTIVE)
-						continue;
-
-					coObjects.push_back(leopard);
-				}
-
-				for (auto bat : listVampireBats)
-				{
-					if (bat->GetState() == VAMPIRE_BAT_INACTIVE)
-						continue;
-
-					coObjects.push_back(bat);
-				}
-
-				for (auto fishman : listFishMans)
-				{
-					if (fishman->GetState() == FISHMAN_INACTIVE)
-						continue;
-
-					coObjects.push_back(fishman);
-				}
-
-				for (auto fireball : listFireBalls)
-				{
-					if (fireball->IsEnable() == false)
-						continue;
-
-					coObjects.push_back(fireball);
-				}
-
-				whip->Update(dt, &Objects, &coObjects);
-			}
-		}
-		else if (dynamic_cast<SubWeapon*>(object) && weapon != STOP_WATCH)
-		{
-			if (weapon->GetScoreReceived() != 0)
-			{
-				simon->AddScore(weapon->GetScoreReceived());
-				weapon->SetScoreReceived(0);
-			}
-
-			coObjects.push_back(simon); // dùng cho xét va chạm của simon với boomerang
-			
-			// dùng cho xét va chạm của holy water với ground
-			for (auto ground : listGrounds)
-			{
-				if (ground->IsEnable() == false)
-					continue;
-
-				coObjects.push_back(ground);
-			}
-
-			if (weapon->IsEnable() == false)
-				continue;
-
-			for (auto candle : listCandles)
-			{
-				if (candle->IsEnable() == false)
-					continue;
-
-				coObjects.push_back(candle);
-			}
-
-			for (auto zombie : listZombies)
-			{
-				if (zombie->GetState() == ZOMBIE_INACTIVE)
-					continue;
-
-				coObjects.push_back(zombie);
-			}
-
-			for (auto leopard : listBlackLeopards)
-			{
-				if (leopard->GetState() == BLACK_LEOPARD_INACTIVE)
-					continue;
-
-				coObjects.push_back(leopard);
-			}
-
-			for (auto bat : listVampireBats)
-			{
-				if (bat->GetState() == VAMPIRE_BAT_INACTIVE)
-					continue;
-
-				coObjects.push_back(bat);
-			}
-
-			for (auto fishman : listFishMans)
-			{
-				if (fishman->GetState() == FISHMAN_INACTIVE)
-					continue;
-
-				coObjects.push_back(fishman);
-			}
-
-			for (auto fireball : listFireBalls)
-			{
-				if (fireball->IsEnable() == false)
-					continue;
-
-				coObjects.push_back(fireball);
-			}
-
-			weapon->Update(dt, &Objects, &coObjects);
+			Item_Update(dt, object);
 		}
 		else if (dynamic_cast<Zombie*>(object))
 		{
-			if (object->GetState() != ZOMBIE_INACTIVE)
-				object->Update(dt, &Objects, &listGrounds, isUsingStopWatch);
+			Zombie_Update(dt, object);
 		}
 		else if (dynamic_cast<BlackLeopard*>(object))
 		{
-			if (object->GetState() != BLACK_LEOPARD_INACTIVE)
-				object->Update(dt, &Objects, &listGrounds, isUsingStopWatch);
+			BlackLeopard_Update(dt, object);
 		}
 		else if (dynamic_cast<VampireBat*>(object))
 		{
-			if (object->GetState() != VAMPIRE_BAT_INACTIVE)
-			{
-				bat = dynamic_cast<VampireBat*>(object);
-
-				if (bat->IsSettedPosition() == false)
-				{
-					bat->SetIsSettedPosition(true);
-
-					// set vị trí cho dơi luôn 
-					// dơi bay ngang tầm simon, từ phía cuối của 2 đầu màn hình)
-					float bx, by;
-
-					by = simon->y + 30;
-
-					if (bat->GetOrientation() == -1) bx = game->GetCameraPositon().x + SCREEN_WIDTH - VAMPIRE_BAT_BBOX_WIDTH;
-					else bx = game->GetCameraPositon().x;
-
-					bat->SetPosition(bx, by);
-				}
-
-				bat->Update(dt, NULL, NULL, isUsingStopWatch);
-			}
-				
+			VampireBat_Update(dt, object);
 		}
 		else if (dynamic_cast<FishMan*>(object))
 		{
-			fishman = dynamic_cast<FishMan*>(object);
-
-			if (fishman->GetState() == FISHMAN_ACTIVE && 
-				GetTickCount() - fishman->GetLastTimeShoot() >= fishman->GetDeltaTimeToShoot())
-			{
-				fishman->SetState(FISHMAN_HIT);
-
-				// Tạo fireball
-				float fx, fy, nx;
-				fishman->GetPosition(fx, fy);
-				nx = fishman->GetOrientation();
-
-				fireball = new FireBall();
-				fireball->SetPosition(fx + 5.0f, fy + 10.0f);
-				fireball->SetOrientation(nx);
-				fireball->SetState(FIREBALL);
-				fireball->SetEnable(true);
-				listFireBalls.push_back(fireball);
-				Objects.push_back(fireball);
-
-				// Đặt hướng quay mặt của Fishman sau khi bắn (quay về phía simon)
-				float sx, sy;
-				simon->GetPosition(sx, sy);
-
-				if (fx < sx) fishman->SetNxAfterShoot(1);
-				else fishman->SetNxAfterShoot(-1);
-			}
-			else 
-			{
-				object->Update(dt, &Objects, &listGrounds, isUsingStopWatch);
-			}
+			FishMan_Update(dt, object);
 		}
 		else if (dynamic_cast<Boss*>(object))
 		{
-			if (boss->GetState() == BOSS_INACTIVE)
-				continue;
-
-			// Passing simon's position for boss movement
-			float sx, sy;
-			simon->GetPosition(sx, sy);
-			boss->SetSimonPosition(sx, sy);
-
-			boss->Update(dt);
+			Boss_Update(dt, object);
 		}
 		else
 		{
-			object->Update(dt, &Objects, &coObjects, isUsingStopWatch);
+			object->Update(dt, &listObjects, isUsingStopWatch);
 		}
 	}
 
+
+	if (isBossFighting == true && simon->x < game->GetCameraPositon().x)
+	{
+		simon->x = game->GetCameraPositon().x;
+	}
+
+	//
+	SetInactivationByPosition();
+
+	// update camera
 	UpdateCameraPosition();
+
+	// update grid
+	UpdateGrid();
 }
 
 void SceneManager::Render()
 {
 	tilemaps->Get(IDScene)->Draw(game->GetCameraPositon());
 
-	for (auto candle : listCandles)
+	for (auto obj : listStaticObjectsToRender)
 	{
-		if (candle->IsEnable() == false)
-			continue;
-
-		candle->Render();
-		candle->RenderBoundingBox();
+		obj->Render();
+		obj->RenderBoundingBox();
 	}
 
-	for (auto item : listItems)
+	for (auto obj : listMovingObjectsToRender)
 	{
-		if (item->IsEnable() == false)
-			continue;
-
-		item->Render();
-		item->RenderBoundingBox();
-	}
-
-	for (auto zombie : listZombies)
-	{
-		zombie->RenderActiveBoundingBox();
-
-		if (zombie->GetState() == ZOMBIE_INACTIVE)
-			continue;
-
-		zombie->Render();
-		zombie->RenderBoundingBox();
-	}
-
-	for (auto leopard : listBlackLeopards)
-	{
-		leopard->RenderActiveBoundingBox();
-
-		if (leopard->GetState() == BLACK_LEOPARD_INACTIVE)
-			continue;
-
-		leopard->Render();
-		leopard->RenderBoundingBox();
-	}
-
-	for (auto bat : listVampireBats)
-	{
-		bat->RenderActiveBoundingBox();
-
-		if (bat->GetState() == VAMPIRE_BAT_INACTIVE)
-			continue;
-
-		bat->Render();
-		bat->RenderBoundingBox();
-	}
-
-	for (auto fireball : listFireBalls)
-	{
-		if (fireball->IsEnable() == false)
-			continue;
-
-		fireball->Render();
-		fireball->RenderBoundingBox();
-	}
-
-	for (auto fish : listFishMans)
-	{
-		fish->RenderActiveBoundingBox();
-
-		fishman = dynamic_cast<FishMan*>(fish);
-
-		if (fishman->GetState() == FISHMAN_INACTIVE)
-		{
-			if (fishman->IsRenderingBubbles() == true)
-				fishman->Render();
-			continue;
-		}
-
-		fishman->Render();
-		fishman->RenderBoundingBox();
+		obj->Render();
+		obj->RenderBoundingBox();
+		obj->RenderActiveBoundingBox();
 	}
 
 	simon->Render();
@@ -752,24 +412,11 @@ void SceneManager::Render()
 	}
 
 	if ((simon->GetState() == HIT_STAND || simon->GetState() == HIT_SIT ||
-		simon->GetState() == HIT_STAIR_UP || simon->GetState() == HIT_STAIR_DOWN) 
+		simon->GetState() == HIT_STAIR_UP || simon->GetState() == HIT_STAIR_DOWN)
 		&& simon->IsHitSubWeapons() == false)
 	{
 		whip->Render(simon->animations[simon->GetState()]->GetCurrentFrame());
 		whip->RenderBoundingBox();
-	}
-
-	boss->Render();
-	boss->RenderBoundingBox();
-	boss->RenderActiveBoundingBox();
-
-	for (auto door : listDoors)  // render door sau để chồng lên Simon
-	{
-		if (door->IsEnable() == false)
-			continue;
-
-		door->Render();
-		door->RenderBoundingBox();
 	}
 }
 
@@ -801,26 +448,61 @@ void SceneManager::UpdateCameraPosition()
 	}
 }
 
+void SceneManager::UpdateGrid()
+{
+	for (int i = 0; i < listUnits.size(); i++)
+	{
+		float newPos_x, newPos_y;
+		listUnits[i]->GetObj()->GetPosition(newPos_x, newPos_y);
+		listUnits[i]->Move(newPos_x, newPos_y);
+	}
+}
+
 void SceneManager::SetDropItems(LPGAMEOBJECT object)
 {
-	if (object->IsEnable() == false ||
-	   (dynamic_cast<Zombie*>(object) && object->GetState() == ZOMBIE_DESTROYED) ||
-		(dynamic_cast<VampireBat*>(object) && object->GetState() == VAMPIRE_BAT_DESTROYED) || 
-		(dynamic_cast<FishMan*>(object) && object->GetState() == FISHMAN_DESTROYED))
+	if ((dynamic_cast<Candle*>(object) && object->GetState() == CANDLE_DESTROYED) ||
+		(dynamic_cast<Zombie*>(object) && object->GetState() == ZOMBIE_DESTROYED) ||
+		(dynamic_cast<VampireBat*>(object) && object->GetState() == VAMPIRE_BAT_DESTROYED) ||
+		(dynamic_cast<FishMan*>(object) && object->GetState() == FISHMAN_DESTROYED) ||
+		(dynamic_cast<Boss*>(object) && object->GetState() == BOSS_DESTROYED))
 	{
 		if (object->idItem != -1 && object->IsDroppedItem() == false)
 		{
-			object->SetIsDroppedItem(true);
+			if (dynamic_cast<Boss*>(object))
+			{
+				boss = dynamic_cast<Boss*>(object);
 
-			// Tạo một item theo id
+				if (boss->DropItem() == true) 
+				{
+					object->SetIsDroppedItem(true);
+					boss->SetEnable(false);
 
-			item = new Items();
-			item->SetEnable(true);
-			item->SetPosition(object->x, object->y);
-			item->SetItem(object->idItem);
+					float ix = game->GetCameraPositon().x + SCREEN_WIDTH / 2;
+					float iy = game->GetCameraPositon().y + SCREEN_HEIGHT / 2;
 
-			listItems.push_back(item);
-			Objects.push_back(item);
+					item = new Items();
+					item->SetEnable(true);
+					item->SetPosition(ix, iy);
+					item->SetItem(object->idItem);
+
+					listItems.push_back(item);
+					unit = new Unit(grid, item, ix, iy);
+				}
+			}
+			else
+			{
+				object->SetIsDroppedItem(true);
+
+				// Tạo một item theo id
+
+				item = new Items();
+				item->SetEnable(true);
+				item->SetPosition(object->x, object->y);
+				item->SetItem(object->idItem);
+
+				listItems.push_back(item);
+				unit = new Unit(grid, item, object->x, object->y);
+			}
 		}
 	}
 }
@@ -829,84 +511,53 @@ void SceneManager::SetInactivationByPosition()
 {
 	D3DXVECTOR2 entryViewPort = game->GetCameraPositon();
 
-	for (auto zombie : listZombies)
+	for (auto object : listObjects)
 	{
-		Zombie * zb = dynamic_cast<Zombie*>(zombie);
+		float x, y;
+		object->GetPosition(x, y);
 
-		if (zb->GetState() == ZOMBIE_ACTIVE)
+		if (x < entryViewPort.x || x > entryViewPort.x + SCREEN_WIDTH - 1)
 		{
-			float zx, zy;
-			zb->GetPosition(zx, zy);
-
-			if (zx + ZOMBIE_BBOX_WIDTH < entryViewPort.x || zx > entryViewPort.x + SCREEN_WIDTH)
+			if (dynamic_cast<Zombie*>(object) && object->GetState() == ZOMBIE_ACTIVE)
 			{
-				zb->SetState(ZOMBIE_INACTIVE);
+				zombie = dynamic_cast<Zombie*>(object);
+				zombie->SetState(ZOMBIE_INACTIVE);
+			}
+			else if (dynamic_cast<BlackLeopard*>(object) && object->GetState() == BLACK_LEOPARD_ACTIVE)
+			{
+				leopard = dynamic_cast<BlackLeopard*>(object);
+				leopard->SetState(BLACK_LEOPARD_INACTIVE);
+			}
+			else if (dynamic_cast<VampireBat*>(object) && object->GetState() == VAMPIRE_BAT_ACTIVE)
+			{
+				bat = dynamic_cast<VampireBat*>(object);
+
+				if (bat->IsSettedPosition())
+				{
+					bat->SetState(VAMPIRE_BAT_INACTIVE);
+				}
+			}
+			else if (dynamic_cast<FishMan*>(object))
+			{
+				fishman = dynamic_cast<FishMan*>(object);
+				fishman->SetState(FISHMAN_INACTIVE);
+			}
+			else if (dynamic_cast<FireBall*>(object))
+			{
+				object->SetEnable(false);
 			}
 		}
-	}
-
-	for (auto leopard : listBlackLeopards)
-	{
-		BlackLeopard * bl = dynamic_cast<BlackLeopard*>(leopard);
-
-		if(bl->GetState() == BLACK_LEOPARD_ACTIVE)
+		else if (dynamic_cast<FishMan*>(object) && object->GetState() != FISHMAN_INACTIVE)
 		{
-			float lx, ly;
-			bl->GetPosition(lx, ly);
+			fishman = dynamic_cast<FishMan*>(object);
 
-			if (lx + BLACK_LEOPARD_BBOX_WIDTH < entryViewPort.x || lx > entryViewPort.x + SCREEN_WIDTH)
+			if (x < entryViewPort.x || x > entryViewPort.x + SCREEN_WIDTH - 1 ||
+				y < entryViewPort.y || y > fishman->GetEntryPosition().y)
 			{
-				bl->SetState(BLACK_LEOPARD_INACTIVE);
-			}
-		}
-	}
+				if (y >= fishman->GetEntryPosition().y) // rơi xuống nước mới có bọt nước
+					fishman->SetIsNeedToCreateBubbles(true);
 
-	for (auto bat : listVampireBats)
-	{
-		VampireBat * vb = dynamic_cast<VampireBat*>(bat);
-
-		if (vb->GetState() == VAMPIRE_BAT_ACTIVE && vb->IsSettedPosition() == true)
-		{
-			float bx, by;
-			vb->GetPosition(bx, by);
-
-			if (bx + VAMPIRE_BAT_BBOX_WIDTH < entryViewPort.x || bx > entryViewPort.x + SCREEN_WIDTH)
-			{
-				vb->SetState(VAMPIRE_BAT_INACTIVE);
-			}
-		}
-	}
-
-	for (auto fishman : listFishMans)
-	{
-		FishMan * fm = dynamic_cast<FishMan*>(fishman);
-
-		if (fm->GetState() == FISHMAN_ACTIVE || fm->GetState() == FISHMAN_JUMP || fm->GetState() == FISHMAN_HIT)
-		{
-			float fx, fy;
-			fm->GetPosition(fx, fy);
-
-			if (fx + FISHMAN_BBOX_WIDTH < entryViewPort.x || fx > entryViewPort.x + SCREEN_WIDTH ||
-				fy > (fm->GetEntryPosition()).y)
-			{
-				if (fy > (fm->GetEntryPosition()).y) // rớt xuống nước mới có bọt nước
-					fm->SetIsNeedToCreateBubbles(true);
-				
-				fm->SetState(FISHMAN_INACTIVE);
-			}
-		}
-	}
-
-	for (auto fireball : listFireBalls)
-	{
-		if (fireball->IsEnable() == true)
-		{
-			float fx, fy;
-			fireball->GetPosition(fx, fy);
-
-			if (fx + FIREBALL_BBOX_WIDTH < entryViewPort.x || fx > entryViewPort.x + SCREEN_WIDTH)
-			{
-				fireball->SetEnable(false);
+				fishman->SetState(FISHMAN_INACTIVE);
 			}
 		}
 	}
@@ -917,7 +568,7 @@ void SceneManager::SetInactivationByPosition()
 		weapon->GetPosition(wx, wy);
 
 		if (wx < entryViewPort.x || wx > entryViewPort.x + SCREEN_WIDTH ||
-			wy > entryViewPort.y + SCREEN_HEIGHT)
+			wy < entryViewPort.y || wy > entryViewPort.y + SCREEN_HEIGHT)
 		{
 			weapon->SetEnable(false);
 		}
@@ -931,12 +582,14 @@ void SceneManager::ChangeScene(int scene)
 	switch (IDScene)
 	{
 	case SCENE_1:
+		grid = new Grid(1536, 480, DEFAULT_CELL_WIDTH, DEFAULT_CELL_HEIGHT);
 		LoadObjectsFromFile(FILEPATH_OBJECTS_SCENE_1);
 		CreateListChangeSceneObjects();
 		simon->SetPosition(0.0f, 302.0f);
 		game->SetCameraPosition(0.0f, 0.0f);
 		break;
 	case SCENE_2:
+		grid = new Grid(5632, 480, DEFAULT_CELL_WIDTH, DEFAULT_CELL_HEIGHT);
 		LoadObjectsFromFile(FILEPATH_OBJECTS_SCENE_2);
 		CreateListChangeSceneObjects();
 		//simon->SetPosition(2560.0f, 335.0f);
@@ -945,6 +598,7 @@ void SceneManager::ChangeScene(int scene)
 		game->SetCameraPosition(4080.0f, 0.0f); 
 		break;
 	case SCENE_3:
+		grid = new Grid(1024, 480, DEFAULT_CELL_WIDTH, DEFAULT_CELL_HEIGHT);
 		LoadObjectsFromFile(FILEPATH_OBJECTS_SCENE_3);
 		CreateListChangeSceneObjects();
 		simon->SetPosition(100.0f, 48.0f);
@@ -955,4 +609,278 @@ void SceneManager::ChangeScene(int scene)
 		break;
 	}
 }
+
+void SceneManager::Simon_Update(DWORD dt)
+{
+	vector<LPGAMEOBJECT> coObjects;
+
+	for (auto obj : listObjects)
+	{
+		if ((dynamic_cast<Ground*>(obj) || dynamic_cast<Door*>(obj) ||
+			dynamic_cast<FireBall*>(obj) || dynamic_cast<Zombie*>(obj) ||
+			dynamic_cast<BlackLeopard*>(obj) || dynamic_cast<VampireBat*>(obj) ||
+			dynamic_cast<FishMan*>(obj) || dynamic_cast<Boss*>(obj)) &&
+			obj->GetState() != INACTIVE && obj->IsEnable() == true)
+		{
+			coObjects.push_back(obj);
+		}
+	}
+
+	simon->Update(dt, &coObjects);
+	simon->CheckCollisionWithItem(&listItems);
+	simon->CheckChangeScene(&listChangeSceneObjs);
+	simon->CheckCollisionWithEnemyActiveArea(&listObjects);
+}
+
+void SceneManager::Whip_Update(DWORD dt)
+{
+	if (weapon->GetScoreReceived() != 0)
+	{
+		simon->AddScore(weapon->GetScoreReceived());
+		weapon->SetScoreReceived(0);
+	}
+
+	if (simon->IsGotChainItem() == true) // update trạng thái của whip
+	{
+		simon->SetGotChainItem(false);
+		whip->PowerUp();
+	}
+
+	// lấy vị trí và phương của simon cho whip
+	float simon_x, simon_y;
+	simon->GetPosition(simon_x, simon_y);
+
+	whip->SetOrientation(simon->GetOrientation());
+	whip->SetWhipPosition(D3DXVECTOR3(simon_x, simon_y, 0), simon->IsStand());
+
+	// chỉ xét va chạm khi render tới sprite cuối cùng của simon (vung tay tới)
+	if ((simon->GetState() == HIT_STAND || simon->GetState() == HIT_SIT ||
+		simon->GetState() == HIT_STAIR_UP || simon->GetState() == HIT_STAIR_DOWN) &&
+		simon->animations[simon->GetState()]->IsRenderingLastFrame() == true &&
+		simon->IsHitSubWeapons() == false)
+	{
+		vector<LPGAMEOBJECT> coObjects;
+
+		for (auto obj : listObjects)
+		{
+			if ((dynamic_cast<Candle*>(obj) ||
+				dynamic_cast<FireBall*>(obj) || dynamic_cast<Zombie*>(obj) ||
+				dynamic_cast<BlackLeopard*>(obj) || dynamic_cast<VampireBat*>(obj) ||
+				dynamic_cast<FishMan*>(obj) || dynamic_cast<Boss*>(obj)) &&
+				obj->GetState() != INACTIVE && obj->IsEnable() == true)
+			{
+				coObjects.push_back(obj);
+			}
+		}
+
+		whip->Update(dt, &coObjects);
+	}
+}
+
+void SceneManager::Weapon_Update(DWORD dt)
+{
+	if (weapon == STOP_WATCH)
+		return;
+
+	if (weapon->IsEnable() == false)
+		return;
+
+	if (weapon->GetScoreReceived() != 0)
+	{
+		simon->AddScore(weapon->GetScoreReceived());
+		weapon->SetScoreReceived(0);
+	}
+
+	vector<LPGAMEOBJECT> coObjects;
+	coObjects.push_back(simon); // dùng để xét va chạm của Simon với boomerang
+
+	for (auto obj : listObjects)
+	{
+		if ((dynamic_cast<Candle*>(obj) || dynamic_cast<Ground*>(obj) ||
+			dynamic_cast<FireBall*>(obj) || dynamic_cast<Zombie*>(obj) ||
+			dynamic_cast<BlackLeopard*>(obj) || dynamic_cast<VampireBat*>(obj) ||
+			dynamic_cast<FishMan*>(obj) || dynamic_cast<Boss*>(obj)) &&
+			obj->GetState() != INACTIVE && obj->IsEnable() == true)
+		{
+			coObjects.push_back(obj);
+		}
+	}
+
+	weapon->Update(dt, &coObjects);
+}
+
+void SceneManager::Item_Update(DWORD dt, LPGAMEOBJECT & item)
+{
+	if (item->IsEnable() == true)
+	{
+		vector<LPGAMEOBJECT> coObjects;
+
+		for (auto obj : listObjects)
+		{
+			if (dynamic_cast<Ground*>(obj))
+			{
+				coObjects.push_back(obj);
+			}
+		}
+
+		item->Update(dt, &coObjects);
+	}
+}
+
+void SceneManager::Zombie_Update(DWORD dt, LPGAMEOBJECT & object)
+{
+	if (object->GetState() != ZOMBIE_INACTIVE)
+	{
+		zombie = dynamic_cast<Zombie*>(object);
+
+		if (zombie->IsSettedPosition() == false)
+		{
+			zombie->SetIsSettedPosition(true);
+
+			D3DXVECTOR2 entryPos = zombie->GetEntryPosition();
+			if (zombie->GetOrientation() == -1) zombie->SetPosition(game->GetCameraPositon().x + SCREEN_WIDTH - ENEMY_DEFAULT_BBOX_WIDTH, entryPos.y);
+			else zombie->SetPosition(game->GetCameraPositon().x + ENEMY_DEFAULT_BBOX_WIDTH, entryPos.y);
+		}
+
+		vector<LPGAMEOBJECT> coObjects;
+
+		for (auto obj : listObjects)
+		{
+			if (dynamic_cast<Ground*>(obj))
+			{
+				coObjects.push_back(obj);
+			}
+		}
+
+		object->Update(dt, &coObjects, isUsingStopWatch);
+	}
+
+}
+
+void SceneManager::BlackLeopard_Update(DWORD dt, LPGAMEOBJECT & object)
+{
+	if (object->GetState() != BLACK_LEOPARD_INACTIVE)
+	{
+		vector<LPGAMEOBJECT> coObjects;
+
+		for (auto obj : listObjects)
+		{
+			if (dynamic_cast<Ground*>(obj))
+			{
+				coObjects.push_back(obj);
+			}
+		}
+
+		object->Update(dt, &coObjects, isUsingStopWatch);
+	}
+}
+
+void SceneManager::VampireBat_Update(DWORD dt, LPGAMEOBJECT & object)
+{
+	if (object->GetState() != VAMPIRE_BAT_INACTIVE)
+	{
+		bat = dynamic_cast<VampireBat*>(object);
+
+		if (bat->IsSettedPosition() == false)
+		{
+			bat->SetIsSettedPosition(true);
+
+			// set random hướng cho dơi
+
+			int listNx[2] = { -1, 1 };
+			int rndIndex = rand() % 2;
+			bat->SetOrientation(listNx[rndIndex]);
+
+			// set vị trí cho dơi luôn 
+			// dơi bay ngang tầm simon, từ phía cuối của 2 đầu màn hình)
+			float bx, by;
+
+			by = simon->y + 20;
+
+			if (bat->GetOrientation() == -1) bx = game->GetCameraPositon().x + SCREEN_WIDTH - ENEMY_DEFAULT_BBOX_WIDTH;
+			else bx = game->GetCameraPositon().x + ENEMY_DEFAULT_BBOX_WIDTH;
+
+			bat->SetPosition(bx, by);
+			bat->SetState(VAMPIRE_BAT_ACTIVE);
+		}
+
+		bat->Update(dt, NULL, isUsingStopWatch);
+	}
+}
+
+void SceneManager::FishMan_Update(DWORD dt, LPGAMEOBJECT & object)
+{
+	fishman = dynamic_cast<FishMan*>(object);
+
+	if (fishman->GetState() == FISHMAN_ACTIVE &&
+		GetTickCount() - fishman->GetLastTimeShoot() >= fishman->GetDeltaTimeToShoot())
+	{
+		fishman->SetState(FISHMAN_HIT);
+
+		// Tạo fireball
+		float fx, fy, nx;
+		fishman->GetPosition(fx, fy);
+		nx = fishman->GetOrientation();
+
+		fireball = new FireBall();
+		fireball->SetPosition(fx + 5.0f, fy + 10.0f);
+		fireball->SetOrientation(nx);
+		fireball->SetState(FIREBALL);
+		fireball->SetEnable(true);
+
+		unit = new Unit(grid, fireball, fx + 5.0f, fy + 10.0f);
+
+		// Đặt hướng quay mặt của Fishman sau khi bắn (quay về phía simon)
+		float sx, sy;
+		simon->GetPosition(sx, sy);
+
+		if (fx < sx) fishman->SetNxAfterShoot(1);
+		else fishman->SetNxAfterShoot(-1);
+	}
+	else
+	{
+		if (fishman->GetState() == FISHMAN_JUMP && fishman->IsSettedPosition() == false)
+		{
+			float simon_x, simon_y;
+			simon->GetPosition(simon_x, simon_y);
+
+			if (abs(simon_x - fishman->GetEntryPosition().x) < 50.0f)
+				return;
+
+			int nx = simon_x > fishman->GetEntryPosition().x ? 1 : -1;
+			fishman->SetOrientation(nx);
+
+			fishman->SetState(FISHMAN_JUMP);
+			fishman->SetIsSettedPosition(true);
+		}
+
+		vector<LPGAMEOBJECT> coObjects;
+
+		for (auto obj : listObjects)
+		{
+			if (dynamic_cast<Ground*>(obj))
+			{
+				coObjects.push_back(obj);
+			}
+		}
+
+		fishman->Update(dt, &coObjects, isUsingStopWatch);
+	}
+}
+
+void SceneManager::Boss_Update(DWORD dt, LPGAMEOBJECT & object)
+{
+	if (object->GetState() == BOSS_INACTIVE)
+		return;
+
+	boss = dynamic_cast<Boss*>(object);
+
+	// Passing simon's position for boss movement
+	float sx, sy;
+	simon->GetPosition(sx, sy);
+	boss->SetSimonPosition(sx, sy);
+
+	boss->Update(dt);
+}
+
 

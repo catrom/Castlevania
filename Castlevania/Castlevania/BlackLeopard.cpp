@@ -40,7 +40,7 @@ void BlackLeopard::LoadResources(Textures *& textures, Sprites *& sprites, Anima
 	animations->Add(BLACK_LEOPARD_JUMP_ANI, ani);
 }
 
-void BlackLeopard::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
+void BlackLeopard::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
 	DWORD now = GetTickCount();
 
@@ -131,6 +131,8 @@ void BlackLeopard::SetState(int state)
 		animations[state]->SetAniStartTime(GetTickCount());
 		break;
 	case BLACK_LEOPARD_INACTIVE:
+		x = entryPosition.x;
+		y = entryPosition.y;
 		vx = 0;
 		vy = 0;
 		StartRespawnTimeCounter();

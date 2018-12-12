@@ -29,7 +29,7 @@ void FireBall::LoadResources(Textures *& textures, Sprites *& sprites, Animation
 	animations->Add(FIREBALL_ANI, ani);
 }
 
-void FireBall::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
+void FireBall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
 	if (stopMovement == true)
 		return;
@@ -65,5 +65,10 @@ void FireBall::GetBoundingBox(float & left, float & top, float & right, float & 
 	top = y;
 	right = left + FIREBALL_BBOX_WIDTH;
 	bottom = top + FIREBALL_BBOX_HEIGHT;
+}
+
+void FireBall::GetActiveBoundingBox(float & left, float & top, float & right, float & bottom)
+{
+	GetBoundingBox(left, top, right, bottom);
 }
 

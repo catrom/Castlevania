@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "Grid.h"
 #include "Game.h"
 #include "GameObject.h"
 #include "Candle.h"
@@ -27,6 +28,13 @@ class SceneManager
 	bool isBossFighting = false;
 
 	Game * game;
+	Grid * grid;
+	Unit * unit;
+
+	vector<Unit*> listUnits;
+	vector<LPGAMEOBJECT> listObjects;
+	vector<LPGAMEOBJECT> listItems;
+	vector<LPGAMEOBJECT> listStairs;
 
 	Simon * simon = new Simon();
 	Candle * candle = new Candle();
@@ -51,20 +59,11 @@ class SceneManager
 	Textures * textures = Textures::GetInstance();
 	Sprites * sprites = Sprites::GetInstance();
 	Animations * animations = Animations::GetInstance();
-
-	vector<LPGAMEOBJECT> Objects;
-	vector<LPGAMEOBJECT> listCandles;
-	vector<LPGAMEOBJECT> listStairs;
-	vector<LPGAMEOBJECT> listGrounds;
-	vector<LPGAMEOBJECT> listItems;
-	vector<LPGAMEOBJECT> listDoors;
-	vector<LPGAMEOBJECT> listZombies;
-	vector<LPGAMEOBJECT> listBlackLeopards;
-	vector<LPGAMEOBJECT> listVampireBats;
-	vector<LPGAMEOBJECT> listFishMans;
-	vector<LPGAMEOBJECT> listFireBalls;
+	
 
 	vector<LPCHANGESCENEOBJ> listChangeSceneObjs;
+	vector<LPGAMEOBJECT> listStaticObjectsToRender;
+	vector<LPGAMEOBJECT> listMovingObjectsToRender;
 
 	bool isSetSimonAutoWalk = false;
 	bool isMovingCamera = false;
@@ -81,9 +80,12 @@ public:
 	void LoadObjectsFromFile(LPCWSTR FilePath);		// load all objects (position, state, isenable) from file and save to vector Objects
 	void CreateListChangeSceneObjects();
 
-	virtual void Update(DWORD dt);
-	virtual void Render();
+	void GetObjectFromGrid();
+
+	void Update(DWORD dt);
+	void Render();
 	void UpdateCameraPosition();
+	void UpdateGrid();
 
 	void SetDropItems(LPGAMEOBJECT object);
 	void SetInactivationByPosition();  // Nếu object ra khỏi toạ độ viewport thì set unable / inactive
@@ -92,6 +94,7 @@ public:
 	int GetIDScene() { return this->IDScene; }
 
 	Simon * GetSimon() { return this->simon; }
+	Boss * GetBoss() { return this->boss; }
 	SubWeapon * GetWeapon() { return this->weapon; }
 	vector<LPGAMEOBJECT> * GetListStairs() { return &(this->listStairs); }
 
@@ -99,5 +102,16 @@ public:
 
 	bool IsUsingStopWatch() { return isUsingStopWatch; }
 	void StartStopWatch() { isUsingStopWatch = true; stopWatchCounter = GetTickCount(); }
+
+	// Các hàm update con
+	void Simon_Update(DWORD dt);
+	void Whip_Update(DWORD dt);
+	void Weapon_Update(DWORD dt);
+	void Item_Update(DWORD dt, LPGAMEOBJECT &object);
+	void Zombie_Update(DWORD dt, LPGAMEOBJECT &object);
+	void BlackLeopard_Update(DWORD dt, LPGAMEOBJECT &object);
+	void VampireBat_Update(DWORD dt, LPGAMEOBJECT &object);
+	void FishMan_Update(DWORD dt, LPGAMEOBJECT &object);
+	void Boss_Update(DWORD dt, LPGAMEOBJECT &object);
 };
 

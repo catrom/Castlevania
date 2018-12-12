@@ -25,8 +25,11 @@ void Zombie::LoadResources(Textures *& textures, Sprites *& sprites, Animations 
 	animations->Add(ZOMBIE_ANI, ani);
 }
 
-void Zombie::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
+void Zombie::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
+	if (state == ZOMBIE_INACTIVE)
+		return;
+
 	if (state == ZOMBIE_DESTROYED && animations[state]->IsOver(150) == true) 
 	{
 		SetState(ZOMBIE_INACTIVE);
@@ -78,7 +81,8 @@ void Zombie::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT
 
 void Zombie::Render()
 {
-	animations[state]->Render(1, nx, x, y);
+	if (state != ZOMBIE_INACTIVE)
+		animations[state]->Render(1, nx, x, y);
 }
 
 void Zombie::SetState(int state)
@@ -88,8 +92,6 @@ void Zombie::SetState(int state)
 	switch (state)
 	{
 	case ZOMBIE_ACTIVE:
-		x = entryPosition.x;
-		y = entryPosition.y;
 		if (nx > 0) vx = ZOMBIE_WALKING_SPEED;
 		else vx = -ZOMBIE_WALKING_SPEED;
 		vy = 0;
@@ -102,7 +104,10 @@ void Zombie::SetState(int state)
 		animations[state]->SetAniStartTime(GetTickCount());
 		break;
 	case ZOMBIE_INACTIVE:
+		x = entryPosition.x;
+		y = entryPosition.y;
 		vx = 0;
+		isSettedPosition = false;
 		StartRespawnTimeCounter();
 		break;
 	default:

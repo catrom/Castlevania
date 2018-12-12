@@ -10,6 +10,7 @@ GameObject::GameObject()
 	isEnable = true;
 	idItem = -1;
 	isRenderAnimation = true;
+	isDroppedItem = false;
 }
 
 void GameObject::RenderBoundingBox()
@@ -239,7 +240,7 @@ void GameObject::AddAnimation(int aniID)
 	animations.push_back(ani);
 }
 
-void GameObject::Update(DWORD dt, vector<LPGAMEOBJECT> *Objects, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
+void GameObject::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
 	this->dt = dt;
 	/*x += vx * dt;

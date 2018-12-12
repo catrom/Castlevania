@@ -126,7 +126,7 @@ public:
 	// Lấy boundingbox vùng va chạm với simon để khiến enemy active
 	virtual void GetActiveBoundingBox(float &left, float &top, float &right, float &bottom) = 0;
 
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *Objects = NULL, vector<LPGAMEOBJECT> *coObject = NULL, bool stopMovement = false);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObject = NULL, bool stopMovement = false);
 	virtual void Render() = 0;
 };
 

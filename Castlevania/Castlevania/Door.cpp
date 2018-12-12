@@ -82,3 +82,8 @@ void Door::GetBoundingBox(float & l, float & t, float & r, float & b)
 		break;
 	}
 }
+
+void Door::GetActiveBoundingBox(float & left, float & top, float & right, float & bottom)
+{
+	GetBoundingBox(left, top, right, bottom);
+}
