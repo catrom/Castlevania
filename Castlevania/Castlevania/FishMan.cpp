@@ -152,8 +152,7 @@ void FishMan::SetState(int state)
 		deltaTimeToShoot = 500 + rand() % 2000; // Random trong khoảng thời gian là 0.5 - 2s
 		break;
 	case FISHMAN_JUMP:
-		x = entryPosition.x;
-		y = entryPosition.y;
+		vx = 0;
 		vy = -FISHMAN_JUMP_SPEED_Y;
 		isDroppedItem = false;
 		isNeedToCreateBubbles = false;

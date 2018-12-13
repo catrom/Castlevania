@@ -143,6 +143,11 @@ void SubWeapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMoveme
 
 				if (state == WEAPONS_DAGGER || state == WEAPONS_AXE || state == WEAPONS_BOOMERANG)
 					this->isEnable = false;
+				else
+				{
+					x += dx;
+					y += dy;
+				}
 			}
 			else if (dynamic_cast<FireBall*>(e->obj))
 			{
@@ -151,6 +156,11 @@ void SubWeapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMoveme
 
 				if (state == WEAPONS_DAGGER || state == WEAPONS_AXE || state == WEAPONS_BOOMERANG)
 					this->isEnable = false;
+				else
+				{
+					x += dx;
+					y += dy;
+				}
 			}
 			else if (dynamic_cast<Zombie*>(e->obj))
 			{
@@ -161,6 +171,11 @@ void SubWeapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMoveme
 
 				if (state == WEAPONS_DAGGER || state == WEAPONS_AXE || state == WEAPONS_BOOMERANG)
 					this->isEnable = false;
+				else
+				{
+					x += dx;
+					y += dy;
+				}
 			}
 			else if (dynamic_cast<BlackLeopard*>(e->obj))
 			{
@@ -171,6 +186,11 @@ void SubWeapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMoveme
 
 				if (state == WEAPONS_DAGGER || state == WEAPONS_AXE || state == WEAPONS_BOOMERANG)
 					this->isEnable = false;
+				else
+				{
+					x += dx;
+					y += dy;
+				}
 			}
 			else if (dynamic_cast<VampireBat*>(e->obj))
 			{
@@ -181,6 +201,11 @@ void SubWeapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMoveme
 
 				if (state == WEAPONS_DAGGER || state == WEAPONS_AXE || state == WEAPONS_BOOMERANG)
 					this->isEnable = false;
+				else
+				{
+					x += dx;
+					y += dy;
+				}
 			}
 			else if (dynamic_cast<FishMan*>(e->obj))
 			{
@@ -191,15 +216,26 @@ void SubWeapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMoveme
 
 				if (state == WEAPONS_DAGGER || state == WEAPONS_AXE || state == WEAPONS_BOOMERANG)
 					this->isEnable = false;
+				else
+				{
+					x += dx;
+					y += dy;
+				}
 			}
 			else if (dynamic_cast<Boss*>(e->obj))
 			{
 				Boss * boss = dynamic_cast<Boss*>(e->obj);
+				boss->SetState(BOSS_HURT);
 				boss->LoseHP(2);
 				targetTypeHit = BOSS;
 
 				if (state == WEAPONS_DAGGER || state == WEAPONS_AXE || state == WEAPONS_BOOMERANG)
 					this->isEnable = false;
+				else
+				{
+					x += dx;
+					y += dy;
+				}
 			}
 			else if (dynamic_cast<Ground*>(e->obj))
 			{

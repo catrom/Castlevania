@@ -7,6 +7,7 @@ Boss::Boss()
 	AddAnimation(BOSS_ACTIVE_ANI);
 	AddAnimation(EFFECT_2_ANI);
 	AddAnimation(BOSS_INACTIVE_ANI);
+	AddAnimation(EFFECT_ANI);
 
 	SetState(BOSS_INACTIVE);
 }
@@ -41,13 +42,17 @@ void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
 	if (state == BOSS_DESTROYED)
 	{
-		if (animations[state]->IsOver(1500) == true)
+		if (animations[state]->IsOver(1000) == true)
 		{
-			//this->isEnable = false;
 			dropItem = true;
 		}
 
 		return;
+	}
+
+	if (state == BOSS_HURT && animations[state]->IsOver(50) == true)
+	{
+		SetState(BOSS_ACTIVE);
 	}
 
 	if (isStopWaiting == true)
@@ -99,7 +104,6 @@ void Boss::SetState(int state)
 	switch (state)
 	{
 	case BOSS_ACTIVE:
-		idTarget = 0;
 		break;
 	case BOSS_DESTROYED:
 		vx = 0;
@@ -109,6 +113,10 @@ void Boss::SetState(int state)
 	case BOSS_INACTIVE:
 		vx = 0;
 		vy = 0;
+		break;
+	case BOSS_HURT:
+		animations[state]->Reset();
+		animations[state]->SetAniStartTime(GetTickCount());
 		break;
 	default:
 		break;
@@ -188,7 +196,7 @@ void Boss::GetVelocity()
 
 void Boss::GetBoundingBox(float & left, float & top, float & right, float & bottom)
 {
-	left = x + 25; // 46, 96
+	left = x + 13; // 70, 96
 	top = y;
 	right = left + BOSS_BBOX_WIDTH;
 	bottom = top + BOSS_BBOX_HEIGHT;
@@ -205,7 +213,7 @@ void Boss::GetActiveBoundingBox(float & left, float & top, float & right, float 
 void Boss::LoseHP(int x)
 {
 	HP -= x;
-	if (HP < 0) {
+	if (HP <= 0) {
 		HP = 0;
 		SetState(BOSS_DESTROYED);
 	}

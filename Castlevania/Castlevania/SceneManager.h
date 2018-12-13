@@ -43,6 +43,7 @@ class SceneManager
 	Whip * whip = new Whip();
 	Effect * effect = new Effect();
 	SubWeapon * weapon = new SubWeapon();
+	vector<SubWeapon*> weaponlist;  // for double-shot, triple-shot
 	Stair * stair = new Stair();
 	Door * door = new Door();
 	Zombie * zombie = new Zombie();
@@ -72,6 +73,18 @@ class SceneManager
 	bool isUsingStopWatch = false; // xác định xem là có đang dùng stopwatch hay không
 	int stopWatchCounter = 0;
 
+	bool isSimonDead = false;		// dừng update simon khi ở trạng thái dead
+	int simonDeadTimeCounter = 0;
+
+	bool isCrossEffect = false;  
+	int crossEffectTimeCounter = 0; 
+
+	bool isDoubleShotEffect = false;
+	int doubleShotEffectTimeCounter = 0;
+
+	bool isTripleShotEffect = false;
+	int tripleShotEffectTimeCounter = 0;
+
 public:
 	SceneManager(Game * game, int idScene);
 	~SceneManager();
@@ -93,9 +106,12 @@ public:
 	void ChangeScene(int scene);
 	int GetIDScene() { return this->IDScene; }
 
+	void ResetGameState(); // Reset lại trạng thái của game (map, simon...) sau khi simon chết
+
 	Simon * GetSimon() { return this->simon; }
 	Boss * GetBoss() { return this->boss; }
 	SubWeapon * GetWeapon() { return this->weapon; }
+	vector<SubWeapon*> * GetWeaponList() { return &weaponlist; }
 	vector<LPGAMEOBJECT> * GetListStairs() { return &(this->listStairs); }
 
 	void SetWeapon(SubWeapon * x) { this->weapon = x; }
@@ -103,10 +119,20 @@ public:
 	bool IsUsingStopWatch() { return isUsingStopWatch; }
 	void StartStopWatch() { isUsingStopWatch = true; stopWatchCounter = GetTickCount(); }
 
-	// Các hàm update con
+	void StartSimonDeadTimeCounter() { isSimonDead = true; simonDeadTimeCounter = GetTickCount(); }
+
+	void CrossEffect();
+
+	void DoubleShotEffect();
+	void TripleShotEffect();
+
+	bool IsDoubleShotEffect() { return isDoubleShotEffect; }
+	bool IsTripleShotEffect() { return isTripleShotEffect; }
+
+	//
 	void Simon_Update(DWORD dt);
 	void Whip_Update(DWORD dt);
-	void Weapon_Update(DWORD dt);
+	void Weapon_Update(DWORD dt, int index);  
 	void Item_Update(DWORD dt, LPGAMEOBJECT &object);
 	void Zombie_Update(DWORD dt, LPGAMEOBJECT &object);
 	void BlackLeopard_Update(DWORD dt, LPGAMEOBJECT &object);

@@ -29,11 +29,17 @@ class Simon : public GameObject
 	bool isHitSubWeapons = false; // xác định xem là hit bằng roi hay subweapon
 
 	bool isGotChainItem = false; // xác định xem có nhặt được Chain item hay không, dùng để update whip
+	bool isGotDoubleShotItem = false;
+	bool isGotTripleShotItem = false;
+
+	bool isDead = false;
+
+	bool isCrossCollected = false;
 
 public:
 	bool isStand = true; // xác định trạng thái đứng/ngồi để lấy vị trí gắn roi cho phù hợp
 	bool isPowered = false; // lấy item, phóng item (up + fight key)
-	bool isTouchGround = false; 
+	bool isTouchGround = false;
 	bool isStandOnStair = false; // trạng thái đang đứng trên cầu thang 
 	bool isMovingUp = false;
 	bool isMovingDown = false;
@@ -81,6 +87,9 @@ public:
 	void LoseEnergy(int x) { energy -= x; }
 	void LoseHP(int x);
 
+	void SetHP(int x) { HP = x; }
+	void SetEnergy(int x) { energy = x; }
+
 	// Kiểm tra va chạm của Simon với list bậc thang
 	bool CheckCollisionWithStair(vector<LPGAMEOBJECT> * listStair);
 	LPGAMEOBJECT GetStairCollided() { return this->stairCollided; }
@@ -90,7 +99,7 @@ public:
 
 	// Kiểm tra va chạm với vùng hoạt động của enemy
 	void CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT> * listEnemy);
-	
+
 	// Kiểm tra va chạm với trigger change scene
 	bool CheckChangeScene(vector<LPCHANGESCENEOBJ> * listChangeScene);
 
@@ -108,10 +117,21 @@ public:
 	bool IsGotChainItem() { return isGotChainItem; }
 	void SetGotChainItem(bool x) { isGotChainItem = x; }
 
+	bool IsGotDoubleShotItem() { return isGotDoubleShotItem; }
+	void SetGotDoubleShotItem(bool x) { isGotDoubleShotItem = x; }
+
+	bool IsGotTripleShotItem() { return isGotTripleShotItem; }
+	void SetGotTripleShotItem(bool x) { isGotTripleShotItem = x; }
+
 	bool IsHitSubWeapons() { return isHitSubWeapons; }
 	void SetHitSubWeapons(bool x) { isHitSubWeapons = x; }
 
 	void SetSubWeapon(int x) { subWeapon = x; }
+
+	bool IsDead() { return isDead; }
+
+	bool IsCrossCollected() { return isCrossCollected; }
+	void SetCrossCollected(bool x) { isCrossCollected = x; }
 };
 
 

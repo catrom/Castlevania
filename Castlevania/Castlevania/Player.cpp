@@ -49,6 +49,10 @@ void Player::Init()
 	subWeaponList.push_back(sprites->Get(80004));
 	subWeaponList.push_back(sprites->Get(80005));
 
+	// Khởi tạo list item (double shot, triple shot)
+	itemList.push_back(sprites->Get(80014));
+	itemList.push_back(sprites->Get(80015));
+
 	// Font
 	font = NULL;
 	AddFontResourceEx(FILEPATH_FONT, FR_PRIVATE, NULL);
@@ -74,11 +78,14 @@ void Player::Update(DWORD dt, bool stopwatch)
 	score = simon->GetScore();
 	energy = simon->GetEnergy();
 	life = simon->GetLife();
-	item = simon->GetItem();
 	subWeapon = simon->GetSubWeapon();
 	scene = scenes->GetIDScene() + 1; // (based 1)
 	simonHP = simon->GetHP();
 	bossHP = boss->GetHP();
+
+	if (scenes->IsDoubleShotEffect()) item = 0; // double shot
+	else if (scenes->IsTripleShotEffect()) item = 1; // trip shot
+	else item = -1;
 	
 	if (stopwatch == false) time += dt; // khi sử dụng stop watch thì không đếm thời gian
 
@@ -121,6 +128,13 @@ void Player::Render()
 	if (subWeapon != -1) // simon get subweapon
 	{
 		subWeaponList[subWeapon]->Draw(0, -1, 305, 40);
+	}
+
+	// draw item
+
+	if (item != -1)
+	{
+		itemList[item]->Draw(0, -1, 450, 38);
 	}
 
 	for (int i = 0; i < simonHP; i++)

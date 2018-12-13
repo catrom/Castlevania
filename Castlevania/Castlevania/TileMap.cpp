@@ -121,11 +121,13 @@ void TileMap::Draw(int start_col, int end_col)
 	}
 }
 
-void TileMap::Draw(D3DXVECTOR3 camPosition)
+void TileMap::Draw(D3DXVECTOR3 camPosition, bool isCrossEffect)
 {
 	start_col_to_draw = (int)camPosition.x / 32;
 	end_col_to_draw = start_col_to_draw + SCREEN_WIDTH / 32;
 
+	int alpha = 255;
+	if (isCrossEffect == true) alpha = rand() % 255;
 
 	for (int i = 0; i < nums_row; i++)
 	{
@@ -135,8 +137,8 @@ void TileMap::Draw(D3DXVECTOR3 camPosition)
 			// +(int)camPosition.x % 32 để giữ cho camera chuyển động mượt (thực ra giá trị này bằng vx*dt, chính là quãng đường dịch chuyển của simon)
 			float x = tile_Width * (j - start_col_to_draw) + camPosition.x - (int)camPosition.x % 32; 
 			float y = tile_Height * i + 80;
-			
-			sprites->Get(1000 * ID + map_Data[i][j])->Draw(1, -1, x, y);
+
+			sprites->Get(1000 * ID + map_Data[i][j])->Draw(1, -1, x, y, alpha);
 		}
 	}
 }

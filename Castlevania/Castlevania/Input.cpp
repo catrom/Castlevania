@@ -16,6 +16,9 @@ void Input::KeyState(BYTE *state)
 {
 	Simon * simon = scene->GetSimon();
 
+	if (simon->GetState() == DEAD)
+		return;
+
 	if (simon->IsAutoWalk() == true)
 		return;
 
@@ -142,6 +145,9 @@ void Input::OnKeyDown(int KeyCode)
 {
 	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 
+	if (scene->GetSimon()->GetState() == DEAD)
+		return;
+
 	switch (KeyCode)
 	{
 	case DIK_0:
@@ -158,6 +164,15 @@ void Input::OnKeyDown(int KeyCode)
 		break;
 	case DIK_4:
 		scene->GetSimon()->SetSubWeapon(WEAPONS_BOOMERANG);
+		break;
+	case DIK_5:
+		scene->GetSimon()->SetCrossCollected(true);
+		break;
+	case DIK_6:
+		scene->GetSimon()->SetGotDoubleShotItem(true);
+		break;
+	case DIK_7:
+		scene->GetSimon()->SetGotTripleShotItem(true);
 		break;
 	case DIK_SPACE:
 		Simon_Jump();
@@ -226,7 +241,8 @@ void Input::Simon_Hit()
 void Input::Simon_Hit_SubWeapon()
 {
 	Simon * simon = scene->GetSimon();
-	SubWeapon * weapon = scene->GetWeapon();
+	vector<SubWeapon*> * weaponlist = scene->GetWeaponList();
+	SubWeapon * weapon;
 
 	if (simon->GetSubWeapon() == -1 || simon->GetEnergy() == 0) // không có vũ khí hoặc enery = 0
 		return;
@@ -234,11 +250,16 @@ void Input::Simon_Hit_SubWeapon()
 	if (simon->GetSubWeapon() == STOP_WATCH && simon->GetEnergy() < 5)
 		return;
 
-	if (weapon->GetState() != STOP_WATCH && weapon->IsEnable() == true) // đang phóng rồi
+	if (weaponlist->at(0)->GetState() == STOP_WATCH && scene->IsUsingStopWatch() == true) // đang sử dụng stop watch
 		return;
 
-	if (weapon->GetState() == STOP_WATCH && scene->IsUsingStopWatch() == true) // đang sử dụng stop watch
-		return;
+	if (weaponlist->at(0)->IsEnable() == false)
+		weapon = weaponlist->at(0);
+	else if (weaponlist->at(1)->IsEnable() == false && (scene->IsDoubleShotEffect() || scene->IsTripleShotEffect()))
+		weapon = weaponlist->at(1);
+	else if (weaponlist->at(2)->IsEnable() == false && scene->IsTripleShotEffect())
+		weapon = weaponlist->at(2);
+	else return;
 
 	if (simon->GetState() == STAND || simon->GetState() == JUMP ||
 		simon->GetState() == SIT || simon->GetState() == STAIR_UP ||
@@ -258,9 +279,9 @@ void Input::Simon_Hit_SubWeapon()
 		// orientation
 		weapon->SetOrientation(simon->GetOrientation());
 
-		// state weapon
-		weapon->SetState(simon->GetSubWeapon());
+		// state enable
 		weapon->SetEnable(true);
+		weapon->SetState(simon->GetSubWeapon());
 
 		if (weapon->GetState() == STOP_WATCH)
 		{

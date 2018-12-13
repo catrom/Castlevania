@@ -48,7 +48,7 @@ public:
 	void LoadResources();	// load tất cả các block tile lưu vào sprites
 	void Load_MapData();	// load ma trận dữ liệu map 
 	void CreateZoneToDraw(); // khởi tạo vector 2 chiều min_max_col_to_draw
-	void Draw(D3DXVECTOR3 camPosition);	// vẽ tất cả các tile nằm trong camera
+	void Draw(D3DXVECTOR3 camPosition, bool isCrossEffect = false);	// vẽ tất cả các tile nằm trong camera
 	void Draw(int start_col, int end_col);
 
 	int GetMapWidth() { return map_Width; }

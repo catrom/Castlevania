@@ -13,7 +13,7 @@ Whip::Whip() : GameObject()
 	AddAnimation(SHORT_CHAIN_ANI);
 	AddAnimation(LONG_CHAIN_ANI);
 
-	SetState(LONG_CHAIN);
+	SetState(NORMAL_WHIP);
 }
 
 void Whip::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &animations)
@@ -166,6 +166,7 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 
 			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và boss
 			{
+				e->SetState(BOSS_HURT);
 				e->LoseHP(1);
 				targetTypeHit = BOSS;
 			}

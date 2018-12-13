@@ -10,9 +10,9 @@ void Effect::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &
 	sprites->Add(50001, 0, 0, 32, 60, texEffect); 
 	sprites->Add(50002, 32, 0, 64, 60, texEffect);
 	sprites->Add(50003, 64, 0, 96, 60, texEffect);
-	sprites->Add(50004, 96, 0, 146, 60, texEffect);
-	sprites->Add(50005, 146, 0, 196, 60, texEffect);
-	sprites->Add(50006, 196, 0, 246, 60, texEffect);
+	sprites->Add(50004, 96, 0, 192, 60, texEffect);
+	sprites->Add(50005, 192, 0, 288, 60, texEffect);
+	sprites->Add(50006, 288, 0, 384, 60, texEffect);
 
 	LPANIMATION ani;
 
@@ -22,7 +22,7 @@ void Effect::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &
 	ani->Add(50003);
 	animations->Add(EFFECT_ANI, ani);
 
-	ani = new Animation(50);
+	ani = new Animation(100);
 	ani->Add(50004);
 	ani->Add(50005);
 	ani->Add(50006);

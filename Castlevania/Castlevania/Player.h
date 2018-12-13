@@ -29,6 +29,7 @@ private:
 
 	Sprite * subWeaponBox;
 	vector<LPSPRITE> subWeaponList;
+	vector<LPSPRITE> itemList;
 	
 	int score;
 	int time;

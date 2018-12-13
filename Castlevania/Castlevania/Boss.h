@@ -5,7 +5,7 @@
 
 class Boss : public GameObject
 {
-	int HP = 3;//BOSS_HP; 
+	int HP = BOSS_HP; 
 
 	bool isFlyToTarget = false;
 	bool isFlyToSimon = false;

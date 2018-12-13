@@ -158,6 +158,7 @@
 #define HIT_STAIR_DOWN	10
 #define AUTO_WALK		11
 #define	DEFLECT			12
+#define DEAD			13
 
 // Whip
 #define NORMAL_WHIP		0
@@ -247,6 +248,7 @@
 #define BOSS_ACTIVE			0
 #define BOSS_DESTROYED		1
 #define BOSS_INACTIVE		2
+#define BOSS_HURT			3
 
 // Fire ball
 #define FIREBALL			0
@@ -270,6 +272,7 @@
 #define HIT_STAIR_UP_ANI	110
 #define HIT_STAIR_DOWN_ANI	111
 #define DEFLECT_ANI			112
+#define DEAD_ANI			113
 
 // Whip
 #define NORMAL_WHIP_ANI	201
@@ -359,7 +362,10 @@
 #pragma region Properties
 
 // Simon
+#define SIMON_HP					16
+#define SIMON_ENERGY				5
 #define SIMON_UNTOUCHABLE_TIME		2000
+#define SIMON_DEAD_TIME				3000
 #define SIMON_WALKING_SPEED			0.13f
 #define SIMON_WALKING_SPEED_LOWER	0.05f
 #define SIMON_JUMP_SPEED_Y			0.5f
@@ -373,6 +379,9 @@
 // Item
 #define ITEM_FALLING_SPEED			0.2f
 #define ITEM_TIME_DESTROYED			3000
+#define ITEM_CROSS_EFFECT_TIME		1000
+#define ITEM_DOUBLE_SHOT_EFFECT_TIME 10000
+#define ITEM_TRIPLE_SHOT_EFFECT_TIME 10000
 
 // SubWeapons
 #define WEAPONS_DAGGER_SPEED		0.3f
@@ -412,7 +421,7 @@
 #define FISHMAN_JUMP_SPEED_Y		0.7f
 #define FISHMAN_GRAVITY				0.0015f
 #define FISHMAN_WALKING_SPEED_X		0.1f
-#define FISHMAN_RESPAWN_TIME		5000
+#define FISHMAN_RESPAWN_TIME		3000
 
 // Boss
 #define BOSS_HP						16
@@ -494,11 +503,11 @@
 // Fish man
 #define FISHMAN_BBOX_WIDTH			10
 #define FISHMAN_BBOX_HEIGHT			60
-#define FISHMAN_ACTIVE_BBOX_WIDTH			100
+#define FISHMAN_ACTIVE_BBOX_WIDTH			150
 #define FISHMAN_ACTIVE_BBOX_HEIGHT			200
 
 // Boss
-#define BOSS_BBOX_WIDTH				46
+#define BOSS_BBOX_WIDTH				70
 #define BOSS_BBOX_HEIGHT			46
 #define BOSS_ACTIVE_BBOX_WIDTH		50
 #define BOSS_ACTIVE_BBOX_HEIGHT		400

@@ -29,13 +29,14 @@ Simon::Simon() : GameObject()
 	AddAnimation(HIT_STAIR_DOWN_ANI);
 	AddAnimation(WALK_ANI);  // for auto - walk
 	AddAnimation(DEFLECT_ANI);
+	AddAnimation(DEAD_ANI);
 
 	score = 0;
 	item = -1;
-	energy = 99;
+	energy = 55;
 	life = 3;
-	subWeapon = HOLY_WATER;
-	HP = 10;
+	subWeapon = WEAPONS_AXE;
+	HP = 2;
 }
 
 void Simon::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &animations)
@@ -82,6 +83,8 @@ void Simon::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &a
 	sprites->Add(10103, 240, 132, 300, 196, texSimon);
 
 	sprites->Add(10111, 0, 66, 60, 130, texSimon); // deflect - when collied with enemy
+
+	sprites->Add(10121, 240, 198, 300, 264, texSimon); // dead
 
 	LPANIMATION ani;
 
@@ -149,10 +152,17 @@ void Simon::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &a
 	ani->Add(10111, 400);
 	ani->Add(10021);
 	animations->Add(DEFLECT_ANI, ani);
+
+	ani = new Animation();
+	ani->Add(10121);
+	animations->Add(DEAD_ANI, ani);
 }
 
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 {
+	if (state == DEAD)
+		return;
+
 	GameObject::Update(dt);
 
 	if (state != STAIR_UP && state != STAIR_DOWN && 
@@ -240,6 +250,13 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 					{
 						vy = 0;
 						isTouchGround = true;
+
+						if ((state == DEFLECT || state == STAND) && HP == 0)
+						{
+							isUntouchable = false;
+							SetState(DEAD);
+							return;
+						}
 					}
 					else
 					{
@@ -424,6 +441,9 @@ void Simon::SetState(int state)
 		animations[state]->Reset();
 		animations[state]->SetAniStartTime(GetTickCount());
 		break;
+	case DEAD:
+		vx = 0;
+		break;
 	default:
 		break;
 	}
@@ -448,7 +468,7 @@ void Simon::LoseHP(int x)
 {
 	HP -= x;
 
-	if (HP < 0)
+	if (HP <= 0)
 	{
 		HP = 0;
 		life -= 1;
@@ -570,8 +590,10 @@ bool Simon::CheckCollisionWithItem(vector<LPGAMEOBJECT> * listItem)
 				energy += 5;
 				break;
 			case CROSS:
+				isCrossCollected = true;
 				break;
 			case INVISIBILITY_POTION:
+				StartUntouchable();
 				break;
 			case CHAIN:
 				SetState(POWER); // đổi trạng thái power - biến hình nhấp nháy các kiểu đà điểu
@@ -591,14 +613,18 @@ bool Simon::CheckCollisionWithItem(vector<LPGAMEOBJECT> * listItem)
 				score += 1000;
 				break;
 			case DOUBLE_SHOT:
+				item = idItem;
+				isGotDoubleShotItem = true;
+				break;
 			case TRIPLE_SHOT:
 				item = idItem;
+				isGotTripleShotItem = true;
 				break;
 			case PORK_CHOP:
 				HP += 2;
 				break;
 			case MAGIC_CRYSTAL:
-				HP = 16;
+				HP = SIMON_HP;
 				break;
 			default:
 				break;
@@ -663,7 +689,7 @@ void Simon::CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT>* listEnemy)
 
 				if (fishman->GetState() == FISHMAN_INACTIVE && fishman->IsAbleToActivate() == true)
 				{
-					fishman->SetState(FISHMAN_JUMP);
+					fishman->SetState(FISHMAN_ACTIVE);
 				}
 			}
 			else if (dynamic_cast<Boss*>(enemy))
