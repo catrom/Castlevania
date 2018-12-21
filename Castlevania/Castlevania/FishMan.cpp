@@ -61,7 +61,7 @@ void FishMan::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement
 	}
 
 	// Update fishman
-	if (state == FISHMAN_DESTROYED && animations[state]->IsOver(150) == true)
+	if (state == FISHMAN_DESTROYED && animations[state]->IsOver(EFFECT_ANI_TIME_DELAY) == true)
 	{
 		SetState(FISHMAN_INACTIVE);
 		return;

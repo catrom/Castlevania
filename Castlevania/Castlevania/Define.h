@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 // main
 #define WINDOW_CLASS_NAME		L"Castlevania"
@@ -10,6 +10,9 @@
 
 #define DEFAULT_CELL_WIDTH		256
 #define DEFAULT_CELL_HEIGHT		240
+
+#define	TILEMAP_DEFAULT_CELL_WIDTH 32
+#define	TILEMAP_DEFAULT_CELL_HEIGHT 32
 
 #define MAX_FRAME_RATE			150
 
@@ -30,6 +33,7 @@
 #define ID_TEX_CANDLE				3
 #define ID_TEX_GROUND				4
 #define ID_TEX_EFFECT				5
+#define ID_TEX_SPARK				38
 #define ID_TEX_HP					6
 #define ID_TEX_RECT					7
 #define ID_TEX_SMALL_CANDLE			26
@@ -64,6 +68,7 @@
 #define ID_TEX_WEAPONS_AXE			23
 #define ID_TEX_WEAPONS_HOLY_WATER	24
 #define ID_TEX_WEAPONS_BOOMERANG	25
+#define ID_TEX_WEAPONS_DAGGER			37
 
 
 
@@ -84,6 +89,7 @@
 #define FILEPATH_TEX_SMALL_CANDLE	L"Textures\\SmallCandle.png"
 #define FILEPATH_TEX_GROUND			L"Textures\\Ground.png"
 #define FILEPATH_TEX_EFFECT			L"Textures\\Effect.png"
+#define FILEPATH_TEX_SPARK			L"Textures\\Spark.png"
 #define FILEPATH_TEX_STAIR			L"Textures\\Stair.png"
 #define FILEPATH_TEX_DOOR			L"Textures\\Door.png"
 #define FILEPATH_TEX_GATE			L"Textures\\Gate.png"
@@ -116,7 +122,7 @@
 #define FILEPATH_TEX_WEAPONS_AXE				L"Textures\\SubWeapons\\Axe.png"
 #define FILEPATH_TEX_WEAPONS_HOLY_WATER			L"Textures\\SubWeapons\\HolyWater.png"
 #define FILEPATH_TEX_WEAPONS_BOOMERANG			L"Textures\\SubWeapons\\Boomerang.png"
-
+#define FILEPATH_TEX_WEAPONS_DAGGER				L"Textures\\SubWeapons\\Dagger.png"
 
 // Scenes
 #define FILEPATH_TEX_MAP_SCENE_1		L"Scenes\\Scene1.png"
@@ -139,6 +145,16 @@
 
 #pragma region State
  
+// Game
+#define GAMESTATE_1		0   // SCENE_1
+#define GAMESTATE_2_1	1	// SCENE_2 - phòng 1
+#define GAMESTATE_2_2	2	// SCENE_2 - phòng 2
+#define GAMESTATE_2_2_1	3	// SCENE_2 - phòng 2 - cầu thang xuống 1
+#define GAMESTATE_2_2_2	4	// SCENE_2 - phòng 2 - cầu thang xuống 2
+#define GAMESTATE_2_3	5	// SCENE_2 - phòng 3 (Boss)
+#define GAMESTATE_3_1	6	// SCENE_3 - cầu thang lên 1
+#define GAMESTATE_3_2	7	// SCENE_3 - cầu thang lên 2
+
 // Scene
 #define SCENE_1		0
 #define SCENE_2		1
@@ -156,9 +172,8 @@
 #define STAIR_DOWN	8
 #define HIT_STAIR_UP	9
 #define HIT_STAIR_DOWN	10
-#define AUTO_WALK		11
-#define	DEFLECT			12
-#define DEAD			13
+#define	DEFLECT			11
+#define DEAD			12
 
 // Whip
 #define NORMAL_WHIP		0
@@ -257,7 +272,11 @@
 #define BUBBLES				0
 #pragma endregion
 
-#pragma region Animation ID
+#pragma region Animation 
+
+// Animation Delay
+#define EFFECT_ANI_TIME_DELAY	300
+#define EFFECT_2_ANI_TIME_DELAY	1000
 
 // Simon
 #define STAND_ANI		101
@@ -290,6 +309,9 @@
 // Flame Effect
 #define	EFFECT_ANI		501
 #define EFFECT_2_ANI	502
+
+// Spark
+#define SPARK_ANI		1701
 
 // Items
 #define	STOP_WATCH_ANI				601
@@ -369,17 +391,18 @@
 #define SIMON_WALKING_SPEED			0.13f
 #define SIMON_WALKING_SPEED_LOWER	0.05f
 #define SIMON_JUMP_SPEED_Y			0.5f
+#define SIMON_SPEED_Y_LOWER_ZONE    0.2f
 #define SIMON_GRAVITY				0.002f
 #define SIMON_GRAVITY_LOWER			0.001f
-#define SIMON_STAIR_SPEED_X			0.08f
-#define SIMON_STAIR_SPEED_Y			0.08f
+#define SIMON_STAIR_SPEED_X			0.079f
+#define SIMON_STAIR_SPEED_Y			0.079f
 #define SIMON_DEFLECT_SPEED_X		0.13f
 #define SIMON_DEFLECT_SPEED_Y		0.3f
 
 // Item
 #define ITEM_FALLING_SPEED			0.2f
 #define ITEM_TIME_DESTROYED			3000
-#define ITEM_CROSS_EFFECT_TIME		1000
+#define ITEM_CROSS_EFFECT_TIME		500
 #define ITEM_DOUBLE_SHOT_EFFECT_TIME 10000
 #define ITEM_TRIPLE_SHOT_EFFECT_TIME 10000
 
@@ -425,10 +448,9 @@
 
 // Boss
 #define BOSS_HP						16
-#define BOSS_DEFAULT_VELOCITY		0.1f
-#define BOSS_MIN_VELOCITY			0.7f
-#define BOSS_MAX_VELOCITY			0.13f
-#define BOSS_STOP_TIME_WAITING		2000
+#define BOSS_DEFAULT_TIME_TO_FLY	1000
+#define BOSS_FAST_TIME_TO_FLY		750
+#define BOSS_STOP_TIME_WAITING		1500
 
 // Boss
 #define BOSS_
@@ -557,6 +579,7 @@
 #define VAMPIRE_BAT		6
 #define FISHMAN			7
 #define	BOSS			8
+#define CHANGE_SCENE_OBJECT 9
 
 #pragma endregion
 

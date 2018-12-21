@@ -1,12 +1,5 @@
 #include "ChangeSceneObject.h"
-
-
-ChangeSceneObject::ChangeSceneObject(float x, float y, int IDNextScene) 
-{
-	this->x = x;
-	this->y = y;
-	this->IDNextScene = IDNextScene;
-}
+#include "Define.h"
 
 void ChangeSceneObject::GetBoundingBox(float & l, float & t, float & r, float & b)
 {

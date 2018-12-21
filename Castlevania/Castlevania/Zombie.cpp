@@ -30,7 +30,7 @@ void Zombie::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 	if (state == ZOMBIE_INACTIVE)
 		return;
 
-	if (state == ZOMBIE_DESTROYED && animations[state]->IsOver(150) == true) 
+	if (state == ZOMBIE_DESTROYED && animations[state]->IsOver(EFFECT_ANI_TIME_DELAY) == true)
 	{
 		SetState(ZOMBIE_INACTIVE);
 		return;

@@ -1,12 +1,12 @@
 ﻿#include "TileMap.h"
+#include "Define.h"
 
 TileMap::TileMap(int ID, LPCWSTR filePath_tex, LPCWSTR filePath_data, int map_width, int map_height, int tile_width, int tile_height)
 {
 	this->ID = ID;
+
 	this->filePath_tex = filePath_tex;
 	this->filePath_data = filePath_data;
-
-	sprites = Sprites::GetInstance();
 
 	this->map_Width = map_width;
 	this->map_Height = map_height;
@@ -17,7 +17,6 @@ TileMap::TileMap(int ID, LPCWSTR filePath_tex, LPCWSTR filePath_data, int map_wi
 	nums_row = map_Height / tile_Height;
 	nums_col = map_Width / tile_Width;
 
-	
 	LoadResources();
 	Load_MapData();
 	CreateZoneToDraw();
@@ -29,28 +28,26 @@ void TileMap::LoadResources()
 
 	texture->Add(ID, filePath_tex, D3DCOLOR_XRGB(255, 255, 255));
 	
-
 	LPDIRECT3DTEXTURE9 texTileMap = texture->Get(ID);
 
 	// lấy thông tin về kích thước của texture lưu các block tiles (filePath_tex)
-
 	D3DSURFACE_DESC surfaceDesc;
 	int level = 0; 
 	texTileMap->GetLevelDesc(level, &surfaceDesc);
 	
-	// tính toán số hàng, số cột cần thiết để load tile 
+	// tính toán số hàng, số cột cần thiết để đọc các ô tile từ file
 	int nums_rowToRead = surfaceDesc.Height / tile_Height;
 	int nums_colToRead = surfaceDesc.Width / tile_Width;
 
 	// thực hiện lưu danh sách các tile vô sprites theo thứ tự id_sprite
 	int id_sprite = 1;
 
-	for (int i = 0; i < nums_rowToRead; i++)
+	for (UINT i = 0; i < nums_rowToRead; i++)
 	{
-		for (int j = 0; j < nums_colToRead; j++)
+		for (UINT j = 0; j < nums_colToRead; j++)
 		{
 			sprites->Add(1000 * ID + id_sprite, tile_Width * j, tile_Height * i, tile_Width * (j + 1), tile_Height * (i + 1), texTileMap);
-			id_sprite += 1;
+			id_sprite = id_sprite + 1;
 		}
 	}
 }
@@ -62,6 +59,7 @@ void TileMap::Load_MapData()
 
 	if (fs.fail())
 	{
+		MessageBox(GetActiveWindow(), L"TileMap::Load_MapData failed!", L"ERROR", MB_OK);
 		DebugOut(L"[ERROR] TileMap::Load_MapData failed: ID=%d", ID);
 		fs.close();
 		return;
@@ -79,7 +77,8 @@ void TileMap::Load_MapData()
 		stringstream ss(line);
 		int n;
 
-		while (ss >> n) {
+		while (ss >> n) 
+		{
 			numInLine.push_back(n);
 		}
 
@@ -112,29 +111,21 @@ void TileMap::CreateZoneToDraw()
 	}
 }
 
-void TileMap::Draw(int start_col, int end_col)
-{
-	for (int i = 0; i < 10; i++) {
-		for (int j = start_col; j <= end_col; j++) {
-			sprites->Get(map_Data[i][j])->Draw(1, -1, tile_Width * (j - start_col), tile_Height * i);
-		}
-	}
-}
-
 void TileMap::Draw(D3DXVECTOR3 camPosition, bool isCrossEffect)
 {
-	start_col_to_draw = (int)camPosition.x / 32;
-	end_col_to_draw = start_col_to_draw + SCREEN_WIDTH / 32;
+	int start_col_to_draw = (int)camPosition.x / 32;
+	int end_col_to_draw = start_col_to_draw + SCREEN_WIDTH / 32;
 
+	// Xét thông số blend cho hiệu ứng của item cross
 	int alpha = 255;
 	if (isCrossEffect == true) alpha = rand() % 255;
 
-	for (int i = 0; i < nums_row; i++)
+	for (UINT i = 0; i < nums_row; i++)
 	{
-		for (int j = start_col_to_draw; j <= end_col_to_draw; j++)
+		for (UINT j = start_col_to_draw; j <= end_col_to_draw; j++)
 		{
-			// +camPosition.x để luôn giữ camera ở chính giữa, vì trong hàm draw có trừ cho camPosition.x làm các object đều di chuyển theo
-			// +(int)camPosition.x % 32 để giữ cho camera chuyển động mượt (thực ra giá trị này bằng vx*dt, chính là quãng đường dịch chuyển của simon)
+			// +camPosition.x để luôn giữ camera ở chính giữa, vì trong hàm Game::Draw() có trừ cho camPosition.x làm các object đều di chuyển theo
+			// +(int)camPosition.x % 32 để giữ cho camera chuyển động mượt
 			float x = tile_Width * (j - start_col_to_draw) + camPosition.x - (int)camPosition.x % 32; 
 			float y = tile_Height * i + 80;
 

@@ -28,7 +28,8 @@ SubWeapon::~SubWeapon()
 
 void SubWeapon::LoadResources(Textures *& textures, Sprites *& sprites, Animations *& animations)
 {
-	// no need to add StopWatch and Dagger again (get them from Items)
+	// no need to add StopWatch 
+	textures->Add(ID_TEX_WEAPONS_DAGGER, FILEPATH_TEX_WEAPONS_DAGGER, D3DCOLOR_XRGB(255, 255, 255));
 	textures->Add(ID_TEX_WEAPONS_AXE, FILEPATH_TEX_WEAPONS_AXE, D3DCOLOR_XRGB(255, 255, 255));
 	textures->Add(ID_TEX_WEAPONS_HOLY_WATER, FILEPATH_TEX_WEAPONS_HOLY_WATER, D3DCOLOR_XRGB(255, 255, 255));
 	textures->Add(ID_TEX_WEAPONS_BOOMERANG, FILEPATH_TEX_WEAPONS_BOOMERANG, D3DCOLOR_XRGB(255, 255, 255));
@@ -51,6 +52,9 @@ void SubWeapon::LoadResources(Textures *& textures, Sprites *& sprites, Animatio
 	sprites->Add(90022, 28, 0, 56, 28, tex);
 	sprites->Add(90023, 56, 0, 84, 28, tex);
 
+	tex = textures->Get(ID_TEX_WEAPONS_DAGGER);
+	sprites->Add(90031, 0, 0, 32, 18, tex);
+
 	LPANIMATION ani;
 
 	ani = new Animation();
@@ -58,7 +62,7 @@ void SubWeapon::LoadResources(Textures *& textures, Sprites *& sprites, Animatio
 	animations->Add(WEAPONS_STOP_WATCH_ANI, ani);
 
 	ani = new Animation();
-	ani->Add(80002);		// ID from Items.cpp
+	ani->Add(90031);		
 	animations->Add(WEAPONS_DAGGER_ANI, ani);
 
 	ani = new Animation();

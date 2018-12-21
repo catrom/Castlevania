@@ -6,6 +6,7 @@
 #include <algorithm>
 
 #include "Debug.h"
+#include "Define.h"
 #include "Game.h"
 #include "Textures.h"
 #include "Sprites.h"

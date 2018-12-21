@@ -3,17 +3,16 @@
 #include <d3dx9.h>
 
 #include "Define.h"
-
 #include "Debug.h"
 #include "Game.h"
 #include "Input.h"
 #include "SceneManager.h"
 #include "Player.h"
 
-Input * input;
 Game * game;
-SceneManager * scenes;
+Input * input;
 Player * player;
+SceneManager * scene;
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -31,8 +30,8 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 void Update(DWORD dt)
 {
-	player->Update(dt, scenes->IsUsingStopWatch());
-	scenes->Update(dt);
+	player->Update(dt, scene->IsUsingStopWatch());
+	scene->Update(dt);
 }
 
 void Render()
@@ -48,7 +47,7 @@ void Render()
 
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 
-		scenes->Render();
+		scene->Render();
 		player->Render();
 
 		spriteHandler->End();
@@ -95,6 +94,7 @@ HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int Sc
 
 	if (!hWnd)
 	{
+		MessageBox(GetActiveWindow(), L"CreateWindow failed!", L"ERROR", MB_OK);
 		OutputDebugString(L"[ERROR] CreateWindow failed");
 		DWORD ErrCode = GetLastError();
 		return FALSE;
@@ -154,14 +154,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	game = Game::GetInstance();
 	game->Init(hWnd);
 	
-	scenes = new SceneManager(game, SCENE_2);
-	scenes->LoadResources();
-	scenes->ChangeScene(SCENE_2);
+	scene = new SceneManager(game);
+	scene->Init(SCENE_2);
 
-	input = new Input(game, scenes);
+	input = new Input(game, scene);
 	game->InitKeyboard(input);
 
-	player = new Player(scenes, game);
+	player = new Player(game, scene);
 	player->Init();
 	
 	Run();

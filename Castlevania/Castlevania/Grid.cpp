@@ -67,6 +67,10 @@ void Grid::Move(Unit * unit, float x, float y)
 	int new_row = (int)(y / cell_height);
 	int new_col = (int)(x / cell_width);
 
+	// nếu object ra khỏi vùng viewport -> không cần cập nhật
+	if (new_row < 0 || new_row >= nums_row || new_col < 0 || new_col >= nums_col)
+		return;
+
 	// cập nhật toạ độ mới
 	unit->x = x;
 	unit->y = y;
@@ -109,9 +113,7 @@ void Grid::Get(D3DXVECTOR3 camPosition, vector<Unit*>& listUnits)
 			while (unit != NULL)
 			{
 				if (unit->GetObj()->IsEnable() == true)
-				{
 					listUnits.push_back(unit);
-				}
 				
 				unit = unit->next;
 			}

@@ -4,8 +4,8 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 #include <dinput.h>
-#include "Define.h"
 #include "Debug.h"
+#include "Define.h"
 
 class KeyEventHandler;
 class Game;

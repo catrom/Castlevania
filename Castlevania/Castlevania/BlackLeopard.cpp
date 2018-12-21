@@ -44,7 +44,7 @@ void BlackLeopard::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMov
 {
 	DWORD now = GetTickCount();
 
-	if (state == BLACK_LEOPARD_DESTROYED && animations[state]->IsOver(150) == true)
+	if (state == BLACK_LEOPARD_DESTROYED && animations[state]->IsOver(EFFECT_ANI_TIME_DELAY) == true)
 	{
 		SetState(BLACK_LEOPARD_INACTIVE);
 		return;

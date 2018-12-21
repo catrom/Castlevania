@@ -54,9 +54,7 @@ void Door::LoadResources(Textures *& textures, Sprites *& sprites, Animations *&
 void Door::Render()
 {
 	if (state == DOOR_2_OPEN && animations[state]->IsOver(5000) == true)
-	{
 		state = DOOR_2_IDLE;
-	}
 
 	animations[state]->Render(1, -1, x, y);
 }

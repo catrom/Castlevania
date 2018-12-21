@@ -1,6 +1,5 @@
 ﻿#include "Simon.h"
 #include "Candle.h"
-#include "Effect.h"
 #include "Ground.h"
 #include "Items.h"
 #include "Door.h"
@@ -27,16 +26,19 @@ Simon::Simon() : GameObject()
 	AddAnimation(STAIR_DOWN_ANI);
 	AddAnimation(HIT_STAIR_UP_ANI);
 	AddAnimation(HIT_STAIR_DOWN_ANI);
-	AddAnimation(WALK_ANI);  // for auto - walk
 	AddAnimation(DEFLECT_ANI);
 	AddAnimation(DEAD_ANI);
 
 	score = 0;
 	item = -1;
-	energy = 55;
+	energy = 5;
 	life = 3;
-	subWeapon = WEAPONS_AXE;
-	HP = 2;
+	subWeapon = -1;
+	HP = SIMON_HP;
+}
+
+Simon::~Simon()
+{
 }
 
 void Simon::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &animations)
@@ -45,46 +47,47 @@ void Simon::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &a
 
 	LPDIRECT3DTEXTURE9 texSimon = textures->Get(ID_TEX_SIMON);
 
-	sprites->Add(10001, 0, 0, 60, 64, texSimon); // stand
+	sprites->Add(10001, 0, 0, 60, 64, texSimon);		// stand
 
-	sprites->Add(10011, 0, 0, 60, 64, texSimon); // walk
+	sprites->Add(10011, 0, 0, 60, 64, texSimon);		// walk
 	sprites->Add(10012, 60, 0, 120, 64, texSimon);
 	sprites->Add(10013, 120, 0, 180, 64, texSimon);
 	sprites->Add(10014, 180, 0, 240, 64, texSimon);
 
-	sprites->Add(10021, 300, 198, 360, 262, texSimon); // sit
+	sprites->Add(10021, 300, 198, 360, 262, texSimon);	// sit
 
-	sprites->Add(10031, 240, 0, 300, 64, texSimon); // jump
+	sprites->Add(10031, 240, 0, 300, 64, texSimon);		// jump
 
-	sprites->Add(10041, 420, 66, 480, 130, texSimon); // hit_sit
+	sprites->Add(10041, 420, 66, 480, 130, texSimon);	// hit_sit
 	sprites->Add(10042, 0, 132, 60, 196, texSimon);
 	sprites->Add(10043, 60, 132, 120, 196, texSimon);
 
-	sprites->Add(10051, 300, 0, 360, 64, texSimon); // hit_stand
+	sprites->Add(10051, 300, 0, 360, 64, texSimon);		// hit_stand
 	sprites->Add(10052, 360, 0, 420, 64, texSimon);
 	sprites->Add(10053, 420, 0, 480, 64, texSimon);
 
-	sprites->Add(10061, 120, 198, 180, 262, texSimon); // power up
+	sprites->Add(10061, 120, 198, 180, 262, texSimon);	// power up
 	sprites->Add(10062, 60, 198, 120, 262, texSimon);
 	sprites->Add(10063, 0, 198, 60, 262, texSimon);
 
-	sprites->Add(10071, 240, 66, 300, 130, texSimon); // stair up
+	sprites->Add(10071, 240, 66, 300, 130, texSimon);	// stair up
 	sprites->Add(10072, 300, 66, 360, 130, texSimon);
 
-	sprites->Add(10081, 120, 66, 180, 130, texSimon); // stair down
+	sprites->Add(10081, 120, 66, 180, 130, texSimon);	// stair down
 	sprites->Add(10082, 180, 66, 240, 130, texSimon);
 
-	sprites->Add(10091, 300, 132, 360, 196, texSimon); // hit - stair up
+	sprites->Add(10091, 300, 132, 360, 196, texSimon);	// hit - stair up
 	sprites->Add(10092, 360, 132, 420, 196, texSimon);
 	sprites->Add(10093, 420, 132, 480, 196, texSimon);
 
-	sprites->Add(10101, 120, 132, 180, 196, texSimon); // hit - stair down
+	sprites->Add(10101, 120, 132, 180, 196, texSimon);	// hit - stair down
 	sprites->Add(10102, 180, 132, 240, 196, texSimon);
 	sprites->Add(10103, 240, 132, 300, 196, texSimon);
 
-	sprites->Add(10111, 0, 66, 60, 130, texSimon); // deflect - when collied with enemy
+	sprites->Add(10111, 0, 66, 60, 130, texSimon);		// deflect - when collide with enemy
 
-	sprites->Add(10121, 240, 198, 300, 264, texSimon); // dead
+	sprites->Add(10121, 240, 198, 300, 264, texSimon);	// dead
+
 
 	LPANIMATION ani;
 
@@ -160,47 +163,24 @@ void Simon::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &a
 
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 {
-	if (state == DEAD)
-		return;
-
 	GameObject::Update(dt);
 
-	if (state != STAIR_UP && state != STAIR_DOWN && 
-		state != HIT_STAIR_UP && state != HIT_STAIR_DOWN && 
-		isAutoWalk == false)
+	// Update vy
+	if (isStandOnStair == false && isAutoWalk == false)
 	{
-		if (vy < -0.2f || vy > 0.2f)
+		if (vy > -SIMON_SPEED_Y_LOWER_ZONE && vy < SIMON_SPEED_Y_LOWER_ZONE)
+			vy += SIMON_GRAVITY_LOWER*dt;
+		else 
 			vy += SIMON_GRAVITY*dt;
-		else vy += SIMON_GRAVITY_LOWER*dt;
 	}
 
-	// Auto walk conditions
+	// Auto - walk
 	if (isAutoWalk == true)
 	{
-		if (abs(dx) <= abs(autoWalkDistance))
-		{
-			x += dx;
-			y += dy;
-			autoWalkDistance -= dx;
-		}
-		else
-		{
-			x += autoWalkDistance;
-			state = stateAfterAutoWalk;
-			nx = nxAfterAutoWalk;
-
-			SetState(state);
-			if (state == STAIR_DOWN) y += 2.0f;
-
-			isAutoWalk = false;
-			autoWalkDistance = 0;
-			stateAfterAutoWalk = -1;
-			nxAfterAutoWalk = 0;
-		}
-
-		return; // no need to check collision
+		DoAutoWalk();
+		
 	}
-
+	
 	// Reset untouchable timer if untouchable time has passed
 	if (GetTickCount() - untouchable_start > SIMON_UNTOUCHABLE_TIME)
 	{
@@ -216,10 +196,15 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 
 	CalcPotentialCollisions(coObjects, coEvents);
 
-	if (coEvents.size() == 0)
+	if (coEvents.size() == 0 && isAutoWalk == false)
 	{
 		x += dx;
 		y += dy;
+
+		if (vy > SIMON_SPEED_Y_LOWER_ZONE)
+			isFalling = true;
+		else
+			isFalling = false;
 	}
 	else
 	{
@@ -227,31 +212,29 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
 
-		x += min_tx*dx + nx*0.1f;
-		y += min_ty*dy + ny*0.1f;
+		if (isAutoWalk == false)
+		{
+			x += min_tx*dx + nx*0.1f;
+			y += min_ty*dy + ny*0.1f;
+		}
+
 
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
-			// collision of Simon and Candle -> do nothing -> update x, y;
-			if (dynamic_cast<Candle*>(e->obj) ||
-				dynamic_cast<Stair*>(e->obj) ||
-				dynamic_cast<Items*>(e->obj))
+			if (dynamic_cast<Ground*>(e->obj))
 			{
-				if (e->nx != 0) x += dx;
-				if (e->ny != 0) y += dy;
-			}
-			else if (dynamic_cast<Ground*>(e->obj))
-			{
-				if (ny != 0)
+				if (e->ny != 0)
 				{
-					if (ny == -1)
+					// BUG: 
+					// Simon deflect ngay lập tức va chạm với ground (đôi lúc) -> không bật nhảy được.
+					if (e->ny == -1 && (state != DEFLECT || (state == DEFLECT && vy > 0) ))
 					{
 						vy = 0;
 						isTouchGround = true;
 
-						if ((state == DEFLECT || state == STAND) && HP == 0)
+						if (HP == 0)
 						{
 							isUntouchable = false;
 							SetState(DEAD);
@@ -259,42 +242,52 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 						}
 					}
 					else
-					{
-						y += dy;
-						isTouchGround = false;
-					}
+						y += dy;		
 				}
-
+				
+				// Khi đang lên/xuống cầu thang, va chạm theo trục x sẽ không được xét tới
 				if (state == STAIR_UP || state == STAIR_DOWN)
-				{
 					if (nx != 0) x -= nx*0.1f;
-				}
-
-				//DebugOut(L"collision\n");
 			}
 			else if (dynamic_cast<Door*>(e->obj))
 			{
-				if (e->obj->GetState() == DOOR_2_IDLE)
+				auto door = dynamic_cast<Door*>(e->obj);
+
+				if (door->GetState() == DOOR_2_IDLE)
 				{
-					if (e->nx == 1.0f) vx = 0;
+					vx = 0;
+
+					if (e->nx == 1.0f)	 // Simon đã đi qua cửa
+						x += 1.0f;		 // +1 để không bị overlap
 					else
 					{
-						e->obj->SetState(DOOR_2_OPEN);
-						e->obj->animations[e->obj->GetState()]->SetAniStartTime(GetTickCount());
+						door->SetState(DOOR_2_OPEN);
+						door->animations[DOOR_2_OPEN]->SetAniStartTime(GetTickCount());
 
 						isWalkThroughDoor = true;
 					}
 				}
-				else if (e->obj->GetState() == DOOR_2_OPEN)
+				else if (e->obj->GetState() == DOOR_1)	// đi qua cửa của scene 1
 				{
-					if (nx == -1) vx = 0;
-				}
-				else
-				{
+					SetState(WALK);
 					vx = SIMON_WALKING_SPEED_LOWER;
 					vy = 0;
 					AutoWalk(80, STAND, 1);
 				}
+			}
+			else if (dynamic_cast<ChangeSceneObject*>(e->obj))
+			{
+				x += dx;
+				y += dy;
+
+				ChangeSceneObject * obj = dynamic_cast<ChangeSceneObject*>(e->obj);
+
+				if ((obj->GetIDNextScene() == SCENE_3 && this->state == STAIR_DOWN) ||
+					(obj->GetIDNextScene() == SCENE_2 && (this->state == STAIR_UP || this->state == WALK)))
+				{
+					isAutoWalk = false;
+					this->changeScene = obj->GetIDNextScene();
+				}	
 			}
 			else if (dynamic_cast<FireBall*>(e->obj))
 			{
@@ -314,16 +307,19 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 						bat->SetState(VAMPIRE_BAT_DESTROYED);
 					}
 
-					// đặt trạng thái deflect cho simon
-					if (e->nx != 0)
+					if (isStandOnStair == false)  // Simon đứng trên cầu thang sẽ không bị bật ngược lại
 					{
-						if (e->nx == 1.0f && this->nx == 1) this->nx = -1;
-						else if (e->nx == -1.0f && this->nx == -1) this->nx = 1;
+						// đặt trạng thái deflect cho simon
+						if (e->nx != 0)
+						{
+							if (e->nx == 1.0f && this->nx == 1) this->nx = -1;
+							else if (e->nx == -1.0f && this->nx == -1) this->nx = 1;
+						}
+
+						SetState(DEFLECT);
 					}
 
-					SetState(DEFLECT);
 					StartUntouchable();
-
 					LoseHP(2);
 				}
 				else
@@ -331,11 +327,6 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 					if (e->nx != 0) x += dx;
 					if (e->ny != 0) y += dy;
 				}
-			}
-			else
-			{
-				if (nx != 0) vx = 0;
-				if (ny != 0) vy = 0;
 			}
 		}
 	}
@@ -347,16 +338,23 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 
 void Simon::Render()
 {
+	int tempState = state;
+
+	// Khi Simon rơi từ trên cao xuống thì luôn co chân
+	// Sử dụng biến tạm để không thay đổi trạng thái gốc của Simon
+	if (state != DEAD && IsHit() == false && isFalling == true)
+		tempState = JUMP;
+
 	if (isUntouchable)  // Để render Simon nhấp nháy trong trạng thái isUntouchable
 	{
 		int r = rand() % 2;
 
-		if (r == 0) animations[state]->Render(1, nx, x, y);
-		else animations[state]->Render(1, nx, x, y, 100);
+		if (r == 0) animations[tempState]->Render(1, nx, x, y);
+		else animations[tempState]->Render(1, nx, x, y, 100);
 	}
 	else
 	{
-		animations[state]->Render(1, nx, x, y);
+		animations[tempState]->Render(1, nx, x, y);
 	}
 }
 
@@ -367,10 +365,7 @@ void Simon::SetState(int state)
 	switch (state)
 	{
 	case STAND:
-		isMovingDown = false;
-		isMovingUp = false;
 		isStandOnStair = false;
-		isStand = true;
 		vx = 0;
 		break;
 	case WALK:
@@ -381,48 +376,42 @@ void Simon::SetState(int state)
 	case JUMP:
 		isTouchGround = false;
 		isStandOnStair = false;
-		isStand = true;
 		vy = -SIMON_JUMP_SPEED_Y;
 		animations[state]->SetAniStartTime(GetTickCount());
 		break;
 	case SIT:
 		isStandOnStair = false;
-		isStand = false;
 		vx = 0;
 		vy = 0;
 		break;
 	case HIT_SIT:
 		isStandOnStair = false;
-		isStand = false;
 		animations[state]->Reset();
 		animations[state]->SetAniStartTime(GetTickCount());
 		break;
 	case HIT_STAND:
 		isStandOnStair = false;
-		isStand = true;
 		animations[state]->Reset();
 		animations[state]->SetAniStartTime(GetTickCount());
 		break;
 	case POWER:
 		isStandOnStair = false;
-		isStand = true;
 		animations[state]->Reset();
 		animations[state]->SetAniStartTime(GetTickCount());
 		break;
 	case STAIR_UP:
-		isTouchGround = false;
-		isStand = true;
 		if (nx > 0) vx = SIMON_STAIR_SPEED_X;
 		else vx = -SIMON_STAIR_SPEED_X;
 		vy = -SIMON_STAIR_SPEED_Y;
+		isStandOnStair = true;
 		animations[state]->Reset();
 		animations[state]->SetAniStartTime(GetTickCount());
 		break;
 	case STAIR_DOWN:
-		isStand = true;
 		if (nx > 0) vx = SIMON_STAIR_SPEED_X;
 		else vx = -SIMON_STAIR_SPEED_X;
 		vy = SIMON_STAIR_SPEED_Y;
+		isStandOnStair = true;
 		animations[state]->Reset();
 		animations[state]->SetAniStartTime(GetTickCount());
 		break;
@@ -435,7 +424,6 @@ void Simon::SetState(int state)
 		break;
 	case HIT_STAIR_UP:
 	case HIT_STAIR_DOWN:
-		isStand = true;
 		vx = 0;
 		vy = 0;
 		animations[state]->Reset();
@@ -477,15 +465,15 @@ void Simon::LoseHP(int x)
 
 bool Simon::CheckCollisionWithStair(vector<LPGAMEOBJECT>* listStair)
 {
-	isMovingUp = false;
-	isMovingDown = false;
+	canMoveUpStair = false;
+	canMoveDownStair = false;
 
 
 	float simon_l, simon_t, simon_r, simon_b;
 	GetBoundingBox(simon_l, simon_t, simon_r, simon_b);
 
 	// thu nhỏ vùng xét va chạm, chỉ xét va chạm với chân của Simon
-	simon_t += 55;
+	simon_t += 50;
 	simon_b += 5;  // bottom +5 để xét cho va chạm với bậc thang đầu tiên khi bước xuống
 
 	for (UINT i = 0; i < listStair->size(); i++)
@@ -502,8 +490,8 @@ bool Simon::CheckCollisionWithStair(vector<LPGAMEOBJECT>* listStair)
 			stairCollided = listStair->at(i);
 
 			// bậc thang ở dưới so với chân Simon->có thể di chuyển xuống.
-			if (simon_b < stair_b) isMovingDown = true;
-			if (stair_t - y <= 35) isMovingUp = true;
+			if (simon_b < stair_b) canMoveDownStair = true;
+			if (y >= stair_t - 35) canMoveUpStair = true;
 
 			// kiểm tra xem simon có thể di chuyển lên hay ko
 			// vì mảng listStairs gồm các bậc thang liền kề nhau, nên chỉ cần kiểm tra 2 bậc là đủ.
@@ -519,12 +507,12 @@ bool Simon::CheckCollisionWithStair(vector<LPGAMEOBJECT>* listStair)
 
 				if (dx == GROUND_BBOX_WIDTH && dy == -GROUND_BBOX_HEIGHT) // vì bậc nằm trên nên dy = -...
 				{
-					isMovingUp = true;
+					canMoveUpStair = true;
 				}
 
 				if (dx == GROUND_BBOX_WIDTH && dy == GROUND_BBOX_HEIGHT) // vì bậc nằm duoi nên dy = +...
 				{
-					isMovingDown = true;
+					canMoveDownStair = true;
 				}
 			}
 
@@ -537,12 +525,12 @@ bool Simon::CheckCollisionWithStair(vector<LPGAMEOBJECT>* listStair)
 
 				if (dx == GROUND_BBOX_WIDTH && dy == -GROUND_BBOX_HEIGHT)
 				{
-					isMovingUp = true;
+					canMoveUpStair = true;
 				}
 
 				if (dx == GROUND_BBOX_WIDTH && dy == GROUND_BBOX_HEIGHT) // vì bậc nằm duoi nên dy = +...
 				{
-					isMovingDown = true;
+					canMoveDownStair = true;
 				}
 			}
 
@@ -701,37 +689,6 @@ void Simon::CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT>* listEnemy)
 	}
 }
 
-bool Simon::CheckChangeScene(vector<LPCHANGESCENEOBJ>* listChangeScene)
-{
-	float simon_l, simon_t, simon_r, simon_b;
-	float obj_l, obj_t, obj_r, obj_b;
-
-	GetBoundingBox(simon_l, simon_t, simon_r, simon_b);
-
-	for (UINT i = 0; i < listChangeScene->size(); i++)
-	{
-		listChangeScene->at(i)->GetBoundingBox(obj_l, obj_t, obj_r, obj_b);
-
-		float t, nx, ny;
-		GameObject::SweptAABB(simon_l, simon_t, simon_r, simon_b, dx, dy, obj_l, obj_t, obj_r, obj_b, t, nx, ny);
-		bool collision = GameObject::AABB(simon_l, simon_t, simon_r, simon_b, obj_l, obj_t, obj_r, obj_b);
-
-		if (nx != 0 || ny != 0 || collision == true)
-		{
-			changeScene = listChangeScene->at(i)->GetIDNextScene();
-			return true;
-		}
-	}
-
-	return false;
-}
-
-void Simon::StandOnStair()
-{
-	vx = 0;
-	vy = 0;
-}
-
 void Simon::AutoWalk(float distance, int new_state, int new_nx)
 {
 	isAutoWalk = true;
@@ -739,6 +696,35 @@ void Simon::AutoWalk(float distance, int new_state, int new_nx)
 	autoWalkDistance = distance;
 	stateAfterAutoWalk = new_state;
 	nxAfterAutoWalk = new_nx;
+}
+
+void Simon::DoAutoWalk()
+{
+	if (abs(dx) <= abs(autoWalkDistance))
+	{
+		x += dx;
+		y += dy;
+		autoWalkDistance -= dx;
+	}
+	else
+	{
+		x += autoWalkDistance;
+		state = stateAfterAutoWalk;
+		nx = nxAfterAutoWalk;
+
+		SetState(state);
+		if (state == STAIR_DOWN) y += 1.0f; // + 1.0f để đảm bảo simon sẽ va chạm với bậc thang trong lần update kế tiếp
+
+		isAutoWalk = false;
+		autoWalkDistance = 0;
+		stateAfterAutoWalk = -1;
+		nxAfterAutoWalk = 0;
+	}
+}
+
+bool Simon::IsHit()
+{
+	return state == HIT_SIT || state == HIT_STAND || state == HIT_STAIR_DOWN || state == HIT_STAIR_UP;
 }
 
 

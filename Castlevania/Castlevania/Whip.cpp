@@ -13,7 +13,7 @@ Whip::Whip() : GameObject()
 	AddAnimation(SHORT_CHAIN_ANI);
 	AddAnimation(LONG_CHAIN_ANI);
 
-	SetState(NORMAL_WHIP);
+	SetState(LONG_CHAIN);
 }
 
 void Whip::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &animations)
@@ -92,6 +92,19 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 				e->SetState(CANDLE_DESTROYED);
 			}
 		}
+		else if (dynamic_cast<FireBall*>(obj))
+		{
+			FireBall * e = dynamic_cast<FireBall*> (obj);
+
+			float left, top, right, bottom;
+
+			e->GetBoundingBox(left, top, right, bottom);
+
+			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và boss
+			{
+				e->SetEnable(false);
+			}
+		}
 		else if (dynamic_cast<Zombie*>(obj))
 		{
 			Zombie * e = dynamic_cast<Zombie*> (obj);
@@ -103,10 +116,9 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và zombie
 			{
 				e->SetState(ZOMBIE_DESTROYED);
+				scoreReceived = SCORE_ZOMBIE;
+				targetTypeHit = ZOMBIE;
 			}
-
-			scoreReceived = SCORE_ZOMBIE;
-			targetTypeHit = ZOMBIE;
 		}
 		else if (dynamic_cast<BlackLeopard*>(obj))
 		{
@@ -119,10 +131,9 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và black leopard
 			{
 				e->SetState(BLACK_LEOPARD_DESTROYED);
+				scoreReceived = SCORE_BLACK_LEOPARD;
+				targetTypeHit = BLACK_LEOPARD;
 			}
-
-			scoreReceived = SCORE_BLACK_LEOPARD;
-			targetTypeHit = BLACK_LEOPARD;
 		}
 		else if (dynamic_cast<VampireBat*>(obj))
 		{
@@ -135,10 +146,9 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và vampire bat
 			{
 				e->SetState(VAMPIRE_BAT_DESTROYED);
+				scoreReceived = SCORE_VAMPIRE_BAT;
+				targetTypeHit = VAMPIRE_BAT;
 			}
-
-			scoreReceived = SCORE_VAMPIRE_BAT;
-			targetTypeHit = VAMPIRE_BAT;
 		}
 		else if (dynamic_cast<FishMan*>(obj))
 		{
@@ -151,10 +161,9 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và fishman
 			{
 				e->SetState(FISHMAN_DESTROYED);
+				scoreReceived = SCORE_FISHMAN;
+				targetTypeHit = FISHMAN;
 			}
-
-			scoreReceived = SCORE_FISHMAN;
-			targetTypeHit = FISHMAN;
 		}
 		else if (dynamic_cast<Boss*>(obj))
 		{
@@ -169,19 +178,6 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 				e->SetState(BOSS_HURT);
 				e->LoseHP(1);
 				targetTypeHit = BOSS;
-			}
-		}
-		else if (dynamic_cast<FireBall*>(obj))
-		{
-			FireBall * e = dynamic_cast<FireBall*> (obj);
-
-			float left, top, right, bottom;
-
-			e->GetBoundingBox(left, top, right, bottom);
-
-			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và boss
-			{
-				e->SetEnable(false);
 			}
 		}
 	}

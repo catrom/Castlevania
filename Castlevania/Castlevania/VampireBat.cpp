@@ -38,7 +38,7 @@ void VampireBat::LoadResources(Textures *& textures, Sprites *& sprites, Animati
 
 void VampireBat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
-	if (state == VAMPIRE_BAT_DESTROYED && animations[state]->IsOver(150) == true)
+	if (state == VAMPIRE_BAT_DESTROYED && animations[state]->IsOver(EFFECT_ANI_TIME_DELAY) == true)
 	{
 		SetState(VAMPIRE_BAT_INACTIVE);
 		return;

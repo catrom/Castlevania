@@ -1,10 +1,6 @@
-#pragma once
+﻿#pragma once
 
 #include "d3dx9.h"
-#include "Define.h"
-#include "Textures.h"
-#include "Sprites.h"
-#include "Simon.h"
 #include "SceneManager.h"
 
 #include <vector>
@@ -12,10 +8,13 @@
 
 using namespace std;
 
+/*
+	Class hiển thị thông tin của người chơi.
+*/
 class Player
 {
 private:
-	SceneManager * scenes;
+	SceneManager * scene;
 	Game * game;
 	Simon * simon;
 	Boss * boss;
@@ -33,7 +32,7 @@ private:
 	
 	int score;
 	int time;
-	int scene;
+	int id_scene;
 	int item;
 	int energy;
 	int life;
@@ -42,7 +41,7 @@ private:
 	int bossHP;
 
 public:
-	Player(SceneManager * scenes, Game * game);
+	Player(Game * game, SceneManager * scene);
 	~Player();
 
 	void Init();

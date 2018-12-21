@@ -28,7 +28,7 @@ void Boss::LoadResources(Textures *& textures, Sprites *& sprites, Animations *&
 
 	LPANIMATION ani;
 
-	ani = new Animation(200);
+	ani = new Animation(300);
 	ani->Add(160002);
 	ani->Add(160003);
 	animations->Add(BOSS_ACTIVE_ANI, ani);
@@ -42,10 +42,8 @@ void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
 	if (state == BOSS_DESTROYED)
 	{
-		if (animations[state]->IsOver(1000) == true)
-		{
+		if (animations[state]->IsOver(EFFECT_2_ANI_TIME_DELAY) == true)
 			dropItem = true;
-		}
 
 		return;
 	}
@@ -140,9 +138,6 @@ D3DXVECTOR2 Boss::GetRandomSpot()
 		float dx = abs(x - randomSpot.x);
 		float dy = abs(y - randomSpot.y);
 
-		if (max(dx, dy) / min(dx, dy) > 1.5) 
-			continue;
-
 		distance = sqrt(pow(x - randomSpot.x, 2) + pow(y - randomSpot.y, 2));
 	} while (distance < 100.0f);
 
@@ -154,7 +149,7 @@ void Boss::FlyToTarget(DWORD dt)
 	x += vx*dt;
 	y += vy*dt;
 
-	if (abs(x - target.x) <= 2.0f)
+	if (abs(x - target.x) <= 1.0f)
 	{
 		isFlyToTarget = false;
 		this->SetPosition(target.x, target.y);
@@ -187,11 +182,16 @@ void Boss::GetVelocity()
 	else ny = -1;
 
 	// tính vận tốc
-	vx = BOSS_DEFAULT_VELOCITY;
-	vy = BOSS_DEFAULT_VELOCITY * (dy / dx);
-	
-	vx *= nx;
-	vy *= ny;
+	if (isFlyToSimon == true)
+	{
+		vx = nx * dx / BOSS_FAST_TIME_TO_FLY;
+		vy = ny * dy / BOSS_FAST_TIME_TO_FLY;
+	}
+	else
+	{
+		vx = nx * dx / BOSS_DEFAULT_TIME_TO_FLY;
+		vy = ny * dy / BOSS_DEFAULT_TIME_TO_FLY;
+	}
 }
 
 void Boss::GetBoundingBox(float & left, float & top, float & right, float & bottom)
@@ -204,7 +204,7 @@ void Boss::GetBoundingBox(float & left, float & top, float & right, float & bott
 
 void Boss::GetActiveBoundingBox(float & left, float & top, float & right, float & bottom)
 {
-	left = entryPosition.x + 100;
+	left = entryPosition.x + 120;
 	right = left + BOSS_ACTIVE_BBOX_WIDTH;
 	top = entryPosition.y;
 	bottom = entryPosition.y + BOSS_ACTIVE_BBOX_HEIGHT;

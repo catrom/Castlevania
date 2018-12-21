@@ -1,8 +1,6 @@
 ﻿#pragma once
 
 #include "GameObject.h"
-#include "Textures.h"
-#include "Define.h"
 
 class SubWeapon  : public GameObject
 {

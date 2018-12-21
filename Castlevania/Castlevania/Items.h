@@ -1,9 +1,6 @@
 ﻿#pragma once
 
 #include "GameObject.h"
-#include "Sprites.h"
-#include "Textures.h"
-#include "Ground.h"
 
 class Items : public GameObject
 {

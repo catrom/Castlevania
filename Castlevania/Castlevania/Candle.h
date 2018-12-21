@@ -1,9 +1,6 @@
 #pragma once
 
 #include "GameObject.h"
-#include "Sprites.h"
-#include "Textures.h"
-#include "Effect.h"
 
 
 class Candle : public GameObject

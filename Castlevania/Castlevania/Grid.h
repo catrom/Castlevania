@@ -37,7 +37,7 @@ class Grid
 	vector<vector<Unit*>> cells;
 
 public:
-	Grid(int map_width, int map_height, int cell_width, int cell_height);
+	Grid(int map_width, int map_height, int cell_width = DEFAULT_CELL_WIDTH, int cell_height = DEFAULT_CELL_HEIGHT);
 	~Grid();
 
 	void Add(Unit * unit);

@@ -8,11 +8,15 @@ class Input : public KeyEventHandler
 {
 	Game * game;
 	SceneManager * scene;
+	Simon * simon;
 	bool isNeedToWaitingAnimation = true;
 
 public:
 	Input(Game * game, SceneManager * scene);
 	~Input();
+
+	bool AnimationDelay();
+	bool CanProcessKeyboard();
 
 	virtual void KeyState(BYTE *state);
 	virtual void OnKeyDown(int KeyCode);

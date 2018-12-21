@@ -1,8 +1,6 @@
 ﻿#pragma once
 
 #include "GameObject.h"
-#include "Sprites.h"
-#include "Textures.h"
 
 class Door : public GameObject
 {
