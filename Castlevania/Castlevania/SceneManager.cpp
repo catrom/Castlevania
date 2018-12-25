@@ -305,12 +305,7 @@ void SceneManager::Update(DWORD dt)
 	Whip_Update(dt);
 
 	for (int i = 0; i < 3; i++)
-	{
-		if (weaponlist[i]->IsEnable() == true)
-		{
-			Weapon_Update(dt, i);
-		}
-	}
+		Weapon_Update(dt, i);
 
 	for (UINT i = 0; i < listObjects.size(); i++)
 	{
@@ -392,23 +387,6 @@ void SceneManager::Render()
 	simon->Render();
 	//simon->RenderBoundingBox();
 
-	for (int i = 0; i < 3; i++)
-	{
-		if (weaponlist[i]->IsEnable() == true)
-		{
-			weaponlist[i]->Render();
-			//weaponlist[i]->RenderBoundingBox();
-		}
-	}
-
-	if ((simon->GetState() == HIT_STAND || simon->GetState() == HIT_SIT ||
-		simon->GetState() == HIT_STAIR_UP || simon->GetState() == HIT_STAIR_DOWN)
-		&& simon->isHitSubWeapons == false)
-	{
-		whip->Render(simon->animations[simon->GetState()]->GetCurrentFrame());
-		//whip->RenderBoundingBox();
-	}
-
 	/*for (auto obj : listObjects)
 	{
 		if (dynamic_cast<ChangeSceneObject*>(obj))
@@ -426,8 +404,24 @@ void SceneManager::Render()
 	for (auto obj : listMovingObjectsToRender)
 	{
 		obj->Render();
-		obj->RenderBoundingBox();
-		obj->RenderActiveBoundingBox();
+		//obj->RenderBoundingBox();
+		//obj->RenderActiveBoundingBox();
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		weaponlist[i]->Render();
+		//weaponlist[i]->RenderBoundingBox();
+	}
+
+	if (simon->isHitSubWeapons == false)
+	{
+		if (simon->IsHit() == true)
+			whip->Render(simon->animations[simon->GetState()]->GetCurrentFrame());
+		else
+			whip->Render(-1);
+
+		//whip->RenderBoundingBox();
 	}
 }
 
@@ -752,6 +746,9 @@ void SceneManager::ResetGame()
 	whip->SetState(NORMAL_WHIP);
 	simon->SetSubWeapon(-1);
 
+	boss->SetState(BOSS_INACTIVE);
+	boss->SetHP(BOSS_HP);
+
 	int curIndex;
 
 	switch (IDScene)
@@ -770,9 +767,10 @@ void SceneManager::ResetGame()
 			SetGameState(GAMESTATE_2_2);
 		else
 		{
-			isBossFighting = false;
 			SetGameState(GAMESTATE_2_3);
+			isBossFighting = false;
 		}
+
 		break;
 	case SCENE_3:
 		Init(SCENE_2);
@@ -785,9 +783,9 @@ void SceneManager::ResetGame()
 
 void SceneManager::CrossEffect()
 {
-	if (simon->isCrossCollected == true)
+	if (simon->isGotCrossItem == true)
 	{
-		simon->isCrossCollected = false;
+		simon->isGotCrossItem = false;
 
 		isCrossEffect = true;
 		crossEffectTimeCounter = GetTickCount();
@@ -870,7 +868,7 @@ void SceneManager::Simon_Update(DWORD dt)
 		{
 			if (dynamic_cast<FireBall*>(obj) && obj->IsEnable() == true)
 				coObjects.push_back(obj);
-			else if ((dynamic_cast<Zombie*>(obj) || dynamic_cast<BlackLeopard*>(obj) || 
+			else if ((dynamic_cast<Zombie*>(obj) || dynamic_cast<BlackLeopard*>(obj) ||
 				dynamic_cast<VampireBat*>(obj) || dynamic_cast<Boss*>(obj)) && obj->GetState() == ACTIVE)
 				coObjects.push_back(obj);
 			else if (dynamic_cast<FishMan*>(obj) && (obj->GetState() == ACTIVE || obj->GetState() == FISHMAN_JUMP))
@@ -922,7 +920,8 @@ void SceneManager::Whip_Update(DWORD dt)
 			if ((dynamic_cast<Zombie*>(obj) ||
 				dynamic_cast<BlackLeopard*>(obj) || dynamic_cast<VampireBat*>(obj)) && obj->GetState() == ACTIVE)
 				coObjects.push_back(obj);
-			else if (dynamic_cast<FishMan*>(obj) && (obj->GetState() == ACTIVE || obj->GetState() == FISHMAN_JUMP))
+			else if (dynamic_cast<FishMan*>(obj) && 
+					(obj->GetState() == ACTIVE || obj->GetState() == FISHMAN_JUMP || obj->GetState() == FISHMAN_HIT))
 				coObjects.push_back(obj);
 			else if (dynamic_cast<Boss*>(obj) && whip->GetTargetTypeHit() != BOSS)  // Do một frame rất ngắn nên dễ dẫn đến việc xét va chạm liên tục với boss.
 				coObjects.push_back(obj);											// -> Nếu đã đánh trúng boss rồi thì không thêm boss vô coObjects nữa.
@@ -941,28 +940,28 @@ void SceneManager::Weapon_Update(DWORD dt, int index)
 	if (weaponlist[index] == STOP_WATCH)
 		return;
 
-	if (weaponlist[index]->IsEnable() == false)
-		return;
-
 	if (weaponlist[index]->GetScoreReceived() != 0)
 	{
 		simon->AddScore(weaponlist[index]->GetScoreReceived());
 		weaponlist[index]->SetScoreReceived(0);
 	}
 
+	if (weaponlist[index]->IsEnable() == false)
+		return;
+
 	vector<LPGAMEOBJECT> coObjects;
 	coObjects.push_back(simon); // dùng để xét va chạm của Simon với boomerang
 
 	for (auto obj : listObjects)
 	{
-		if ((dynamic_cast<Candle*>(obj) || dynamic_cast<Ground*>(obj) ||
-			dynamic_cast<FireBall*>(obj) || dynamic_cast<Zombie*>(obj) ||
-			dynamic_cast<BlackLeopard*>(obj) || dynamic_cast<VampireBat*>(obj) ||
-			dynamic_cast<FishMan*>(obj) || dynamic_cast<Boss*>(obj)) &&
-			obj->GetState() != INACTIVE && obj->IsEnable() == true)
-		{
+		if (dynamic_cast<Candle*>(obj) || dynamic_cast<FireBall*>(obj))
 			coObjects.push_back(obj);
-		}
+		if ((dynamic_cast<Zombie*>(obj) || dynamic_cast<Boss*>(obj) ||
+			dynamic_cast<BlackLeopard*>(obj) || dynamic_cast<VampireBat*>(obj)) && obj->GetState() == ACTIVE)
+			coObjects.push_back(obj);
+		else if (dynamic_cast<FishMan*>(obj) &&
+			(obj->GetState() == ACTIVE || obj->GetState() == FISHMAN_JUMP || obj->GetState() == FISHMAN_HIT))
+			coObjects.push_back(obj);
 	}
 
 	weaponlist[index]->Update(dt, &coObjects);
@@ -990,7 +989,7 @@ void SceneManager::Zombie_Update(DWORD dt, LPGAMEOBJECT & object)
 	{
 		auto zombie = dynamic_cast<Zombie*>(object);
 
-		if (zombie->IsSettedPosition() == false)
+		if (isCrossEffect == false && zombie->IsSettedPosition() == false)
 		{
 			zombie->SetIsSettedPosition(true);
 
@@ -1034,7 +1033,7 @@ void SceneManager::VampireBat_Update(DWORD dt, LPGAMEOBJECT & object)
 	{
 		auto bat = dynamic_cast<VampireBat*>(object);
 
-		if (bat->IsSettedPosition() == false)
+		if (isCrossEffect == false && bat->IsSettedPosition() == false)
 		{
 			bat->SetIsSettedPosition(true);
 
@@ -1094,7 +1093,7 @@ void SceneManager::FishMan_Update(DWORD dt, LPGAMEOBJECT & object)
 		}
 		else
 		{
-			if (fishman->IsSettedPosition() == false)
+			if (isCrossEffect == false && fishman->IsSettedPosition() == false)
 			{
 				fishman->SetIsSettedPosition(true);
 

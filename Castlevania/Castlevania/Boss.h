@@ -46,6 +46,7 @@ public:
 
 	void LoseHP(int x);
 	int GetHP() { return HP; }
+	void SetHP(int x) { HP = x; }
 };
 
 

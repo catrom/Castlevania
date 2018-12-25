@@ -78,9 +78,6 @@ void Input::KeyState(BYTE *state)
 	if (CanProcessKeyboard() == false)
 		return;
 
-	static int c = 0;
-	DebugOut(L"%d\n", c++);
-
 	// nếu simon đang nhảy và chưa chạm đất
 	if ((simon->GetState() == JUMP || simon->GetState() == STAND) 
 		&& simon->isTouchGround == false)
@@ -123,6 +120,12 @@ void Input::KeyState(BYTE *state)
 			return;
 		}
 
+		if (simon->isTouchGround == false || simon->isFalling == true)
+		{
+			simon->SetState(STAND);
+			return;
+		}
+		
 		simon->SetState(SIT);
 	}
 	else if (game->IsKeyDown(DIK_UP))
@@ -172,13 +175,16 @@ void Input::OnKeyDown(int KeyCode)
 		simon->SetSubWeapon(WEAPONS_BOOMERANG);
 		break;
 	case DIK_5:
-		simon->isCrossCollected = true;
+		simon->isGotCrossItem = true;
 		break;
 	case DIK_6:
 		simon->isGotDoubleShotItem = true;
 		break;
 	case DIK_7:
 		simon->isGotTripleShotItem = true;
+		break;
+	case DIK_8:
+		simon->StartInvisibility();
 		break;
 	case DIK_Q:
 		scene->Init(SCENE_1);

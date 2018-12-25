@@ -14,9 +14,6 @@ Player::~Player()
 
 void Player::Init()
 {
-	this->simon = scene->GetSimon();
-	this->boss = scene->GetBoss();
-
 	time = 0;
 
 	// Khởi tạo list máu của Simon và Enemy
@@ -76,6 +73,9 @@ void Player::Init()
 
 void Player::Update(DWORD dt, bool stopwatch)
 {
+	this->simon = scene->GetSimon();
+	this->boss = scene->GetBoss();
+
 	// Lấy thông tin
 	score = simon->GetScore();
 	energy = simon->GetEnergy();
@@ -96,7 +96,16 @@ void Player::Update(DWORD dt, bool stopwatch)
 	}
 
 	if (stopwatch == false) time += dt;				// khi sử dụng stop watch thì không đếm thời gian
-	int remainTime = DEFAULT_TIME_PLAY - time / 1000;
+	int remainTime = DEFAULT_TIME_PLAY - time / CLOCKS_PER_SEC;
+
+	if (remainTime <= 0)
+	{
+		remainTime = 0;
+
+		if (simon->isTouchGround == true && simon->GetState() != DEAD)
+			simon->SetState(DEAD);
+	}
+		
 
 	// Chuẩn hoá chuỗi
 	string score_str = to_string(score);

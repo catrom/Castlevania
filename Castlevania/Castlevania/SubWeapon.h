@@ -10,13 +10,21 @@ class SubWeapon  : public GameObject
 	bool isHolyWaterShattered = false;
 	int holyWaterShatteredCounter = 0;
 
+	vector<vector<float>> sparkCoord; // vector lưu toạ độ để render spark khi subweapon trúng mục tiêu
+	Animation * spark = Animations::GetInstance()->Get(SPARK_ANI);
+	int startTimeRenderSpark = 0;
+
 public:
 	SubWeapon();
 	~SubWeapon();
 
 	virtual void LoadResources(Textures* &textures, Sprites* &sprites, Animations* &animations);
+	
+	void UpdateCollisionState();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObject = NULL, bool stopMovement = false);
+	
 	virtual void Render();
+	void RenderSpark();
 
 	void SetState(int state);
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
@@ -24,6 +32,8 @@ public:
 
 	int GetScoreReceived() { return scoreReceived; }
 	int GetTargetTypeHit() { return targetTypeHit; }
+
+	void GetCoordinateObject(LPGAMEOBJECT obj);			// Lấy toạ độ của object để lưu vào sparkCoord
 
 	void SetScoreReceived(int x) { scoreReceived = x; }
 	void SetTargetTypeHit(int x) { targetTypeHit = x; }

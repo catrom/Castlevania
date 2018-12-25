@@ -7,7 +7,6 @@ Boss::Boss()
 	AddAnimation(BOSS_ACTIVE_ANI);
 	AddAnimation(EFFECT_2_ANI);
 	AddAnimation(BOSS_INACTIVE_ANI);
-	AddAnimation(EFFECT_ANI);
 
 	SetState(BOSS_INACTIVE);
 }
@@ -46,11 +45,6 @@ void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 			dropItem = true;
 
 		return;
-	}
-
-	if (state == BOSS_HURT && animations[state]->IsOver(50) == true)
-	{
-		SetState(BOSS_ACTIVE);
 	}
 
 	if (isStopWaiting == true)
@@ -111,10 +105,6 @@ void Boss::SetState(int state)
 	case BOSS_INACTIVE:
 		vx = 0;
 		vy = 0;
-		break;
-	case BOSS_HURT:
-		animations[state]->Reset();
-		animations[state]->SetAniStartTime(GetTickCount());
 		break;
 	default:
 		break;

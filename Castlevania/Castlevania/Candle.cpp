@@ -42,9 +42,7 @@ void Candle::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &
 void Candle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
 	if (state == CANDLE_DESTROYED && animations[state]->IsOver(EFFECT_ANI_TIME_DELAY) == true) 	//nếu render xong hết đốm lửa rồi thì set enable = false -> biến mất
-	{
 		this->isEnable = false;
-	}		
 }
 
 void Candle::Render()

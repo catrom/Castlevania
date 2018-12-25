@@ -17,7 +17,7 @@ void Effect::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &
 
 	LPDIRECT3DTEXTURE9 texSpark = textures->Get(ID_TEX_SPARK);
 
-	sprites->Add(50007, 0, 0, 16, 20, texEffect);
+	sprites->Add(50007, 0, 0, 16, 20, texSpark);
 
 	LPANIMATION ani;
 

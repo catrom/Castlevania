@@ -90,6 +90,8 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và nến
 			{
 				e->SetState(CANDLE_DESTROYED);
+				targetTypeHit = CANDLE;
+				sparkCoord.push_back({ left, top });
 			}
 		}
 		else if (dynamic_cast<FireBall*>(obj))
@@ -103,6 +105,8 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và boss
 			{
 				e->SetEnable(false);
+				targetTypeHit = FIREBALL;
+				sparkCoord.push_back({ left, top });
 			}
 		}
 		else if (dynamic_cast<Zombie*>(obj))
@@ -116,8 +120,9 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và zombie
 			{
 				e->SetState(ZOMBIE_DESTROYED);
-				scoreReceived = SCORE_ZOMBIE;
+				scoreReceived += SCORE_ZOMBIE;
 				targetTypeHit = ZOMBIE;
+				sparkCoord.push_back({ left, top });
 			}
 		}
 		else if (dynamic_cast<BlackLeopard*>(obj))
@@ -131,8 +136,9 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và black leopard
 			{
 				e->SetState(BLACK_LEOPARD_DESTROYED);
-				scoreReceived = SCORE_BLACK_LEOPARD;
+				scoreReceived += SCORE_BLACK_LEOPARD;
 				targetTypeHit = BLACK_LEOPARD;
+				sparkCoord.push_back({ left, top });
 			}
 		}
 		else if (dynamic_cast<VampireBat*>(obj))
@@ -146,8 +152,9 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và vampire bat
 			{
 				e->SetState(VAMPIRE_BAT_DESTROYED);
-				scoreReceived = SCORE_VAMPIRE_BAT;
+				scoreReceived += SCORE_VAMPIRE_BAT;
 				targetTypeHit = VAMPIRE_BAT;
+				sparkCoord.push_back({ left, top });
 			}
 		}
 		else if (dynamic_cast<FishMan*>(obj))
@@ -161,8 +168,9 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và fishman
 			{
 				e->SetState(FISHMAN_DESTROYED);
-				scoreReceived = SCORE_FISHMAN;
+				scoreReceived += SCORE_FISHMAN;
 				targetTypeHit = FISHMAN;
+				sparkCoord.push_back({ left, top });
 			}
 		}
 		else if (dynamic_cast<Boss*>(obj))
@@ -175,9 +183,9 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 
 			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và boss
 			{
-				e->SetState(BOSS_HURT);
 				e->LoseHP(1);
 				targetTypeHit = BOSS;
+				sparkCoord.push_back({ left, top });
 			}
 		}
 	}
@@ -185,14 +193,34 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 
 void Whip::Render(int currentID)
 {
-	animations[state]->RenderByID(currentID, nx, x, y);
+	RenderSpark();
+
+	if (currentID >= 0)
+		animations[state]->RenderByID(currentID, nx, x, y);
+}
+
+void Whip::RenderSpark()
+{
+	if (sparkCoord.size() > 0)
+	{
+		if (startTimeRenderSpark == 0)
+			startTimeRenderSpark = GetTickCount();
+		else if (GetTickCount() - startTimeRenderSpark > SPARK_ANI_TIME_DELAY)
+		{
+			startTimeRenderSpark = 0;
+			sparkCoord.clear();
+		}
+
+		for (auto coord : sparkCoord)
+			spark->Render(1, -1, coord[0], coord[1]);
+	}
 }
 
 void Whip::SetWhipPosition(D3DXVECTOR3 simonPositon, bool isStand)
 {
-	simonPositon.x -= 90.0f;
+	simonPositon.x -= 90;
 	if (isStand == false)
-		simonPositon.y += 15.0f;
+		simonPositon.y += 15;
 
 	SetPosition(simonPositon.x, simonPositon.y);
 }

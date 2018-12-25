@@ -21,7 +21,7 @@
 #define KEYBOARD_BUFFER_SIZE	1024
 
 // Time play
-#define DEFAULT_TIME_PLAY		1000
+#define DEFAULT_TIME_PLAY		300
 
 #pragma region Texture ID
 
@@ -263,7 +263,6 @@
 #define BOSS_ACTIVE			0
 #define BOSS_DESTROYED		1
 #define BOSS_INACTIVE		2
-#define BOSS_HURT			3
 
 // Fire ball
 #define FIREBALL			0
@@ -275,6 +274,7 @@
 #pragma region Animation 
 
 // Animation Delay
+#define SPARK_ANI_TIME_DELAY	100
 #define EFFECT_ANI_TIME_DELAY	300
 #define EFFECT_2_ANI_TIME_DELAY	1000
 
@@ -387,6 +387,7 @@
 #define SIMON_HP					16
 #define SIMON_ENERGY				5
 #define SIMON_UNTOUCHABLE_TIME		2000
+#define SIMON_INVISIBILITY_TIME		4000
 #define SIMON_DEAD_TIME				3000
 #define SIMON_WALKING_SPEED			0.13f
 #define SIMON_WALKING_SPEED_LOWER	0.05f
@@ -410,7 +411,7 @@
 #define WEAPONS_DAGGER_SPEED		0.3f
 
 #define WEAPONS_AXE_SPEED_X			0.2f
-#define WEAPONS_AXE_SPEED_Y			0.5f
+#define WEAPONS_AXE_SPEED_Y			0.45f
 #define WEAPONS_AXE_GRAVITY			0.001f
 
 #define WEAPONS_HOLY_WATER_SPEED_X	0.25f

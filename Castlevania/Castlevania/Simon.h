@@ -25,10 +25,19 @@ class Simon : public GameObject
 	bool isUntouchable = false;		
 	DWORD untouchable_start = 0;
 
+	// invisibility
+	bool isInvisibility = false;
+	DWORD invisibility_start = 0;
+
+	// falling water
+	DWORD startTimeRenderBubbles = 0;
+	Bubbles * bubbles;
+	
 public:
 	bool isDead = false;
 	bool isTouchGround = false;	
 	bool isFalling = false;
+	bool isFallingWater = false;
 	bool isStandOnStair = false;	// trạng thái đang đứng trên cầu thang 
 	bool canMoveUpStair = false;	// có thể di chuyển lên cầu thang
 	bool canMoveDownStair = false;	// có thể di chuyển xuống cầu thang
@@ -38,7 +47,7 @@ public:
 	bool isGotChainItem = false;	// xác định xem có nhặt được Chain item hay không, dùng để update whip
 	bool isGotDoubleShotItem = false; // Double shot item
 	bool isGotTripleShotItem = false; // Triple shot item
-	bool isCrossCollected = false;
+	bool isGotCrossItem = false;
 
 	int changeScene = -1;			// lưu id Scene kế tiếp khi Simon va chạm với ChangeSceneObject
 
@@ -60,6 +69,7 @@ public:
 	virtual void GetActiveBoundingBox(float &left, float &top, float &right, float &bottom);
 
 	void StartUntouchable() { isUntouchable = true; untouchable_start = GetTickCount(); }
+	void StartInvisibility() { isInvisibility = true; invisibility_start = GetTickCount(); }
 
 	// Get function
 	int GetEnergy() { return this->energy; }

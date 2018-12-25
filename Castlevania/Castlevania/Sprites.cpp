@@ -84,7 +84,6 @@ void Animation::RenderByID(int currentID, int nx, float x, float y, int alpha)
 	else  // == 12, long chain
 	{
 		int rd = rand() % 4;
-
 		frames[currentID * 4 + rd]->GetSprite()->Draw(1, nx, x, y, alpha);
 	}
 }
