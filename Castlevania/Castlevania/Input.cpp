@@ -230,7 +230,7 @@ void Input::OnKeyDown(int KeyCode)
 
 void Input::OnKeyUp(int KeyCode)
 {
-	DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
+	//DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
 }
 
 void Input::Simon_Walk_Left()

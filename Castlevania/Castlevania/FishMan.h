@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "GameObject.h"
-#include "Bubbles.h"
 
 class FishMan : public GameObject
 {
@@ -14,12 +13,6 @@ class FishMan : public GameObject
 	DWORD deltaTimeToShoot = 0; // khoảng thời gian kể từ lúc fishman xuất hiện đến lúc bắn 
 
 	int nxAfterShoot = 0; // Hướng quay mặt sau khi bắn (để luôn quay mặt về phía Simon)
-
-	// Hiệu ứng bọt nước
-	bool isNeedToCreateBubbles = false;
-	bool isRenderingBubbles = false;
-	DWORD startTimeRenderBubbles = 0;
-	Bubbles * bubbles;
 
 public:
 	FishMan();
@@ -43,10 +36,7 @@ public:
 	int GetLastTimeShoot() { return lastTimeShoot; }
 	int GetDeltaTimeToShoot() { return deltaTimeToShoot; }
 
-	void SetIsNeedToCreateBubbles(bool x) { isNeedToCreateBubbles = x; }
 	void SetNxAfterShoot(int x) { nxAfterShoot = x; }
-
-	bool IsRenderingBubbles() { return isRenderingBubbles; }
 
 	bool IsSettedPosition() { return isSettedPosition; }
 	void SetIsSettedPosition(bool x) { isSettedPosition = x; }

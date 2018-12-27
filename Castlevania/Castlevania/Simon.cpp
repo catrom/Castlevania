@@ -10,6 +10,8 @@
 #include "FireBall.h"
 #include "Stair.h"
 #include "Boss.h"
+#include "ChangeSceneObject.h"
+#include "Water.h"
 
 Simon::Simon() : GameObject()
 {
@@ -206,12 +208,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 		y += dy;
 
 		if (vy > SIMON_SPEED_Y_LOWER_ZONE)
-		{
-			vx = 0;
 			isFalling = true;
-		}
-		//else
-		//	isFalling = false;
 	}
 	else
 	{
@@ -296,6 +293,15 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 					this->changeScene = obj->GetIDNextScene();
 				}	
 			}
+			else if (dynamic_cast<Water*>(e->obj))
+			{
+				Water * water = dynamic_cast<Water*>(e->obj);
+				water->AddBubbles(x, y + SIMON_BBOX_HEIGHT);
+
+				SetState(DEAD);
+				isFallingWater = true;
+				return;
+			}
 			else if (dynamic_cast<FireBall*>(e->obj))
 			{
 				LoseHP(2);
@@ -339,7 +345,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 	}
 
 	// clean up collision events
-	for (int i = 0; i < coEvents.size(); i++)
+	for (UINT i = 0; i < coEvents.size(); i++)
 		delete coEvents[i];
 }
 
@@ -365,7 +371,7 @@ void Simon::Render()
 		if (ratio < 0.5f)			// nhấp nháy
 			alpha = 50 * (rand() % 2);
 		else 
-			alpha = 255 * ratio;	// render rõ dần theo thời gian
+			alpha = (int)(255 * ratio);	// render rõ dần theo thời gian
 	}
 
 	animations[tempState]->Render(1, nx, x, y, alpha);
@@ -379,6 +385,7 @@ void Simon::SetState(int state)
 	{
 	case STAND:
 		isStandOnStair = false;
+		isFallingWater = false;
 		vx = 0;
 		break;
 	case WALK:
@@ -445,6 +452,7 @@ void Simon::SetState(int state)
 	case DEAD:
 		isUntouchable = false;
 		vx = 0;
+		vy = 0;
 		life -= 1;
 		break;
 	default:
@@ -604,6 +612,8 @@ bool Simon::CheckCollisionWithItem(vector<LPGAMEOBJECT> * listItem)
 				break;
 			case PORK_CHOP:
 				HP += 2;
+				if (HP > SIMON_HP)
+					HP = SIMON_HP;
 				break;
 			case MAGIC_CRYSTAL:
 				HP = SIMON_HP;
@@ -642,13 +652,8 @@ void Simon::CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT>* listEnemy)
 			{
 				Zombie * zombie = dynamic_cast<Zombie*>(enemy);
 
-				if (zombie->IsAbleToActivate() == true)
-				{
-						if (enemyEntryPostion.x < x) zombie->SetOrientation(1);
-						else zombie->SetOrientation(-1);
-
-						zombie->SetState(ZOMBIE_ACTIVE);
-				}
+				if (zombie->GetState() == ZOMBIE_INACTIVE && zombie->IsAbleToActivate() == true)
+					zombie->SetState(ZOMBIE_ACTIVE);
 			}
 			else if (dynamic_cast<BlackLeopard*>(enemy))
 			{
@@ -661,18 +666,14 @@ void Simon::CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT>* listEnemy)
 				VampireBat * bat = dynamic_cast<VampireBat*>(enemy);
 
 				if (bat->GetState() == VAMPIRE_BAT_INACTIVE && bat->IsAbleToActivate() == true)
-				{
 					bat->SetState(VAMPIRE_BAT_ACTIVE);
-				}
 			}
 			else if (dynamic_cast<FishMan*>(enemy))
 			{
 				FishMan * fishman = dynamic_cast<FishMan*>(enemy);
 
 				if (fishman->GetState() == FISHMAN_INACTIVE && fishman->IsAbleToActivate() == true)
-				{
 					fishman->SetState(FISHMAN_ACTIVE);
-				}
 			}
 			else if (dynamic_cast<Boss*>(enemy))
 			{

@@ -465,6 +465,7 @@
 #define BUBBLES_SPEED_X2			0.03f
 #define BUBBLES_SPEED_Y2			0.2f
 #define BUBBLES_GRAVITY				0.0005f
+#define BUBBLES_TIME				1000
 #pragma endregion
 
 
@@ -557,6 +558,10 @@
 
 #define WEAPONS_BOOMERANG_BBOX_WIDTH			28
 #define WEAPONS_BOOMERANG_BBOX_HEIGHT			28
+
+// Water
+#define	WATER_BBOX_WIDTH			512
+#define WATER_BBOX_HEIGHT			32
 #pragma endregion
 
 
@@ -581,6 +586,7 @@
 #define FISHMAN			7
 #define	BOSS			8
 #define CHANGE_SCENE_OBJECT 9
+#define WATER			10
 
 #pragma endregion
 

@@ -90,7 +90,7 @@ void SubWeapon::LoadResources(Textures *& textures, Sprites *& sprites, Animatio
 
 void SubWeapon::UpdateCollisionState()
 {
-	if (state == WEAPONS_DAGGER || state == WEAPONS_AXE || state == WEAPONS_BOOMERANG)
+	if (state == WEAPONS_DAGGER || state == WEAPONS_BOOMERANG)
 		this->isEnable = false;
 	else
 	{
@@ -134,6 +134,8 @@ void SubWeapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMoveme
 	coEvents.clear();
 
 	CalcPotentialCollisions(coObject, coEvents);
+
+	static int  c = 0;
 
 	if (coEvents.size() == 0)
 	{

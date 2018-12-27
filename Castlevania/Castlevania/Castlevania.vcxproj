@@ -172,6 +172,7 @@
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="VampireBat.cpp" />
+    <ClCompile Include="Water.cpp" />
     <ClCompile Include="Whip.cpp" />
     <ClCompile Include="Zombie.cpp" />
   </ItemGroup>
@@ -202,8 +203,12 @@
     <ClInclude Include="Textures.h" />
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="VampireBat.h" />
+    <ClInclude Include="Water.h" />
     <ClInclude Include="Whip.h" />
     <ClInclude Include="Zombie.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -7,8 +7,6 @@ BlackLeopard::BlackLeopard()
 	AddAnimation(BLACK_LEOPARD_INACTIVE_ANI);
 	AddAnimation(BLACK_LEOPARD_IDLE_ANI);
 	AddAnimation(BLACK_LEOPARD_JUMP_ANI);
-
-	nx = -1;
 }
 
 void BlackLeopard::LoadResources(Textures *& textures, Sprites *& sprites, Animations *& animations)
@@ -87,13 +85,13 @@ void BlackLeopard::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMov
 		x += dx;
 		y += min_ty*dy + ny*0.1f;
 
-		if (ny != 0)
+		if (ny == -1)
 		{
 			vy = 0;
 
 			if (state == BLACK_LEOPARD_JUMP)
 			{
-				this->nx = 1;
+				(this->nx) *= -1;
 				SetState(BLACK_LEOPARD_ACTIVE);
 			}
 		}
@@ -106,10 +104,7 @@ void BlackLeopard::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMov
 void BlackLeopard::Render()
 {
 	if (state != BLACK_LEOPARD_INACTIVE)
-	{
-		if (isRespawnWaiting == false)
-			animations[state]->Render(1, nx, x, y);
-	}
+		animations[state]->Render(1, nx, x, y);
 }
 
 void BlackLeopard::SetState(int state)
@@ -122,9 +117,7 @@ void BlackLeopard::SetState(int state)
 		if (nx > 0) vx = BLACK_LEOPARD_RUNNING_SPEED_X;
 		else vx = -BLACK_LEOPARD_RUNNING_SPEED_X;
 		vy = BLACK_LEOPARD_RUNNING_SPEED_Y;
-		isDroppedItem = false;
-		respawnTime_Start = 0;
-		isRespawnWaiting = false;
+		isJumping = false;
 		break;
 	case BLACK_LEOPARD_DESTROYED:
 		vx = 0;
@@ -139,6 +132,9 @@ void BlackLeopard::SetState(int state)
 		break;
 	case BLACK_LEOPARD_IDLE:
 		vx = 0;
+		respawnTime_Start = 0;
+		isRespawnWaiting = false;
+		isDroppedItem = false;
 		break;
 	case BLACK_LEOPARD_JUMP:
 		vy = -BLACK_LEOPARD_RUNNING_SPEED_Y;

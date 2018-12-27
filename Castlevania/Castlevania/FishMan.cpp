@@ -1,5 +1,6 @@
 ﻿#include "FishMan.h"
-
+#include "Ground.h"
+#include "Water.h"
 
 
 FishMan::FishMan()
@@ -44,22 +45,6 @@ void FishMan::LoadResources(Textures *& textures, Sprites *& sprites, Animations
 
 void FishMan::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
-	// Update bubbles
-	if (isRenderingBubbles == true && stopMovement == false)
-	{
-		DWORD now = GetTickCount();
-
-		if (now - startTimeRenderBubbles <= 1000)
-		{
-			bubbles->Update(dt);
-		}
-		else
-		{
-			isRenderingBubbles = false;
-			startTimeRenderBubbles = 0;
-		}
-	}
-
 	// Update fishman
 	if (state == FISHMAN_DESTROYED && animations[state]->IsOver(EFFECT_ANI_TIME_DELAY) == true)
 	{
@@ -106,22 +91,37 @@ void FishMan::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement
 		x += dx;
 		y += min_ty*dy + ny*0.1f;
 
-		if (ny != 0)
+		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
-			if (ny == -1.0f)
+			LPCOLLISIONEVENT e = coEventsResult[i];
+
+			if (dynamic_cast<Ground*>(e->obj))
 			{
-				vy = 0;
-				
-				if (state == FISHMAN_JUMP) // jump xong chạm đất -> walk
+				if (e->ny != 0)
 				{
-					SetState(FISHMAN_ACTIVE);
+					if (e->ny == -1.0f)
+					{
+						vy = 0;
+
+						if (state == FISHMAN_JUMP) // jump xong chạm đất -> walk
+							SetState(FISHMAN_ACTIVE);
+					}
+					else
+						y += dy;
 				}
 			}
-			else
+			else if (dynamic_cast<Water*>(e->obj))
 			{
-				y += dy;
+				if (e->ny == -1.0f)
+				{
+					Water * water = dynamic_cast<Water*>(e->obj);
+					water->AddBubbles(x, y + FISHMAN_BBOX_HEIGHT);
+
+					SetState(FISHMAN_INACTIVE);
+				}
 			}
 		}
+		
 	}
 
 	// clean up collision events
@@ -130,10 +130,6 @@ void FishMan::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement
 
 void FishMan::Render()
 {
-	// render bubbles
-	if (isRenderingBubbles == true)
-		bubbles->Render();
-
 	// render fishman
 	if (state != FISHMAN_INACTIVE)
 		animations[state]->Render(1, nx, x, y);
@@ -155,24 +151,14 @@ void FishMan::SetState(int state)
 		vx = 0;
 		vy = -FISHMAN_JUMP_SPEED_Y;
 		isDroppedItem = false;
-		isNeedToCreateBubbles = false;
 		respawnTime_Start = 0;
 		isRespawnWaiting = false;
-		bubbles = new Bubbles(x, y + 32);
-		isRenderingBubbles = true;
-		startTimeRenderBubbles = GetTickCount();
 		break;
 	case FISHMAN_DESTROYED:
 		vx = vy = 0;
 		animations[state]->SetAniStartTime(GetTickCount());
 		break;
 	case FISHMAN_INACTIVE:
-		if (isNeedToCreateBubbles == true)
-		{
-			bubbles = new Bubbles(x, y + 32);
-			isRenderingBubbles = true;
-			startTimeRenderBubbles = GetTickCount();
-		}
 		x = entryPosition.x;
 		y = entryPosition.y;
 		vx = vy = 0;

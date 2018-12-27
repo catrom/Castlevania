@@ -51,13 +51,12 @@ void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 	{
 		if (GetTickCount() - startTimeWaiting > BOSS_STOP_TIME_WAITING)
 		{
+			vx = vy = 0;
 			isStopWaiting = false;
 			startTimeWaiting = 0;
 		}
 		else
-		{
 			return;
-		}
 	}
 
 	if (isFlyToTarget == false)
@@ -103,6 +102,8 @@ void Boss::SetState(int state)
 		animations[state]->SetAniStartTime(GetTickCount());
 		break;
 	case BOSS_INACTIVE:
+		x = entryPosition.x;
+		y = entryPosition.y;
 		vx = 0;
 		vy = 0;
 		break;

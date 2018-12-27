@@ -20,8 +20,11 @@
 #include "Bubbles.h"
 #include "Items.h"
 #include "Boss.h"
+#include "Water.h"
 #include "ChangeSceneObject.h"
 
+#include <map>
+using namespace std;
 
 class SceneManager
 {
@@ -40,6 +43,7 @@ class SceneManager
 	Simon * simon;
 	Whip * whip;
 	SubWeapon * weapon;
+	Water * water;
 
 	TileMaps * tilemaps = TileMaps::GetInstance();
 	Textures * textures = Textures::GetInstance();
@@ -93,6 +97,7 @@ public:
 	
 	bool SimonWalkThroughDoor();				// Di chuyển camera -> Simon auto walk -> di chuyển camera
 
+	int GetRandomItem();						// Random item cho object bị huỷ
 	void SetDropItems();						// Xét rơi item cho các object bị huỷ	
 	
 	bool IsInViewport(LPGAMEOBJECT object);

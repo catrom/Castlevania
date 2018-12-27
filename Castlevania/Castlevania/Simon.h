@@ -2,7 +2,6 @@
 
 #include <vector>
 #include "GameObject.h"
-#include "ChangeSceneObject.h"
 
 using namespace std;
 
@@ -28,10 +27,6 @@ class Simon : public GameObject
 	// invisibility
 	bool isInvisibility = false;
 	DWORD invisibility_start = 0;
-
-	// falling water
-	DWORD startTimeRenderBubbles = 0;
-	Bubbles * bubbles;
 	
 public:
 	bool isDead = false;
