@@ -2,10 +2,15 @@
 
 
 
-Zombie::Zombie()
+Zombie::Zombie() : Enemy()
 {
 	AddAnimation(ZOMBIE_ANI);
 	AddAnimation(EFFECT_ANI);
+
+	HP = 1;
+	score = 100;
+	attack = 2;
+	respawnWaitingTime = 5000;
 }
 
 void Zombie::LoadResources(Textures *& textures, Sprites *& sprites, Animations *& animations)
@@ -39,7 +44,7 @@ void Zombie::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 	if (stopMovement == true)
 		return;
 
-	GameObject::Update(dt);
+	Enemy::Update(dt);
 
 	// Check collision between zombie and ground (falling on ground)
 	vector<LPCOLLISIONEVENT> coEvents;
@@ -87,7 +92,7 @@ void Zombie::Render()
 
 void Zombie::SetState(int state)
 {
-	GameObject::SetState(state);
+	Enemy::SetState(state);
 
 	switch (state)
 	{
@@ -131,14 +136,12 @@ void Zombie::GetActiveBoundingBox(float & left, float & top, float & right, floa
 	bottom = entryPosition.y + ZOMBIE_ACTIVE_BBOX_HEIGHT;
 }
 
-bool Zombie::IsAbleToActivate()
+void Zombie::LoseHP(int x)
 {
-	DWORD now = GetTickCount();
+	Enemy::LoseHP(x);
 
-	if (isRespawnWaiting == true && now - respawnTime_Start >= ZOMBIE_RESPAWN_TIME)
-		return true;
-
-	return false;
+	if (HP == 0)
+		SetState(ZOMBIE_DESTROYED);
 }
 
 

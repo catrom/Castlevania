@@ -13,8 +13,23 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Objects">
+    <Filter Include="Static Objects">
       <UniqueIdentifier>{e794b551-3793-4f4a-aebb-17ec747e33c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Moving Objects">
+      <UniqueIdentifier>{e35ab636-8023-44fc-81e2-13295484cedb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Effects">
+      <UniqueIdentifier>{be17c956-e5b0-4839-90bb-87e29b7d08b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{2ffae495-eb7a-4a81-a0c9-4e0070367dbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input Handler">
+      <UniqueIdentifier>{5640f8f9-9897-4d36-a239-9419df443fa6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HUD">
+      <UniqueIdentifier>{78c72bbc-2615-4f2f-8fdc-c7d99178130c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -36,74 +51,77 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TileMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Input.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BlackLeopard.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Bubbles.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
     <ClCompile Include="Candle.cpp">
-      <Filter>Objects</Filter>
+      <Filter>Static Objects</Filter>
     </ClCompile>
     <ClCompile Include="ChangeSceneObject.cpp">
-      <Filter>Objects</Filter>
+      <Filter>Static Objects</Filter>
     </ClCompile>
     <ClCompile Include="Door.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Effect.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="FireBall.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="FishMan.cpp">
-      <Filter>Objects</Filter>
+      <Filter>Static Objects</Filter>
     </ClCompile>
     <ClCompile Include="Ground.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Items.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Simon.cpp">
-      <Filter>Objects</Filter>
+      <Filter>Static Objects</Filter>
     </ClCompile>
     <ClCompile Include="Stair.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="SubWeapon.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="VampireBat.cpp">
-      <Filter>Objects</Filter>
+      <Filter>Static Objects</Filter>
     </ClCompile>
     <ClCompile Include="Whip.cpp">
-      <Filter>Objects</Filter>
+      <Filter>Static Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Zombie.cpp">
-      <Filter>Objects</Filter>
+    <ClCompile Include="BlackLeopard.cpp">
+      <Filter>Moving Objects</Filter>
     </ClCompile>
     <ClCompile Include="Boss.cpp">
-      <Filter>Objects</Filter>
+      <Filter>Moving Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Grid.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="FireBall.cpp">
+      <Filter>Moving Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="FishMan.cpp">
+      <Filter>Moving Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Items.cpp">
+      <Filter>Moving Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Simon.cpp">
+      <Filter>Moving Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="SubWeapon.cpp">
+      <Filter>Moving Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="VampireBat.cpp">
+      <Filter>Moving Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Zombie.cpp">
+      <Filter>Moving Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Bubbles.cpp">
+      <Filter>Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>Effects</Filter>
     </ClCompile>
     <ClCompile Include="Water.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Static Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Grid.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="TileMap.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>Input Handler</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Moving Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -125,77 +143,80 @@
     <ClInclude Include="GameObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TileMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Input.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BlackLeopard.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Bubbles.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
     <ClInclude Include="Candle.h">
-      <Filter>Objects</Filter>
+      <Filter>Static Objects</Filter>
     </ClInclude>
     <ClInclude Include="ChangeSceneObject.h">
-      <Filter>Objects</Filter>
+      <Filter>Static Objects</Filter>
     </ClInclude>
     <ClInclude Include="Door.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Effect.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="FireBall.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="FishMan.h">
-      <Filter>Objects</Filter>
+      <Filter>Static Objects</Filter>
     </ClInclude>
     <ClInclude Include="Ground.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Items.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Simon.h">
-      <Filter>Objects</Filter>
+      <Filter>Static Objects</Filter>
     </ClInclude>
     <ClInclude Include="Stair.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="SubWeapon.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="VampireBat.h">
-      <Filter>Objects</Filter>
+      <Filter>Static Objects</Filter>
     </ClInclude>
     <ClInclude Include="Whip.h">
-      <Filter>Objects</Filter>
+      <Filter>Static Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Zombie.h">
-      <Filter>Objects</Filter>
+    <ClInclude Include="BlackLeopard.h">
+      <Filter>Moving Objects</Filter>
     </ClInclude>
     <ClInclude Include="Boss.h">
-      <Filter>Objects</Filter>
+      <Filter>Moving Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Grid.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="FireBall.h">
+      <Filter>Moving Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="FishMan.h">
+      <Filter>Moving Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Items.h">
+      <Filter>Moving Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Simon.h">
+      <Filter>Moving Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="SubWeapon.h">
+      <Filter>Moving Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="VampireBat.h">
+      <Filter>Moving Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Zombie.h">
+      <Filter>Moving Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Bubbles.h">
+      <Filter>Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>Effects</Filter>
     </ClInclude>
     <ClInclude Include="Water.h">
+      <Filter>Static Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="TileMap.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>Input Handler</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Moving Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

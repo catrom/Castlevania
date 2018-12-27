@@ -154,6 +154,7 @@
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="FireBall.cpp" />
     <ClCompile Include="FishMan.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -186,6 +187,7 @@
     <ClInclude Include="Define.h" />
     <ClInclude Include="Door.h" />
     <ClInclude Include="Effect.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="FireBall.h" />
     <ClInclude Include="FishMan.h" />
     <ClInclude Include="Game.h" />
@@ -202,13 +204,11 @@
     <ClInclude Include="SubWeapon.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="TileMap.h" />
+    <ClInclude Include="Timer.h" />
     <ClInclude Include="VampireBat.h" />
     <ClInclude Include="Water.h" />
     <ClInclude Include="Whip.h" />
     <ClInclude Include="Zombie.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

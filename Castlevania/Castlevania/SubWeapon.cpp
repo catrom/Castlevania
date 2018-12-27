@@ -157,6 +157,7 @@ void SubWeapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMoveme
 			{
 				Candle * candle = dynamic_cast<Candle*>(e->obj);
 				candle->SetState(CANDLE_DESTROYED);
+
 				targetTypeHit = CANDLE;
 				GetCoordinateObject(e->obj);
 
@@ -166,6 +167,7 @@ void SubWeapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMoveme
 			{
 				FireBall * fireball = dynamic_cast<FireBall*>(e->obj);
 				fireball->SetEnable(false);
+
 				targetTypeHit = FIREBALL;
 				GetCoordinateObject(e->obj);
 
@@ -174,40 +176,56 @@ void SubWeapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMoveme
 			else if (dynamic_cast<Zombie*>(e->obj))
 			{
 				Zombie * zombie = dynamic_cast<Zombie*>(e->obj);
-				zombie->SetState(ZOMBIE_DESTROYED);
-				scoreReceived = SCORE_ZOMBIE;
+				zombie->LoseHP(2);
 				targetTypeHit = ZOMBIE;
-				GetCoordinateObject(e->obj);
+
+				if (zombie->GetState() == ZOMBIE_DESTROYED)
+				{
+					scoreReceived += zombie->GetScore();
+					GetCoordinateObject(e->obj);
+				}
 
 				UpdateCollisionState();
 			}
 			else if (dynamic_cast<BlackLeopard*>(e->obj))
 			{
 				BlackLeopard * blackLeopard = dynamic_cast<BlackLeopard*>(e->obj);
-				blackLeopard->SetState(BLACK_LEOPARD_DESTROYED);
-				scoreReceived = SCORE_BLACK_LEOPARD;
+				blackLeopard->LoseHP(2);
 				targetTypeHit = BLACK_LEOPARD;
-				GetCoordinateObject(e->obj);
 
+				if (blackLeopard->GetState() == BLACK_LEOPARD_DESTROYED)
+				{
+					scoreReceived += blackLeopard->GetScore();
+					GetCoordinateObject(e->obj);
+				}
+				
 				UpdateCollisionState();
 			}
 			else if (dynamic_cast<VampireBat*>(e->obj))
 			{
 				VampireBat * vampirebat = dynamic_cast<VampireBat*>(e->obj);
-				vampirebat->SetState(VAMPIRE_BAT_DESTROYED);
-				scoreReceived = SCORE_VAMPIRE_BAT;
+				vampirebat->LoseHP(2);
 				targetTypeHit = VAMPIRE_BAT;
-				GetCoordinateObject(e->obj);
+
+				if (vampirebat->GetState() == VAMPIRE_BAT_DESTROYED)
+				{
+					scoreReceived += vampirebat->GetScore();
+					GetCoordinateObject(e->obj);
+				}
 
 				UpdateCollisionState();
 			}
 			else if (dynamic_cast<FishMan*>(e->obj))
 			{
 				FishMan * fishman = dynamic_cast<FishMan*>(e->obj);
-				fishman->SetState(FISHMAN_DESTROYED);
-				scoreReceived = SCORE_FISHMAN;
+				fishman->LoseHP(2);
 				targetTypeHit = FISHMAN;
-				GetCoordinateObject(e->obj);
+
+				if (fishman->GetState() == FISHMAN_DESTROYED)
+				{
+					scoreReceived += fishman->GetScore();
+					GetCoordinateObject(e->obj);
+				}
 
 				UpdateCollisionState();
 			}
@@ -217,6 +235,9 @@ void SubWeapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMoveme
 				boss->LoseHP(2);
 				targetTypeHit = BOSS;
 				GetCoordinateObject(e->obj);
+
+				if (boss->GetState() == BOSS_DESTROYED)
+					scoreReceived += boss->GetScore();
 
 				UpdateCollisionState();
 			}

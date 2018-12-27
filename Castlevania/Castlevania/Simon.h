@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "GameObject.h"
+#include "Timer.h"
 
 using namespace std;
 
@@ -19,16 +20,11 @@ class Simon : public GameObject
 	float autoWalkDistance = 0;		// Khoảng cách 
 	int stateAfterAutoWalk = -1;	// Trạng thái sau khi auto-walk
 	int nxAfterAutoWalk = 0;		// Hướng Simon sau khi auto-walk
-
-	// untouchable
-	bool isUntouchable = false;		
-	DWORD untouchable_start = 0;
-
-	// invisibility
-	bool isInvisibility = false;
-	DWORD invisibility_start = 0;
 	
 public:
+	Timer * untouchableTimer = new Timer(SIMON_UNTOUCHABLE_TIME);
+	Timer * invisibilityTimer = new Timer(SIMON_INVISIBILITY_TIME);
+
 	bool isDead = false;
 	bool isTouchGround = false;	
 	bool isFalling = false;
@@ -63,9 +59,6 @@ public:
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	virtual void GetActiveBoundingBox(float &left, float &top, float &right, float &bottom);
 
-	void StartUntouchable() { isUntouchable = true; untouchable_start = GetTickCount(); }
-	void StartInvisibility() { isInvisibility = true; invisibility_start = GetTickCount(); }
-
 	// Get function
 	int GetEnergy() { return this->energy; }
 	int GetLife() { return this->life; }
@@ -89,7 +82,7 @@ public:
 	bool CheckCollisionWithItem(vector<LPGAMEOBJECT> * listItem);
 
 	// Kiểm tra va chạm với vùng hoạt động của enemy
-	void CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT> * listEnemy);
+	void CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT> * listObjects);
 
 	// Giữ cho Simon đứng yên trên bậc thang
 	void StandOnStair() { vx = vy = 0; }

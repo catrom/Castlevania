@@ -61,11 +61,7 @@ public:
 	bool isEnable;
 	int idItem;		// id của item mà object đó chứa (-1: no item)
 
-	bool isRenderAnimation;
-
 	bool isDroppedItem = false;
-
-	D3DXVECTOR2 entryPosition; // đưa enemy về vị trí entry sau thời gian respawn
 	
 
 	vector<LPANIMATION> animations;
@@ -81,10 +77,7 @@ public:
 	void SetIDItem(int id) { this->idItem = id; }
 	void SetEnable(bool enable) { this->isEnable = enable; }
 	void SetIsDroppedItem(bool x) { this->isDroppedItem = x; }
-	void SetEntryPosition(float x, float y) { entryPosition.x = x; entryPosition.y = y; }
-
-	bool GetIsRenderAnimation() { return this->isRenderAnimation; }
-	void SetIsRenderAnimation(bool x) { this->isRenderAnimation = x; }
+	
 
 	void GetPosition(float &x, float &y) { x = this->x; y = this->y; }
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }
@@ -92,7 +85,6 @@ public:
 	int GetOrientation() { return this->nx; }
 	bool IsDroppedItem() { return this->isDroppedItem; }
 	bool IsEnable() { return this->isEnable; }
-	D3DXVECTOR2 GetEntryPosition() { return this->entryPosition; }
 
 	void RenderBoundingBox();
 	void RenderActiveBoundingBox();

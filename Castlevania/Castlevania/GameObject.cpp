@@ -9,7 +9,6 @@ GameObject::GameObject()
 	nx = 1;					// right
 	isEnable = true;
 	idItem = -1;
-	isRenderAnimation = true;
 	isDroppedItem = false;
 }
 

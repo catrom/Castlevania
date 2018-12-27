@@ -119,10 +119,14 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 
 			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và zombie
 			{
-				e->SetState(ZOMBIE_DESTROYED);
-				scoreReceived += SCORE_ZOMBIE;
+				e->LoseHP(1);
 				targetTypeHit = ZOMBIE;
-				sparkCoord.push_back({ left, top });
+
+				if (e->GetState() == ZOMBIE_DESTROYED)
+				{
+					scoreReceived += e->GetScore();
+					sparkCoord.push_back({ left, top });
+				}
 			}
 		}
 		else if (dynamic_cast<BlackLeopard*>(obj))
@@ -135,10 +139,14 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 
 			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và black leopard
 			{
-				e->SetState(BLACK_LEOPARD_DESTROYED);
-				scoreReceived += SCORE_BLACK_LEOPARD;
+				e->LoseHP(1);
 				targetTypeHit = BLACK_LEOPARD;
-				sparkCoord.push_back({ left, top });
+
+				if (e->GetState() == BLACK_LEOPARD_DESTROYED)
+				{
+					scoreReceived += e->GetScore();
+					sparkCoord.push_back({ left, top });
+				}
 			}
 		}
 		else if (dynamic_cast<VampireBat*>(obj))
@@ -151,10 +159,14 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 
 			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và vampire bat
 			{
-				e->SetState(VAMPIRE_BAT_DESTROYED);
-				scoreReceived += SCORE_VAMPIRE_BAT;
+				e->LoseHP(1);
 				targetTypeHit = VAMPIRE_BAT;
-				sparkCoord.push_back({ left, top });
+
+				if (e->GetState() == VAMPIRE_BAT_DESTROYED)
+				{
+					scoreReceived += e->GetScore();
+					sparkCoord.push_back({ left, top });
+				}
 			}
 		}
 		else if (dynamic_cast<FishMan*>(obj))
@@ -167,10 +179,14 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 
 			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và fishman
 			{
-				e->SetState(FISHMAN_DESTROYED);
-				scoreReceived += SCORE_FISHMAN;
+				e->LoseHP(1);
 				targetTypeHit = FISHMAN;
-				sparkCoord.push_back({ left, top });
+
+				if (e->GetState() == FISHMAN_DESTROYED)
+				{
+					scoreReceived += e->GetScore();
+					sparkCoord.push_back({ left, top });
+				}
 			}
 		}
 		else if (dynamic_cast<Boss*>(obj))
@@ -186,6 +202,9 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 				e->LoseHP(1);
 				targetTypeHit = BOSS;
 				sparkCoord.push_back({ left, top });
+
+				if (e->GetState() == BOSS_DESTROYED)
+					scoreReceived += e->GetScore();
 			}
 		}
 	}

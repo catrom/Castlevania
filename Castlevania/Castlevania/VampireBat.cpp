@@ -2,16 +2,17 @@
 
 
 
-VampireBat::VampireBat()
+VampireBat::VampireBat() : Enemy()
 {
 	AddAnimation(VAMPIRE_BAT_ANI);
 	AddAnimation(EFFECT_ANI);
 
-	nx = 1;
-}
+	velocityVariation = 0.004f;
 
-VampireBat::~VampireBat()
-{
+	HP = 1;
+	score = 200;
+	attack = 2;
+	respawnWaitingTime = 5000;
 }
 
 void VampireBat::LoadResources(Textures *& textures, Sprites *& sprites, Animations *& animations)
@@ -47,7 +48,7 @@ void VampireBat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovem
 	if (stopMovement == true)
 		return;
 
-	GameObject::Update(dt);
+	Enemy::Update(dt);
 
 	vy += velocityVariation;
 
@@ -66,7 +67,7 @@ void VampireBat::Render()
 
 void VampireBat::SetState(int state)
 {
-	GameObject::SetState(state);
+	Enemy::SetState(state);
 
 	switch (state)
 	{
@@ -112,12 +113,10 @@ void VampireBat::GetActiveBoundingBox(float & left, float & top, float & right, 
 	bottom = entryPosition.y + VAMPIRE_BAT_ACTIVE_BBOX_HEIGHT;
 }
 
-bool VampireBat::IsAbleToActivate()
+void VampireBat::LoseHP(int x)
 {
-	DWORD now = GetTickCount();
+	Enemy::LoseHP(x);
 
-	if (isRespawnWaiting == true && now - respawnTime_Start >= VAMPIRE_BAT_RESPAWN_TIME)
-		return true;
-
-	return false;
+	if (HP == 0)
+		SetState(VAMPIRE_BAT_DESTROYED);
 }

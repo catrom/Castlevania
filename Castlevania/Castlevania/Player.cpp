@@ -85,8 +85,8 @@ void Player::Update(DWORD dt, bool stopwatch)
 	simonHP = simon->GetHP();
 	bossHP = boss->GetHP();
 
-	if (scene->IsDoubleShotEffect()) item = 0;		// double shot
-	else if (scene->IsTripleShotEffect()) item = 1; // trip shot
+	if (scene->doubleShotTimer->IsTimeUp() == false) item = 0;		// double shot
+	else if (scene->tripleShotTimer->IsTimeUp() == false) item = 1; // trip shot
 	else item = -1;
 	
 	if (scene->isGameReset == true)

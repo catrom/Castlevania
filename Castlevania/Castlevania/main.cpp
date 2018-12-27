@@ -30,7 +30,7 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 void Update(DWORD dt)
 {
-	player->Update(dt, scene->IsUsingStopWatch());
+	player->Update(dt, !scene->stopWatchTimer->IsTimeUp());
 	scene->Update(dt);
 }
 

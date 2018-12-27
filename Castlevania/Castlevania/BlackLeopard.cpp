@@ -1,12 +1,18 @@
 ﻿#include "BlackLeopard.h"
 
-BlackLeopard::BlackLeopard()
+BlackLeopard::BlackLeopard() : Enemy()
 {
 	AddAnimation(BLACK_LEOPARD_ACTIVE_ANI);
 	AddAnimation(EFFECT_ANI);
 	AddAnimation(BLACK_LEOPARD_INACTIVE_ANI);
 	AddAnimation(BLACK_LEOPARD_IDLE_ANI);
 	AddAnimation(BLACK_LEOPARD_JUMP_ANI);
+
+	isJumping = false;
+	HP = 1;
+	score = 200;
+	attack = 2;
+	respawnWaitingTime = 20000;
 }
 
 void BlackLeopard::LoadResources(Textures *& textures, Sprites *& sprites, Animations *& animations)
@@ -52,7 +58,7 @@ void BlackLeopard::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMov
 		return;
 
 	vy += BLACK_LEOPARD_GRAVITY*dt;
-	GameObject::Update(dt);
+	Enemy::Update(dt);
 	
 
 	// Check collision between zombie and ground (jumping on ground)
@@ -109,7 +115,7 @@ void BlackLeopard::Render()
 
 void BlackLeopard::SetState(int state)
 {
-	GameObject::SetState(state);
+	Enemy::SetState(state);
 
 	switch (state)
 	{
@@ -159,14 +165,12 @@ void BlackLeopard::GetActiveBoundingBox(float & left, float & top, float & right
 	bottom = entryPosition.y + BLACK_LEOPARD_ACTIVE_BBOX_HEIGHT;
 }
 
-bool BlackLeopard::IsAbleToActivate()
+void BlackLeopard::LoseHP(int x)
 {
-	DWORD now = GetTickCount();
+	Enemy::LoseHP(x);
 
-	if (isRespawnWaiting == true && now - respawnTime_Start >= BLACK_LEOPARD_RESPAWN_TIME)
-		return true;
-
-	return false;
+	if (HP == 0)
+		SetState(BLACK_LEOPARD_DESTROYED);
 }
 
 

@@ -325,7 +325,7 @@ void SceneManager::Update(DWORD dt)
 		else if (dynamic_cast<Boss*>(object))
 			Boss_Update(dt, object);
 		else 
-			object->Update(dt, &listObjects, isUsingStopWatch);
+			object->Update(dt, &listObjects, !stopWatchTimer->IsTimeUp());
 	}
 
 	// Không cho Simon đi ra khỏi vùng đánh boss
@@ -345,45 +345,33 @@ void SceneManager::Update(DWORD dt)
 void SceneManager::UpdateTimeCounter()
 {
 	// Stop Watch
-	if (isUsingStopWatch == true && GetTickCount() - stopWatchCounter > WEAPONS_STOP_WATCH_TIME)
-	{
-		isUsingStopWatch = false;
-		stopWatchCounter = 0;
-	}
+	if (stopWatchTimer->IsTimeUp() == true)
+		stopWatchTimer->Stop();
 
 	// Cross
-	if (isCrossEffect == true && GetTickCount() - crossEffectTimeCounter > ITEM_CROSS_EFFECT_TIME)
-	{
-		isCrossEffect = false;
-		crossEffectTimeCounter = 0;
-	}
+	if (crossEffectTimer->IsTimeUp() == true)
+		crossEffectTimer->Stop();
 
 	// Simon dead
-	if (isSimonDead == true && GetTickCount() - simonDeadTimeCounter > SIMON_DEAD_TIME)
+	if (isSimonDead == true && simonDeadTimer->IsTimeUp() == true)
 	{
+		simonDeadTimer->Stop();
 		isSimonDead = false;
-		simonDeadTimeCounter = 0;
 		ResetGame();
 	}
 
 	// Double shot
-	if (isDoubleShotEffect == true && GetTickCount() - doubleShotEffectTimeCounter > ITEM_DOUBLE_SHOT_EFFECT_TIME)
-	{
-		isDoubleShotEffect = false;
-		doubleShotEffectTimeCounter = 0;
-	}
+	if (doubleShotTimer->IsTimeUp() == true)
+		doubleShotTimer->Stop();
 
 	// Triple shot
-	if (isTripleShotEffect == true && GetTickCount() - tripleShotEffectTimeCounter > ITEM_TRIPLE_SHOT_EFFECT_TIME)
-	{
-		isTripleShotEffect = false;
-		tripleShotEffectTimeCounter = 0;
-	}
+	if (tripleShotTimer->IsTimeUp() == true)
+		tripleShotTimer->Stop();
 }
 
 void SceneManager::Render()
 {
-	tilemaps->Get(IDScene)->Draw(game->GetCameraPositon(), isCrossEffect);
+	tilemaps->Get(IDScene)->Draw(game->GetCameraPositon(), !crossEffectTimer->IsTimeUp());
 
 	simon->Render();
 	//simon->RenderBoundingBox();
@@ -765,16 +753,11 @@ void SceneManager::ResetGame()
 {
 	isGameReset = true; // flag variable for reset time in Player::Update()
 
-	simon->SetState(STAND);
-	simon->SetHP(SIMON_HP);
-	simon->SetEnergy(SIMON_ENERGY);
-	simon->SetOrientation(1);
-
-	whip->SetState(NORMAL_WHIP);
+	simon->SetHP(16);
 	simon->SetSubWeapon(-1);
-
+	whip->SetState(NORMAL_WHIP);
+	boss = new Boss();
 	boss->SetState(BOSS_INACTIVE);
-	boss->SetHP(BOSS_HP);
 
 	int curIndex;
 
@@ -812,9 +795,7 @@ void SceneManager::CrossEffect()
 	if (simon->isGotCrossItem == true)
 	{
 		simon->isGotCrossItem = false;
-
-		isCrossEffect = true;
-		crossEffectTimeCounter = GetTickCount();
+		crossEffectTimer->Start();
 
 		for (UINT i = 0; i < listObjects.size(); i++)
 		{
@@ -856,8 +837,7 @@ void SceneManager::DoubleShotEffect()
 	if (simon->isGotDoubleShotItem == true)
 	{
 		simon->isGotDoubleShotItem = false;
-		isDoubleShotEffect = true;
-		doubleShotEffectTimeCounter = GetTickCount();
+		doubleShotTimer->Start();
 	}
 }
 
@@ -866,8 +846,7 @@ void SceneManager::TripleShotEffect()
 	if (simon->isGotTripleShotItem == true)
 	{
 		simon->isGotTripleShotItem = false;
-		isTripleShotEffect = true;
-		tripleShotEffectTimeCounter = GetTickCount();
+		tripleShotTimer->Start();
 	}
 }
 
@@ -878,7 +857,7 @@ void SceneManager::Simon_Update(DWORD dt)
 		if (isSimonDead == false)
 		{
 			isSimonDead = true;
-			simonDeadTimeCounter = GetTickCount();
+			simonDeadTimer->Start();
 		}
 
 		return;
@@ -953,7 +932,7 @@ void SceneManager::Whip_Update(DWORD dt)
 			else if (dynamic_cast<FishMan*>(obj) &&
 				(obj->GetState() == ACTIVE || obj->GetState() == FISHMAN_JUMP || obj->GetState() == FISHMAN_HIT))
 				coObjects.push_back(obj);
-			else if (dynamic_cast<Boss*>(obj) && whip->GetTargetTypeHit() != BOSS)
+			else if (dynamic_cast<Boss*>(obj) && obj->GetState() == BOSS_ACTIVE && whip->GetTargetTypeHit() != BOSS)
 				coObjects.push_back(obj);
 		}
 
@@ -965,7 +944,7 @@ void SceneManager::Whip_Update(DWORD dt)
 
 void SceneManager::Weapon_Update(DWORD dt, int index)
 {
-	if (weaponlist[index] == STOP_WATCH)
+	if (simon->GetSubWeapon() == STOP_WATCH)
 		return;
 
 	if (weaponlist[index]->GetScoreReceived() != 0)
@@ -983,7 +962,7 @@ void SceneManager::Weapon_Update(DWORD dt, int index)
 	vector<LPGAMEOBJECT> coObjects;
 	coObjects.push_back(simon); // dùng để xét va chạm của Simon với boomerang
 
-	if (isBossFighting == true && weaponlist[index]->GetTargetTypeHit() != BOSS)
+	if (isBossFighting == true && boss->GetState() == BOSS_ACTIVE && weaponlist[index]->GetTargetTypeHit() != BOSS)
 		coObjects.push_back(boss);
 
 	for (auto obj : listObjects)
@@ -1022,13 +1001,13 @@ void SceneManager::Item_Update(DWORD dt, LPGAMEOBJECT & item)
 
 void SceneManager::Zombie_Update(DWORD dt, LPGAMEOBJECT & object)
 {
-	if (isCrossEffect == false && object->GetState() != ZOMBIE_INACTIVE)
+	if (crossEffectTimer->IsTimeUp() == true && object->GetState() != ZOMBIE_INACTIVE)
 	{
 		auto zombie = dynamic_cast<Zombie*>(object);
 
-		if (zombie->IsSettedPosition() == false)
+		if (zombie->isSettedPosition == false)
 		{
-			zombie->SetIsSettedPosition(true);
+			zombie->isSettedPosition = true;
 
 			float simon_x, simon_y;
 			simon->GetPosition(simon_x, simon_y);
@@ -1058,7 +1037,7 @@ void SceneManager::Zombie_Update(DWORD dt, LPGAMEOBJECT & object)
 				coObjects.push_back(obj);
 		}
 
-		object->Update(dt, &coObjects, isUsingStopWatch);
+		object->Update(dt, &coObjects, !stopWatchTimer->IsTimeUp());
 	}
 
 }
@@ -1087,19 +1066,19 @@ void SceneManager::BlackLeopard_Update(DWORD dt, LPGAMEOBJECT & object)
 				coObjects.push_back(obj);
 		}
 
-		object->Update(dt, &coObjects, isUsingStopWatch);
+		object->Update(dt, &coObjects, !stopWatchTimer->IsTimeUp());
 	}
 }
 
 void SceneManager::VampireBat_Update(DWORD dt, LPGAMEOBJECT & object)
 {
-	if (isCrossEffect == false && object->GetState() != VAMPIRE_BAT_INACTIVE)
+	if (crossEffectTimer->IsTimeUp() == true && object->GetState() != VAMPIRE_BAT_INACTIVE)
 	{
 		auto bat = dynamic_cast<VampireBat*>(object);
 
-		if (bat->IsSettedPosition() == false)
+		if (bat->isSettedPosition == false)
 		{
-			bat->SetIsSettedPosition(true);
+			bat->isSettedPosition = true;
 
 			// set random hướng cho dơi
 			int listNx[2] = { -1, 1 };
@@ -1122,7 +1101,7 @@ void SceneManager::VampireBat_Update(DWORD dt, LPGAMEOBJECT & object)
 			bat->SetState(VAMPIRE_BAT_ACTIVE);
 		}
 
-		bat->Update(dt, NULL, isUsingStopWatch);
+		bat->Update(dt, NULL, !stopWatchTimer->IsTimeUp());
 	}
 }
 
@@ -1132,7 +1111,7 @@ void SceneManager::FishMan_Update(DWORD dt, LPGAMEOBJECT & object)
 
 	if (fishman->GetState() != FISHMAN_INACTIVE)
 	{
-		if (fishman->GetState() == FISHMAN_ACTIVE && fishman->IsSettedPosition() == true &&
+		if (fishman->GetState() == FISHMAN_ACTIVE && fishman->isSettedPosition == true &&
 			GetTickCount() - fishman->GetLastTimeShoot() >= fishman->GetDeltaTimeToShoot())
 		{
 			fishman->SetState(FISHMAN_HIT);
@@ -1160,9 +1139,9 @@ void SceneManager::FishMan_Update(DWORD dt, LPGAMEOBJECT & object)
 		}
 		else
 		{
-			if (isCrossEffect == false && fishman->IsSettedPosition() == false)
+			if (crossEffectTimer->IsTimeUp() == true && fishman->isSettedPosition == false)
 			{
-				fishman->SetIsSettedPosition(true);
+				fishman->isSettedPosition = true;
 
 				// Set vị trí cho fishman dựa vào vị trí của Simon
 				float simon_x, simon_y;
@@ -1191,7 +1170,7 @@ void SceneManager::FishMan_Update(DWORD dt, LPGAMEOBJECT & object)
 					coObjects.push_back(obj);
 			}
 
-			fishman->Update(dt, &coObjects, isUsingStopWatch);
+			fishman->Update(dt, &coObjects, !stopWatchTimer->IsTimeUp());
 		}
 	}
 }

@@ -1,31 +1,20 @@
 ﻿#pragma once
 
-#include "GameObject.h"
+#include "Enemy.h"
 
-class Zombie : public GameObject
+class Zombie : public Enemy
 {
-	DWORD respawnTime_Start = 0;
-	bool isRespawnWaiting = false;
-	bool isSettedPosition = false;
-
 public:
 	Zombie();
 
 	virtual void LoadResources(Textures* &textures, Sprites* &sprites, Animations* &animations);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObject = NULL, bool stopMovement = false);
-	void Render();
-	void SetState(int state);
-
-	void StartRespawnTimeCounter() { isRespawnWaiting = true; respawnTime_Start = GetTickCount(); }
+	virtual void Render();
+	virtual void SetState(int state);
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	virtual void GetActiveBoundingBox(float &left, float &top, float &right, float &bottom);
 
-	void SetIsRespawnWaiting(bool x) { isRespawnWaiting = x; }
-	bool IsRespawnWaiting() { return isRespawnWaiting; }
-	bool IsAbleToActivate();
-
-	bool IsSettedPosition() { return isSettedPosition; }
-	void SetIsSettedPosition(bool x) { isSettedPosition = x; }
+	virtual void LoseHP(int x);
 };
 

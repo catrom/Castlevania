@@ -6,7 +6,6 @@ Input::Input(Game * game, SceneManager * scene)
 {
 	this->game = game;
 	this->scene = scene;
-	this->simon = scene->GetSimon();
 }
 
 Input::~Input()
@@ -17,28 +16,28 @@ bool Input::AnimationDelay()
 {
 	if (isNeedToWaitingAnimation == true)
 	{
-		if (simon->GetState() == POWER && simon->animations[POWER]->IsOver(450) == false)
+		if (simon->GetState() == POWER && simon->animations[POWER]->IsOver(POWER_ANI_TIME_DELAY) == false)
 			return true;
 
-		if (simon->GetState() == STAIR_UP && simon->animations[STAIR_UP]->IsOver(200) == false)
+		if (simon->GetState() == STAIR_UP && simon->animations[STAIR_UP]->IsOver(STAIR_WALK_ANI_TIME_DELAY) == false)
 			return true;
 
-		if (simon->GetState() == STAIR_DOWN && simon->animations[STAIR_DOWN]->IsOver(200) == false)
+		if (simon->GetState() == STAIR_DOWN && simon->animations[STAIR_DOWN]->IsOver(STAIR_WALK_ANI_TIME_DELAY) == false)
 			return true;
 
-		if (simon->GetState() == DEFLECT && simon->animations[DEFLECT]->IsOver(600) == false)
+		if (simon->GetState() == DEFLECT && simon->animations[DEFLECT]->IsOver(DEFLECT_ANI_TIME_DELAY) == false)
 			return true;
 
-		if (simon->GetState() == HIT_STAND && simon->animations[HIT_STAND]->IsOver(300) == false)
+		if (simon->GetState() == HIT_STAND && simon->animations[HIT_STAND]->IsOver(HIT_ANI_TIME_DELAY) == false)
 			return true;
 
-		if (simon->GetState() == HIT_SIT && simon->animations[HIT_SIT]->IsOver(300) == false)
+		if (simon->GetState() == HIT_SIT && simon->animations[HIT_SIT]->IsOver(HIT_ANI_TIME_DELAY) == false)
 			return true;
 
-		if (simon->GetState() == HIT_STAIR_UP && simon->animations[HIT_STAIR_UP]->IsOver(300) == false)
+		if (simon->GetState() == HIT_STAIR_UP && simon->animations[HIT_STAIR_UP]->IsOver(HIT_ANI_TIME_DELAY) == false)
 			return true;
 
-		if (simon->GetState() == HIT_STAIR_DOWN && simon->animations[HIT_STAIR_DOWN]->IsOver(300) == false)
+		if (simon->GetState() == HIT_STAIR_DOWN && simon->animations[HIT_STAIR_DOWN]->IsOver(HIT_ANI_TIME_DELAY) == false)
 			return true;
 	}
 	else
@@ -47,7 +46,7 @@ bool Input::AnimationDelay()
 		isNeedToWaitingAnimation = true;
 
 		// Để tránh việc ở frame tiếp theo rơi vào trạng thái chờ render animation 
-		// (vì animation == 200ms, một frame == 30ms nên sẽ phải bị chờ dù cho có biến isNeedToWaitingAnimation),
+		// (vì animation == 200ms, một frame ~ 30ms nên sẽ phải bị chờ dù cho có biến = false),
 		// do đó cần reset lại animation start time về 0
 		simon->animations[STAIR_UP]->SetAniStartTime(0);
 		simon->animations[STAIR_DOWN]->SetAniStartTime(0);
@@ -75,6 +74,8 @@ bool Input::CanProcessKeyboard()
 
 void Input::KeyState(BYTE *state)
 {
+	simon = scene->GetSimon();
+
 	if (CanProcessKeyboard() == false)
 		return;
 
@@ -184,7 +185,7 @@ void Input::OnKeyDown(int KeyCode)
 		simon->isGotTripleShotItem = true;
 		break;
 	case DIK_8:
-		simon->StartInvisibility();
+		simon->invisibilityTimer->Start();
 		break;
 	case DIK_Q:
 		scene->Init(SCENE_1);
@@ -293,14 +294,16 @@ void Input::Simon_Hit_SubWeapon()
 	if (simon->GetSubWeapon() == STOP_WATCH && simon->GetEnergy() < 5)
 		return;
 
-	if (weaponlist->at(0)->GetState() == STOP_WATCH && scene->IsUsingStopWatch() == true) // đang sử dụng stop watch
+	if (scene->stopWatchTimer->IsTimeUp() == false) // đang sử dụng stop watch
 		return;
+	else
+		weaponlist->at(0)->SetEnable(false);
 
 	if (weaponlist->at(0)->IsEnable() == false)
 		weapon = weaponlist->at(0);
-	else if (weaponlist->at(1)->IsEnable() == false && (scene->IsDoubleShotEffect() || scene->IsTripleShotEffect()))
+	else if (weaponlist->at(1)->IsEnable() == false && (scene->doubleShotTimer->IsTimeUp() == false || scene->tripleShotTimer->IsTimeUp() == false))
 		weapon = weaponlist->at(1);
-	else if (weaponlist->at(2)->IsEnable() == false && scene->IsTripleShotEffect())
+	else if (weaponlist->at(2)->IsEnable() == false && scene->tripleShotTimer->IsTimeUp() == false)
 		weapon = weaponlist->at(2);
 	else return;
 
@@ -329,7 +332,7 @@ void Input::Simon_Hit_SubWeapon()
 		if (weapon->GetState() == STOP_WATCH)
 		{
 			simon->LoseEnergy(5);
-			scene->StartStopWatch();
+			scene->stopWatchTimer->Start();
 		}
 		else
 		{
@@ -459,6 +462,5 @@ bool Input::Simon_Stair_Stand()
 
 bool Input::StairCollisionsDetection()
 {
-	vector<LPGAMEOBJECT> * listStairs = scene->GetListStairs();
-	return simon->CheckCollisionWithStair(listStairs);
+	return simon->CheckCollisionWithStair(scene->GetListStairs());
 }

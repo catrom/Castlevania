@@ -1,18 +1,24 @@
 ﻿#include "Boss.h"
 
-
-
-Boss::Boss()
+Boss::Boss() : Enemy()
 {
 	AddAnimation(BOSS_ACTIVE_ANI);
 	AddAnimation(EFFECT_2_ANI);
 	AddAnimation(BOSS_INACTIVE_ANI);
 
-	SetState(BOSS_INACTIVE);
-}
+	isFlyToTarget = false;
+	isFlyToSimon = false;
 
-Boss::~Boss()
-{
+	idTarget = 0;
+
+	startTimeWaiting = 0;
+	isStopWaiting = false;
+
+	dropItem = false;
+
+	HP = 16;
+	score = 3000;
+	attack = 3;
 }
 
 void Boss::LoadResources(Textures *& textures, Sprites *& sprites, Animations *& animations)
@@ -90,7 +96,7 @@ void Boss::Render()
 
 void Boss::SetState(int state)
 {
-	GameObject::SetState(state);
+	Enemy::SetState(state);
 
 	switch (state)
 	{
@@ -203,10 +209,9 @@ void Boss::GetActiveBoundingBox(float & left, float & top, float & right, float 
 
 void Boss::LoseHP(int x)
 {
-	HP -= x;
-	if (HP <= 0) {
-		HP = 0;
+	Enemy::LoseHP(x);
+
+	if (HP == 0)
 		SetState(BOSS_DESTROYED);
-	}
 }
 

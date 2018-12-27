@@ -22,6 +22,7 @@
 #include "Boss.h"
 #include "Water.h"
 #include "ChangeSceneObject.h"
+#include "Timer.h"
 
 #include <map>
 using namespace std;
@@ -59,24 +60,16 @@ class SceneManager
 	bool isMovingCamera2 = false;
 	int countDxCamera = 0;
 
-	bool isUsingStopWatch = false;		// 
-	int stopWatchCounter = 0;
-
-	bool isSimonDead = false;			// dừng update simon khi ở trạng thái dead
-	int simonDeadTimeCounter = 0;
-
-	bool isCrossEffect = false;  
-	int crossEffectTimeCounter = 0; 
-
-	bool isDoubleShotEffect = false;
-	int doubleShotEffectTimeCounter = 0;
-
-	bool isTripleShotEffect = false;
-	int tripleShotEffectTimeCounter = 0;
-
 	bool isBossFighting = false;
+	bool isSimonDead = false;
 
 public:
+	Timer * stopWatchTimer = new Timer(WEAPONS_STOP_WATCH_TIME);
+	Timer * simonDeadTimer = new Timer(SIMON_DEAD_TIME);
+	Timer * crossEffectTimer = new Timer(ITEM_CROSS_EFFECT_TIME);
+	Timer * doubleShotTimer = new Timer(ITEM_DOUBLE_SHOT_EFFECT_TIME);
+	Timer * tripleShotTimer = new Timer(ITEM_TRIPLE_SHOT_EFFECT_TIME);
+
 	SceneManager(Game * game);
 	~SceneManager();
 
@@ -115,13 +108,9 @@ public:
 	vector<SubWeapon*> * GetWeaponList() { return &weaponlist; }
 	vector<LPGAMEOBJECT> * GetListStairs() { return &(listStairs); }
 
-	bool IsUsingStopWatch() { return isUsingStopWatch; }
-	bool IsDoubleShotEffect() { return isDoubleShotEffect; }
-	bool IsTripleShotEffect() { return isTripleShotEffect; }
 	bool IsMovingCamera() { return isMovingCamera1 || isMovingCamera2; }
 
 	// Item Effect
-	void StartStopWatch() { isUsingStopWatch = true; stopWatchCounter = GetTickCount(); }
 	void CrossEffect();
 	void DoubleShotEffect();
 	void TripleShotEffect();

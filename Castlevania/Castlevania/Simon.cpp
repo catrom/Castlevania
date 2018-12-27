@@ -36,7 +36,7 @@ Simon::Simon() : GameObject()
 	energy = 5;
 	life = 3;
 	subWeapon = -1;
-	HP = SIMON_HP;
+	HP = 16;
 }
 
 Simon::~Simon()
@@ -181,18 +181,12 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 		DoAutoWalk();
 	
 	// Reset untouchable timer if untouchable time has passed
-	if (GetTickCount() - untouchable_start > SIMON_UNTOUCHABLE_TIME)
-	{
-		untouchable_start = 0;
-		isUntouchable = false;
-	}
+	if (untouchableTimer->IsTimeUp() == true)
+		untouchableTimer->Stop();
 
 	// Reset invisibility timer if invisibility time has passed
-	if (GetTickCount() - invisibility_start > SIMON_INVISIBILITY_TIME)
-	{
-		invisibility_start = 0;
-		isInvisibility = false;
-	}
+	if (invisibilityTimer->IsTimeUp() == true)
+		invisibilityTimer->Stop();
 
 	// Check collision between Simon and other objects
 	vector<LPCOLLISIONEVENT> coEvents;
@@ -304,23 +298,45 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 			}
 			else if (dynamic_cast<FireBall*>(e->obj))
 			{
-				LoseHP(2);
+				LoseHP(1);
 				e->obj->SetEnable(false);
 			}
 			else if (dynamic_cast<Zombie*>(e->obj) || dynamic_cast<BlackLeopard*>(e->obj)
 				|| dynamic_cast<VampireBat*>(e->obj) || dynamic_cast<FishMan*>(e->obj)
 				|| dynamic_cast<Boss*>(e->obj))
 			{
-				if (state != POWER && isUntouchable == false && isInvisibility == false)
+				if (state != POWER && untouchableTimer->IsTimeUp() == true && invisibilityTimer->IsTimeUp() == true)
 				{
-					// nếu dơi tông trúng simon thì cho huỷ
-					if (dynamic_cast<VampireBat*>(e->obj))
+					untouchableTimer->Start();
+
+					if (dynamic_cast<Zombie*>(e->obj))
+					{
+						Zombie * zombie = dynamic_cast<Zombie*>(e->obj);
+						LoseHP(zombie->GetAttack());
+					}
+					else if (dynamic_cast<BlackLeopard*>(e->obj))
+					{
+						BlackLeopard * leopard = dynamic_cast<BlackLeopard*>(e->obj);
+						LoseHP(leopard->GetAttack());
+					}
+					else if (dynamic_cast<VampireBat*>(e->obj)) 
 					{
 						VampireBat * bat = dynamic_cast<VampireBat*>(e->obj);
-						bat->SetState(VAMPIRE_BAT_DESTROYED);
+						bat->SetState(VAMPIRE_BAT_DESTROYED);	// nếu dơi tông trúng simon thì cho huỷ
+						LoseHP(bat->GetAttack());
 					}
-
-					if (isStandOnStair == false)  // Simon đứng trên cầu thang sẽ không bị bật ngược lại
+					else if (dynamic_cast<FishMan*>(e->obj))
+					{
+						FishMan * fishman = dynamic_cast<FishMan*>(e->obj);
+						LoseHP(fishman->GetAttack());
+					}
+					else if (dynamic_cast<Boss*>(e->obj))
+					{
+						Boss * boss = dynamic_cast<Boss*>(e->obj);
+						LoseHP(boss->GetAttack());
+					}
+					
+					if (isStandOnStair == false || HP == 0)  // Simon đứng trên cầu thang sẽ không bị bật ngược lại
 					{
 						// đặt trạng thái deflect cho simon
 						if (e->nx != 0)
@@ -331,9 +347,6 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 
 						SetState(DEFLECT);
 					}
-
-					StartUntouchable();
-					LoseHP(2);
 				}
 				else
 				{
@@ -362,14 +375,14 @@ void Simon::Render()
 	if (state != DEAD && IsHit() == false && isFalling == true)
 		tempState = JUMP;
 
-	if (isUntouchable == true)  // Để render Simon nhấp nháy trong trạng thái isUntouchable
+	if (untouchableTimer->IsTimeUp() == false)  // Để render Simon nhấp nháy trong trạng thái isUntouchable
 		alpha = rand() % 255;
-	else if (isInvisibility == true)
+	else if (invisibilityTimer->IsTimeUp() == false)
 	{
-		float ratio = (float)(GetTickCount() - invisibility_start) / SIMON_INVISIBILITY_TIME;
+		float ratio = (float)(GetTickCount() - invisibilityTimer->GetStartTime()) / SIMON_INVISIBILITY_TIME;
 
 		if (ratio < 0.5f)			// nhấp nháy
-			alpha = 50 * (rand() % 2);
+			alpha = 50;
 		else 
 			alpha = (int)(255 * ratio);	// render rõ dần theo thời gian
 	}
@@ -450,7 +463,8 @@ void Simon::SetState(int state)
 		animations[state]->SetAniStartTime(GetTickCount());
 		break;
 	case DEAD:
-		isUntouchable = false;
+		untouchableTimer->Stop();
+		invisibilityTimer->Stop();
 		vx = 0;
 		vy = 0;
 		life -= 1;
@@ -583,7 +597,7 @@ bool Simon::CheckCollisionWithItem(vector<LPGAMEOBJECT> * listItem)
 				isGotCrossItem = true;
 				break;
 			case INVISIBILITY_POTION:
-				StartInvisibility();
+				invisibilityTimer->Start();
 				break;
 			case CHAIN:
 				SetState(POWER); // đổi trạng thái power - biến hình nhấp nháy các kiểu đà điểu
@@ -627,15 +641,18 @@ bool Simon::CheckCollisionWithItem(vector<LPGAMEOBJECT> * listItem)
 	}
 }
 
-void Simon::CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT>* listEnemy)
+void Simon::CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT>* listObjects)
 {
 	float simon_l, simon_t, simon_r, simon_b;
 
 	GetBoundingBox(simon_l, simon_t, simon_r, simon_b);
 
-	for (UINT i = 0; i < listEnemy->size(); i++)
+	for (UINT i = 0; i < listObjects->size(); i++)
 	{
-		LPGAMEOBJECT enemy = listEnemy->at(i);
+		Enemy * enemy = dynamic_cast<Enemy*>(listObjects->at(i));
+
+		if (enemy == NULL)
+			continue;
 
 		// Không cần xét vùng active nữa khi nó đang active / destroyed
 		if (enemy->GetState() == ACTIVE || enemy->GetState() == DESTROYED)

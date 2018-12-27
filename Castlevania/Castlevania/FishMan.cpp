@@ -3,18 +3,22 @@
 #include "Water.h"
 
 
-FishMan::FishMan()
+FishMan::FishMan() : Enemy()
 {
 	AddAnimation(FISHMAN_ACTIVE_ANI);
 	AddAnimation(EFFECT_ANI);
 	AddAnimation(FISHMAN_INACTIVE_ANI);
 	AddAnimation(FISHMAN_JUMP_ANI);
 	AddAnimation(FISHMAN_HIT_ANI);
-}
 
+	lastTimeShoot = 0; 
+	deltaTimeToShoot = 0; 
+	nxAfterShoot = 0;
 
-FishMan::~FishMan()
-{
+	HP = 1;
+	score = 300;
+	attack = 2 + rand() % 3;
+	respawnWaitingTime = 3000;
 }
 
 void FishMan::LoadResources(Textures *& textures, Sprites *& sprites, Animations *& animations)
@@ -55,7 +59,7 @@ void FishMan::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement
 	if (stopMovement == true)
 		return;
 
-	if (state == FISHMAN_HIT && animations[state]->IsOver(1000) == true)
+	if (state == FISHMAN_HIT && animations[state]->IsOver(FISHMAN_HIT_ANI_TIME_DELAY) == true)
 	{
 		nx = nxAfterShoot;
 		SetState(FISHMAN_ACTIVE);
@@ -63,11 +67,9 @@ void FishMan::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement
 	}
 	
 	if (state == FISHMAN_INACTIVE)
-	{
 		return;
-	}
 
-	GameObject::Update(dt);
+	Enemy::Update(dt);
 	vy += FISHMAN_GRAVITY*dt;
 
 	vector<LPCOLLISIONEVENT> coEvents;
@@ -137,7 +139,7 @@ void FishMan::Render()
 
 void FishMan::SetState(int state)
 {
-	GameObject::SetState(state);
+	Enemy::SetState(state);
 
 	switch (state)
 	{
@@ -190,13 +192,11 @@ void FishMan::GetActiveBoundingBox(float & left, float & top, float & right, flo
 	bottom = entryPosition.y;
 }
 
-bool FishMan::IsAbleToActivate()
+void FishMan::LoseHP(int x)
 {
-	DWORD now = GetTickCount();
+	Enemy::LoseHP(x);
 
-	if (isRespawnWaiting == true && now - respawnTime_Start >= FISHMAN_RESPAWN_TIME)
-		return true;
-
-	return false;
+	if (HP == 0)
+		SetState(FISHMAN_DESTROYED);
 }
 
