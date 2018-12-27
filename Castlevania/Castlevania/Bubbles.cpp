@@ -4,7 +4,7 @@
 
 Bubble::Bubble()
 {
-	AddAnimation(BUBBLES_ANI);
+	AddAnimation("bubbles_ani");
 	SetState(BUBBLES);
 }
 
@@ -19,13 +19,13 @@ void Bubble::LoadResources(Textures *& textures, Sprites *& sprites, Animations 
 
 	LPDIRECT3DTEXTURE9 texBubbles = textures->Get(ID_TEX_BUBBLES);
 
-	sprites->Add(160002, 0, 0, 14, 28, texBubbles);
+	sprites->Add("bubbles", 0, 0, 14, 28, texBubbles);
 
 	LPANIMATION ani;
 
 	ani = new Animation(100);
-	ani->Add(160002);
-	animations->Add(BUBBLES_ANI, ani);
+	ani->Add("bubbles");
+	animations->Add("bubbles_ani", ani);
 }
 
 void Bubble::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)

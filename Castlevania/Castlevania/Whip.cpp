@@ -9,9 +9,9 @@
 
 Whip::Whip() : GameObject()
 {
-	AddAnimation(NORMAL_WHIP_ANI);
-	AddAnimation(SHORT_CHAIN_ANI);
-	AddAnimation(LONG_CHAIN_ANI);
+	AddAnimation("normalwhip_ani");
+	AddAnimation("shortchain_ani");
+	AddAnimation("longchain_ani");
 
 	SetState(LONG_CHAIN);
 }
@@ -22,55 +22,55 @@ void Whip::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &an
 
 	LPDIRECT3DTEXTURE9 texWhip = textures->Get(ID_TEX_WHIP);
 
-	sprites->Add(20001, 0, 0, 240, 66, texWhip); // normal whip
-	sprites->Add(20002, 240, 0, 480, 66, texWhip);
-	sprites->Add(20003, 480, 0, 720, 66, texWhip);
+	sprites->Add("normalwhip_1", 0, 0, 240, 66, texWhip); // normal whip
+	sprites->Add("normalwhip_2", 240, 0, 480, 66, texWhip);
+	sprites->Add("normalwhip_3", 480, 0, 720, 66, texWhip);
 
-	sprites->Add(20011, 0, 66, 240, 132, texWhip); // short chain
-	sprites->Add(20012, 240, 66, 480, 132, texWhip);
-	sprites->Add(20013, 480, 66, 720, 132, texWhip);
+	sprites->Add("shortchain_1", 0, 66, 240, 132, texWhip); // short chain
+	sprites->Add("shortchain_2", 240, 66, 480, 132, texWhip);
+	sprites->Add("shortchain_3", 480, 66, 720, 132, texWhip);
 
-	sprites->Add(20021, 0, 132, 240, 198, texWhip); // long chain
-	sprites->Add(20022, 240, 132, 480, 198, texWhip);
-	sprites->Add(20023, 480, 132, 720, 198, texWhip);
-	sprites->Add(20024, 0, 198, 240, 264, texWhip);
-	sprites->Add(20025, 240, 198, 480, 264, texWhip);
-	sprites->Add(20026, 480, 198, 720, 264, texWhip);
-	sprites->Add(20027, 0, 264, 240, 330, texWhip);
-	sprites->Add(20028, 240, 264, 480, 330, texWhip);
-	sprites->Add(20029, 480, 264, 720, 330, texWhip);
-	sprites->Add(20030, 0, 330, 240, 396, texWhip);
-	sprites->Add(20031, 240, 330, 480, 396, texWhip);
-	sprites->Add(20032, 480, 330, 720, 396, texWhip);
+	sprites->Add("longchain_1", 0, 132, 240, 198, texWhip); // long chain
+	sprites->Add("longchain_2", 240, 132, 480, 198, texWhip);
+	sprites->Add("longchain_3", 480, 132, 720, 198, texWhip);
+	sprites->Add("longchain_4", 0, 198, 240, 264, texWhip);
+	sprites->Add("longchain_5", 240, 198, 480, 264, texWhip);
+	sprites->Add("longchain_6", 480, 198, 720, 264, texWhip);
+	sprites->Add("longchain_7", 0, 264, 240, 330, texWhip);
+	sprites->Add("longchain_8", 240, 264, 480, 330, texWhip);
+	sprites->Add("longchain_9", 480, 264, 720, 330, texWhip);
+	sprites->Add("longchain_10", 0, 330, 240, 396, texWhip);
+	sprites->Add("longchain_11", 240, 330, 480, 396, texWhip);
+	sprites->Add("longchain_12", 480, 330, 720, 396, texWhip);
 
 	LPANIMATION ani;
 
 	ani = new Animation();
-	ani->Add(20001);
-	ani->Add(20002);
-	ani->Add(20003);
-	animations->Add(NORMAL_WHIP_ANI, ani);
+	ani->Add("normalwhip_1");
+	ani->Add("normalwhip_2");
+	ani->Add("normalwhip_3");
+	animations->Add("normalwhip_ani", ani);
 
 	ani = new Animation();
-	ani->Add(20011);
-	ani->Add(20012);
-	ani->Add(20013);
-	animations->Add(SHORT_CHAIN_ANI, ani);
+	ani->Add("shortchain_1");
+	ani->Add("shortchain_2");
+	ani->Add("shortchain_3");
+	animations->Add("shortchain_ani", ani);
 
 	ani = new Animation(25);
-	ani->Add(20021);
-	ani->Add(20022);
-	ani->Add(20023);
-	ani->Add(20024);
-	ani->Add(20025);
-	ani->Add(20026);
-	ani->Add(20027);
-	ani->Add(20028);
-	ani->Add(20029);
-	ani->Add(20030);
-	ani->Add(20031);
-	ani->Add(20032);
-	animations->Add(LONG_CHAIN_ANI, ani);
+	ani->Add("longchain_1");
+	ani->Add("longchain_2");
+	ani->Add("longchain_3");
+	ani->Add("longchain_4");
+	ani->Add("longchain_5");
+	ani->Add("longchain_6");
+	ani->Add("longchain_7");
+	ani->Add("longchain_8");
+	ani->Add("longchain_9");
+	ani->Add("longchain_10");
+	ani->Add("longchain_11");
+	ani->Add("longchain_12");
+	animations->Add("longchain_ani", ani);
 }
 
 void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)

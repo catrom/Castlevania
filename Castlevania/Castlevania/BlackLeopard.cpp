@@ -2,11 +2,11 @@
 
 BlackLeopard::BlackLeopard() : Enemy()
 {
-	AddAnimation(BLACK_LEOPARD_ACTIVE_ANI);
-	AddAnimation(EFFECT_ANI);
-	AddAnimation(BLACK_LEOPARD_INACTIVE_ANI);
-	AddAnimation(BLACK_LEOPARD_IDLE_ANI);
-	AddAnimation(BLACK_LEOPARD_JUMP_ANI);
+	AddAnimation("leopard_run_ani");
+	AddAnimation("effect1_ani");
+	AddAnimation("");
+	AddAnimation("leopard_idle_ani");
+	AddAnimation("leopard_jump_ani");
 
 	isJumping = false;
 	HP = 1;
@@ -21,27 +21,31 @@ void BlackLeopard::LoadResources(Textures *& textures, Sprites *& sprites, Anima
 
 	LPDIRECT3DTEXTURE9 texLeopard = textures->Get(ID_TEX_BLACK_LEOPARD);
 
-	sprites->Add(130001, 0, 0, 64, 32, texLeopard);
-	sprites->Add(130002, 64, 0, 128, 32, texLeopard);
-	sprites->Add(130003, 128, 0, 192, 32, texLeopard);
-	sprites->Add(130004, 192, 0, 256, 32, texLeopard);
+	sprites->Add("leopard_idle", 0, 0, 64, 32, texLeopard);
+
+	sprites->Add("leopard_run_1", 64, 0, 128, 32, texLeopard);
+	sprites->Add("leopard_run_2", 128, 0, 192, 32, texLeopard);
+	sprites->Add("leopard_run_3", 192, 0, 256, 32, texLeopard);
+	sprites->Add("leopard_run_4", 128, 0, 192, 32, texLeopard);
+	
+	sprites->Add("leopard_jump", 192, 0, 256, 32, texLeopard);
 
 	LPANIMATION ani;
 
 	ani = new Animation(200);
-	ani->Add(130002);
-	ani->Add(130003);
-	ani->Add(130004);
-	ani->Add(130003);
-	animations->Add(BLACK_LEOPARD_ACTIVE_ANI, ani);
+	ani->Add("leopard_run_1");
+	ani->Add("leopard_run_2");
+	ani->Add("leopard_run_3");
+	ani->Add("leopard_run_4");
+	animations->Add("leopard_run_ani", ani);
 
 	ani = new Animation(200);
-	ani->Add(130001);
-	animations->Add(BLACK_LEOPARD_IDLE_ANI, ani);
+	ani->Add("leopard_idle");
+	animations->Add("leopard_idle_ani", ani);
 
 	ani = new Animation(200);
-	ani->Add(130004);
-	animations->Add(BLACK_LEOPARD_JUMP_ANI, ani);
+	ani->Add("leopard_jump");
+	animations->Add("leopard_jump_ani", ani);
 }
 
 void BlackLeopard::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)

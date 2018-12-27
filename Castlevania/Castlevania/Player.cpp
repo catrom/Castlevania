@@ -26,29 +26,29 @@ void Player::Init()
 
 	for (int i = 0; i < 16; i++)
 	{
-		Sprite * player = new Sprite(100, 0, 0, 8, 15, texHP);
+		Sprite * player = new Sprite("HP_player", 0, 0, 8, 15, texHP);
 		playerHP.push_back(player);
 
-		Sprite * lose = new Sprite(101, 8, 0, 16, 15, texHP);
+		Sprite * lose = new Sprite("HP_lose", 8, 0, 16, 15, texHP);
 		loseHP.push_back(lose);
 
-		Sprite * enemy = new Sprite(102, 16, 0, 24, 15, texHP);
+		Sprite * enemy = new Sprite("HP_enemy", 16, 0, 24, 15, texHP);
 		enemyHP.push_back(enemy);
 	}
 
 	// Khởi tạo list subweapon để render trong subweaponbox
-	subWeaponBox = new Sprite(110, 0, 0, 95, 40, texRect);
+	subWeaponBox = new Sprite("rect", 0, 0, 95, 40, texRect);
 
 	Sprites * sprites = Sprites::GetInstance();
-	subWeaponList.push_back(sprites->Get(80001)); // ID bên class Items
-	subWeaponList.push_back(sprites->Get(80002));
-	subWeaponList.push_back(sprites->Get(80003));
-	subWeaponList.push_back(sprites->Get(80004));
-	subWeaponList.push_back(sprites->Get(80005));
+	subWeaponList.push_back(sprites->Get("item_stopwatch"));
+	subWeaponList.push_back(sprites->Get("item_dagger"));
+	subWeaponList.push_back(sprites->Get("item_axe"));
+	subWeaponList.push_back(sprites->Get("item_holywater"));
+	subWeaponList.push_back(sprites->Get("item_boomerang"));
 
 	// Khởi tạo list item (double shot, triple shot)
-	itemList.push_back(sprites->Get(80014));
-	itemList.push_back(sprites->Get(80015));
+	itemList.push_back(sprites->Get("item_doubleshot"));
+	itemList.push_back(sprites->Get("item_tripleshot"));
 
 	// Font
 	font = NULL;

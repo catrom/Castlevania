@@ -69,6 +69,7 @@
 #define ID_TEX_WEAPONS_HOLY_WATER	24
 #define ID_TEX_WEAPONS_BOOMERANG	25
 #define ID_TEX_WEAPONS_DAGGER			37
+#define ID_TEX_WEAPONS_STOP_WATCH			39
 
 
 
@@ -123,6 +124,7 @@
 #define FILEPATH_TEX_WEAPONS_HOLY_WATER			L"Textures\\SubWeapons\\HolyWater.png"
 #define FILEPATH_TEX_WEAPONS_BOOMERANG			L"Textures\\SubWeapons\\Boomerang.png"
 #define FILEPATH_TEX_WEAPONS_DAGGER				L"Textures\\SubWeapons\\Dagger.png"
+#define FILEPATH_TEX_WEAPONS_STOP_WATCH			L"Textures\\SubWeapons\\StopWatch.png"
 
 // Scenes
 #define FILEPATH_TEX_MAP_SCENE_1		L"Scenes\\Scene1.png"

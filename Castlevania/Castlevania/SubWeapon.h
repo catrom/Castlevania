@@ -11,7 +11,7 @@ class SubWeapon  : public GameObject
 	int holyWaterShatteredCounter = 0;
 
 	vector<vector<float>> sparkCoord; // vector lưu toạ độ để render spark khi subweapon trúng mục tiêu
-	Animation * spark = Animations::GetInstance()->Get(SPARK_ANI);
+	Animation * spark = Animations::GetInstance()->Get("spark_ani");
 	int startTimeRenderSpark = 0;
 
 public:

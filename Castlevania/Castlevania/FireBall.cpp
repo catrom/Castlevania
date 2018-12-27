@@ -4,7 +4,7 @@
 
 FireBall::FireBall()
 {
-	AddAnimation(FIREBALL_ANI);
+	AddAnimation("fireball_ani");
 	SetState(FIREBALL);
 }
 
@@ -19,14 +19,14 @@ void FireBall::LoadResources(Textures *& textures, Sprites *& sprites, Animation
 
 	LPDIRECT3DTEXTURE9 texFireball = textures->Get(ID_TEX_FIREBALL);
 
-	sprites->Add(160001, 0, 0, 14, 12, texFireball);
+	sprites->Add("fireball", 0, 0, 14, 12, texFireball);
 	
 
 	LPANIMATION ani;
 
 	ani = new Animation(100);
-	ani->Add(160001);
-	animations->Add(FIREBALL_ANI, ani);
+	ani->Add("fireball");
+	animations->Add("fireball_ani", ani);
 }
 
 void FireBall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)

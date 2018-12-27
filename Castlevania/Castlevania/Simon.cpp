@@ -13,23 +13,26 @@
 #include "ChangeSceneObject.h"
 #include "Water.h"
 
+#include <fstream>
+#include <string>
+
 Simon::Simon() : GameObject()
 {
 	SetState(STAND);
 
-	AddAnimation(STAND_ANI);
-	AddAnimation(WALK_ANI);
-	AddAnimation(SIT_ANI);
-	AddAnimation(JUMP_ANI);
-	AddAnimation(HIT_SIT_ANI);
-	AddAnimation(HIT_STAND_ANI);
-	AddAnimation(POWER_ANI);
-	AddAnimation(STAIR_UP_ANI);
-	AddAnimation(STAIR_DOWN_ANI);
-	AddAnimation(HIT_STAIR_UP_ANI);
-	AddAnimation(HIT_STAIR_DOWN_ANI);
-	AddAnimation(DEFLECT_ANI);
-	AddAnimation(DEAD_ANI);
+	AddAnimation("simon_stand_ani");
+	AddAnimation("simon_walk_ani");
+	AddAnimation("simon_sit_ani");
+	AddAnimation("simon_jump_ani");
+	AddAnimation("simon_hitsit_ani");
+	AddAnimation("simon_hitstand_ani");
+	AddAnimation("simon_powerup_ani");
+	AddAnimation("simon_stairup_ani");
+	AddAnimation("simon_stairdown_ani");
+	AddAnimation("simon_hitstairup_ani");
+	AddAnimation("simon_hitstairdown_ani");
+	AddAnimation("simon_deflect_ani");
+	AddAnimation("simon_dead_ani");
 
 	score = 0;
 	item = -1;
@@ -45,122 +48,125 @@ Simon::~Simon()
 
 void Simon::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &animations)
 {
-	textures->Add(ID_TEX_SIMON, FILEPATH_TEX_SIMON, D3DCOLOR_XRGB(255, 255, 255));
+	textures->Add(ID_TEX_SIMON, FILEPATH_TEX_SIMON);
 
 	LPDIRECT3DTEXTURE9 texSimon = textures->Get(ID_TEX_SIMON);
 
-	sprites->Add(10001, 0, 0, 60, 64, texSimon);		// stand
-
-	sprites->Add(10011, 0, 0, 60, 64, texSimon);		// walk
-	sprites->Add(10012, 60, 0, 120, 64, texSimon);
-	sprites->Add(10013, 120, 0, 180, 64, texSimon);
-	sprites->Add(10014, 180, 0, 240, 64, texSimon);
-
-	sprites->Add(10021, 300, 198, 360, 262, texSimon);	// sit
-
-	sprites->Add(10031, 240, 0, 300, 64, texSimon);		// jump
-
-	sprites->Add(10041, 420, 66, 480, 130, texSimon);	// hit_sit
-	sprites->Add(10042, 0, 132, 60, 196, texSimon);
-	sprites->Add(10043, 60, 132, 120, 196, texSimon);
-
-	sprites->Add(10051, 300, 0, 360, 64, texSimon);		// hit_stand
-	sprites->Add(10052, 360, 0, 420, 64, texSimon);
-	sprites->Add(10053, 420, 0, 480, 64, texSimon);
-
-	sprites->Add(10061, 120, 198, 180, 262, texSimon);	// power up
-	sprites->Add(10062, 60, 198, 120, 262, texSimon);
-	sprites->Add(10063, 0, 198, 60, 262, texSimon);
-
-	sprites->Add(10071, 240, 66, 300, 130, texSimon);	// stair up
-	sprites->Add(10072, 300, 66, 360, 130, texSimon);
-
-	sprites->Add(10081, 120, 66, 180, 130, texSimon);	// stair down
-	sprites->Add(10082, 180, 66, 240, 130, texSimon);
-
-	sprites->Add(10091, 300, 132, 360, 196, texSimon);	// hit - stair up
-	sprites->Add(10092, 360, 132, 420, 196, texSimon);
-	sprites->Add(10093, 420, 132, 480, 196, texSimon);
-
-	sprites->Add(10101, 120, 132, 180, 196, texSimon);	// hit - stair down
-	sprites->Add(10102, 180, 132, 240, 196, texSimon);
-	sprites->Add(10103, 240, 132, 300, 196, texSimon);
-
-	sprites->Add(10111, 0, 66, 60, 130, texSimon);		// deflect - when collide with enemy
-
-	sprites->Add(10121, 240, 198, 300, 264, texSimon);	// dead
+	
 
 
-	LPANIMATION ani;
+	////sprites->Add("simon_stand", 0, 0, 60, 64, texSimon);		// stand
 
-	ani = new Animation();
-	ani->Add(10001);
-	animations->Add(STAND_ANI, ani);
+	////sprites->Add("simon_walk_1", 0, 0, 60, 64, texSimon);		// walk
+	////sprites->Add("simon_walk_2", 60, 0, 120, 64, texSimon);
+	////sprites->Add("simon_walk_3", 120, 0, 180, 64, texSimon);
+	////sprites->Add("simon_walk_4", 180, 0, 240, 64, texSimon);
 
-	ani = new Animation();
-	ani->Add(10011);
-	ani->Add(10012);
-	ani->Add(10013);
-	ani->Add(10014);
-	animations->Add(WALK_ANI, ani);
+	//sprites->Add("simon_sit", 300, 198, 360, 262, texSimon);	// sit
 
-	ani = new Animation();
-	ani->Add(10021);
-	animations->Add(SIT_ANI, ani);
+	//sprites->Add("simon_jump", 240, 0, 300, 64, texSimon);		// jump
 
-	ani = new Animation();
-	ani->Add(10031);
-	animations->Add(JUMP_ANI, ani);
+	//sprites->Add("simon_hitsit_1", 420, 66, 480, 130, texSimon);	// hit_sit
+	//sprites->Add("simon_hitsit_2", 0, 132, 60, 196, texSimon);
+	//sprites->Add("simon_hitsit_3", 60, 132, 120, 196, texSimon);
 
-	ani = new Animation();
-	ani->Add(10041);
-	ani->Add(10042);
-	ani->Add(10043);
-	animations->Add(HIT_SIT_ANI, ani);
+	//sprites->Add("simon_hitstand_1", 300, 0, 360, 64, texSimon);		// hit_stand
+	//sprites->Add("simon_hitstand_2", 360, 0, 420, 64, texSimon);
+	//sprites->Add("simon_hitstand_3", 420, 0, 480, 64, texSimon);
 
-	ani = new Animation();
-	ani->Add(10051);
-	ani->Add(10052);
-	ani->Add(10053);
-	animations->Add(HIT_STAND_ANI, ani);
+	//sprites->Add("simon_powerup_1", 120, 198, 180, 262, texSimon);	// power up
+	//sprites->Add("simon_powerup_2", 60, 198, 120, 262, texSimon);
+	//sprites->Add("simon_powerup_3", 0, 198, 60, 262, texSimon);
 
-	ani = new Animation(50);
-	ani->Add(10061);
-	ani->Add(10062);
-	ani->Add(10063);
-	animations->Add(POWER_ANI, ani);
+	//sprites->Add("simon_stairup_1", 240, 66, 300, 130, texSimon);	// stair up
+	//sprites->Add("simon_stairup_2", 300, 66, 360, 130, texSimon);
 
-	ani = new Animation();
-	ani->Add(10071);
-	ani->Add(10072);
-	animations->Add(STAIR_UP_ANI, ani);
+	//sprites->Add("simon_stairdown_1", 120, 66, 180, 130, texSimon);	// stair down
+	//sprites->Add("simon_stairdown_2", 180, 66, 240, 130, texSimon);
 
-	ani = new Animation();
-	ani->Add(10081);
-	ani->Add(10082);
-	animations->Add(STAIR_DOWN_ANI, ani);
+	//sprites->Add("simon_hitstairup_1", 300, 132, 360, 196, texSimon);	// hit - stair up
+	//sprites->Add("simon_hitstairup_2", 360, 132, 420, 196, texSimon);
+	//sprites->Add("simon_hitstairup_3", 420, 132, 480, 196, texSimon);
 
-	ani = new Animation();
-	ani->Add(10091);
-	ani->Add(10092);
-	ani->Add(10093);
-	animations->Add(HIT_STAIR_UP_ANI, ani);
+	//sprites->Add("simon_hitstairdown_1", 120, 132, 180, 196, texSimon);	// hit - stair down
+	//sprites->Add("simon_hitstairdown_2", 180, 132, 240, 196, texSimon);
+	//sprites->Add("simon_hitstairdown_3", 240, 132, 300, 196, texSimon);
 
-	ani = new Animation();
-	ani->Add(10101);
-	ani->Add(10102);
-	ani->Add(10103);
-	animations->Add(HIT_STAIR_DOWN_ANI, ani);
+	//sprites->Add("simon_deflect", 0, 66, 60, 130, texSimon);		// deflect - when collide with enemy
 
-	ani = new Animation();
-	ani->Add(10001);
-	ani->Add(10111, 400);
-	ani->Add(10021);
-	animations->Add(DEFLECT_ANI, ani);
+	//sprites->Add("simon_dead", 240, 198, 300, 264, texSimon);	// dead
 
-	ani = new Animation();
-	ani->Add(10121);
-	animations->Add(DEAD_ANI, ani);
+
+	//LPANIMATION ani;
+
+	//ani = new Animation();
+	//ani->Add("simon_stand");
+	//animations->Add("simon_stand_ani", ani);
+
+	//ani = new Animation();
+	//ani->Add("simon_walk_1");
+	//ani->Add("simon_walk_2");
+	//ani->Add("simon_walk_3");
+	//ani->Add("simon_walk_4");
+	//animations->Add("simon_walk_ani", ani);
+
+	//ani = new Animation();
+	//ani->Add("simon_sit");
+	//animations->Add("simon_sit_ani", ani);
+
+	//ani = new Animation();
+	//ani->Add("simon_jump");
+	//animations->Add("simon_jump_ani", ani);
+
+	//ani = new Animation();
+	//ani->Add("simon_hitsit_1");
+	//ani->Add("simon_hitsit_2");
+	//ani->Add("simon_hitsit_3");
+	//animations->Add("simon_hitsit_ani", ani);
+
+	//ani = new Animation();
+	//ani->Add("simon_hitstand_1");
+	//ani->Add("simon_hitstand_2");
+	//ani->Add("simon_hitstand_3");
+	//animations->Add("simon_hitstand_ani", ani);
+
+	//ani = new Animation(50);
+	//ani->Add("simon_powerup_1");
+	//ani->Add("simon_powerup_2");
+	//ani->Add("simon_powerup_3");
+	//animations->Add("simon_powerup_ani", ani);
+
+	//ani = new Animation();
+	//ani->Add("simon_stairup_1");
+	//ani->Add("simon_stairup_2");
+	//animations->Add("simon_stairup_ani", ani);
+
+	//ani = new Animation();
+	//ani->Add("simon_stairdown_1");
+	//ani->Add("simon_stairdown_2");
+	//animations->Add("simon_stairdown_ani", ani);
+
+	//ani = new Animation();
+	//ani->Add("simon_hitstairup_1");
+	//ani->Add("simon_hitstairup_2");
+	//ani->Add("simon_hitstairup_3");
+	//animations->Add("simon_hitstairup_ani", ani);
+
+	//ani = new Animation();
+	//ani->Add("simon_hitstairdown_1");
+	//ani->Add("simon_hitstairdown_2");
+	//ani->Add("simon_hitstairdown_3");
+	//animations->Add("simon_hitstairdown_ani", ani);
+
+	//ani = new Animation();
+	//ani->Add("simon_stand");
+	//ani->Add("simon_deflect", 400);
+	//ani->Add("simon_sit");
+	//animations->Add("simon_deflect_ani", ani);
+
+	//ani = new Animation();
+	//ani->Add("simon_dead");
+	//animations->Add("simon_dead_ani", ani);
 }
 
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)

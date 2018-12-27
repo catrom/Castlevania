@@ -4,8 +4,8 @@
 
 Zombie::Zombie() : Enemy()
 {
-	AddAnimation(ZOMBIE_ANI);
-	AddAnimation(EFFECT_ANI);
+	AddAnimation("zombie_walk_ani");
+	AddAnimation("effect1_ani");
 
 	HP = 1;
 	score = 100;
@@ -19,15 +19,15 @@ void Zombie::LoadResources(Textures *& textures, Sprites *& sprites, Animations 
 
 	LPDIRECT3DTEXTURE9 texZombie = textures->Get(ID_TEX_ZOMBIE);
 
-	sprites->Add(120001, 0, 0, 32, 64, texZombie);
-	sprites->Add(120002, 32, 0, 64, 64, texZombie);
+	sprites->Add("zombie_walk_1", 0, 0, 32, 64, texZombie);
+	sprites->Add("zombie_walk_2", 32, 0, 64, 64, texZombie);
 
 	LPANIMATION ani;
 
 	ani = new Animation(150);
-	ani->Add(120001);
-	ani->Add(120002);
-	animations->Add(ZOMBIE_ANI, ani);
+	ani->Add("zombie_walk_1");
+	ani->Add("zombie_walk_2");
+	animations->Add("zombie_walk_ani", ani);
 }
 
 void Zombie::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)

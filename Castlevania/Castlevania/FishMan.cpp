@@ -5,11 +5,11 @@
 
 FishMan::FishMan() : Enemy()
 {
-	AddAnimation(FISHMAN_ACTIVE_ANI);
-	AddAnimation(EFFECT_ANI);
-	AddAnimation(FISHMAN_INACTIVE_ANI);
-	AddAnimation(FISHMAN_JUMP_ANI);
-	AddAnimation(FISHMAN_HIT_ANI);
+	AddAnimation("fishman_walk_ani");
+	AddAnimation("effect1_ani");
+	AddAnimation("");
+	AddAnimation("fishman_jump_ani");
+	AddAnimation("fishman_hit_ani");
 
 	lastTimeShoot = 0; 
 	deltaTimeToShoot = 0; 
@@ -27,24 +27,27 @@ void FishMan::LoadResources(Textures *& textures, Sprites *& sprites, Animations
 
 	LPDIRECT3DTEXTURE9 texFishman = textures->Get(ID_TEX_FISHMAN);
 
-	sprites->Add(150001, 0, 0, 32, 64, texFishman);
-	sprites->Add(150002, 32, 0, 64, 64, texFishman);
-	sprites->Add(150003, 64, 0, 96, 64, texFishman);
+	sprites->Add("fishman_hit", 0, 0, 32, 64, texFishman);
+
+	sprites->Add("fishman_walk_1", 32, 0, 64, 64, texFishman);
+	sprites->Add("fishman_walk_2", 64, 0, 96, 64, texFishman);
+
+	sprites->Add("fishman_jump", 64, 0, 96, 64, texFishman);
 
 	LPANIMATION ani;
 
 	ani = new Animation(200);
-	ani->Add(150002);
-	ani->Add(150003);
-	animations->Add(FISHMAN_ACTIVE_ANI, ani);
+	ani->Add("fishman_walk_1");
+	ani->Add("fishman_walk_2");
+	animations->Add("fishman_walk_ani", ani);
 
 	ani = new Animation(1000);
-	ani->Add(150001);
-	animations->Add(FISHMAN_HIT_ANI, ani);
+	ani->Add("fishman_hit");
+	animations->Add("fishman_hit_ani", ani);
 
 	ani = new Animation();
-	ani->Add(150003);
-	animations->Add(FISHMAN_JUMP_ANI, ani);
+	ani->Add("fishman_jump");
+	animations->Add("fishman_jump_ani", ani);
 }
 
 void FishMan::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)

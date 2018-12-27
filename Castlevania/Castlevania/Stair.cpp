@@ -4,8 +4,8 @@
 
 Stair::Stair()
 {
-	AddAnimation(STAIR_LEFT_UP_ANI);
-	AddAnimation(STAIR_RIGHT_DOWN_ANI);
+	AddAnimation("stair_leftup_ani");
+	AddAnimation("stair_rightdown_ani");
 }
 
 
@@ -19,18 +19,18 @@ void Stair::LoadResources(Textures *& textures, Sprites *& sprites, Animations *
 
 	LPDIRECT3DTEXTURE9 texStair = textures->Get(ID_TEX_STAIR);
 
-	sprites->Add(100001, 0, 0, 32, 32, texStair);
-	sprites->Add(100002, 32, 0, 64, 32, texStair);
+	sprites->Add("stair_leftup", 0, 0, 32, 32, texStair);
+	sprites->Add("stair_rightdown", 32, 0, 64, 32, texStair);
 
 	LPANIMATION ani;
 
 	ani = new Animation();
-	ani->Add(100001);
-	animations->Add(STAIR_LEFT_UP_ANI, ani);
+	ani->Add("stair_leftup");
+	animations->Add("stair_leftup_ani", ani);
 
 	ani = new Animation();
-	ani->Add(100002);
-	animations->Add(STAIR_RIGHT_DOWN_ANI, ani);
+	ani->Add("stair_rightdown");
+	animations->Add("stair_rightdown_ani", ani);
 }
 
 void Stair::Render()

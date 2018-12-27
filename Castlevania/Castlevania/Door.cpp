@@ -4,9 +4,9 @@
 
 Door::Door() : GameObject()
 {
-	AddAnimation(DOOR_1_ANI);
-	AddAnimation(DOOR_2_IDLE_ANI);
-	AddAnimation(DOOR_2_OPEN_ANI);
+	AddAnimation("door1_ani");
+	AddAnimation("door2_idle_ani");
+	AddAnimation("door2_open_ani");
 }
 
 
@@ -21,33 +21,36 @@ void Door::LoadResources(Textures *& textures, Sprites *& sprites, Animations *&
 
 	LPDIRECT3DTEXTURE9 texDoor = textures->Get(ID_TEX_DOOR);
 
-	sprites->Add(110001, 0, 0, 96, 288, texDoor);
+	sprites->Add("door1", 0, 0, 96, 288, texDoor);
 
 	LPANIMATION ani;
 
 	ani = new Animation();
-	ani->Add(110001);
-	animations->Add(DOOR_1_ANI, ani);
+	ani->Add("door1");
+	animations->Add("door1_ani", ani);
 
 
 	LPDIRECT3DTEXTURE9 texGate = textures->Get(ID_TEX_GATE);
 
-	sprites->Add(110011, 0, 0, 48, 96, texGate);
-	sprites->Add(110012, 48, 0, 96, 96, texGate);
-	sprites->Add(110013, 96, 0, 144, 96, texGate);
-	sprites->Add(110014, 144, 0, 192, 96, texGate);
+	sprites->Add("door2_idle", 0, 0, 48, 96, texGate);
+
+	sprites->Add("door2_open_1", 0, 0, 48, 96, texGate);
+	sprites->Add("door2_open_2", 48, 0, 96, 96, texGate);
+	sprites->Add("door2_open_3", 96, 0, 144, 96, texGate);
+	sprites->Add("door2_open_4", 144, 0, 192, 96, texGate);
+	sprites->Add("door2_open_5", 0, 0, 48, 96, texGate);
 
 	ani = new Animation(700);
-	ani->Add(110011);
-	animations->Add(DOOR_2_IDLE_ANI, ani);
+	ani->Add("door2_idle");
+	animations->Add("door2_idle_ani", ani);
 
 	ani = new Animation(700);
-	ani->Add(110011);
-	ani->Add(110012);
-	ani->Add(110013, 2000);
-	ani->Add(110014);
-	ani->Add(110011, 1000);
-	animations->Add(DOOR_2_OPEN_ANI, ani);
+	ani->Add("door2_open_1");
+	ani->Add("door2_open_2");
+	ani->Add("door2_open_3", 2000);
+	ani->Add("door2_open_4");
+	ani->Add("door2_open_5", 1000);
+	animations->Add("door2_open_ani", ani);
 
 }
 

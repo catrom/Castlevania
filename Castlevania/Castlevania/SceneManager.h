@@ -76,6 +76,7 @@ public:
 	bool isGameReset = false;
 
 	void Init(int idScene);						// init simon position, camera position, grid..
+	void LoadSprites(int id, LPCWSTR tex, LPCWSTR sprite_data, LPCWSTR animation_data);
 	void LoadResources();						// load all sprites, textures and tilemaps
 	void LoadObjectsFromFile(LPCWSTR FilePath);	// load all objects (position, state, isEnable) from file 
 

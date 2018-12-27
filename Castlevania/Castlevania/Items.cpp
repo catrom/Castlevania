@@ -3,28 +3,27 @@
 
 Items::Items() : GameObject()
 {
-	vy = ITEM_FALLING_SPEED;
-
-	AddAnimation(STOP_WATCH_ANI);
-	AddAnimation(DAGGER_ANI);
-	AddAnimation(AXE_ANI);
-	AddAnimation(HOLY_WATER_ANI);
-	AddAnimation(BOOMERANG_ANI);
-	AddAnimation(SMALL_HEART_ANI);
-	AddAnimation(LARGE_HEART_ANI);
-	AddAnimation(CROSS_ANI);
-	AddAnimation(INVISIBILITY_POTION_ANI);
-	AddAnimation(CHAIN_ANI);
-	AddAnimation(MONEY_BAG_RED_ANI);
-	AddAnimation(MONEY_BAG_BLUE_ANI);
-	AddAnimation(MONEY_BAG_WHITE_ANI);
-	AddAnimation(MONEY_BAG_FLASHING_ANI);
-	AddAnimation(DOUBLE_SHOT_ANI);
-	AddAnimation(TRIPLE_SHOT_ANI);
-	AddAnimation(PORK_CHOP_ANI);
-	AddAnimation(MAGIC_CRYSTAL_ANI);
+	AddAnimation("item_stopwatch_ani");
+	AddAnimation("item_dagger_ani");
+	AddAnimation("item_axe_ani");
+	AddAnimation("item_holywater_ani");
+	AddAnimation("item_boomerang_ani");
+	AddAnimation("item_smallheart_ani");
+	AddAnimation("item_largeheart_ani");
+	AddAnimation("item_cross_ani");
+	AddAnimation("item_invisibilitypostion_ani");
+	AddAnimation("item_chain_ani");
+	AddAnimation("item_redmoneybag_ani");
+	AddAnimation("item_bluemoneybag_ani");
+	AddAnimation("item_whitemoneybag_ani");
+	AddAnimation("item_flashingmoneybag_ani");
+	AddAnimation("item_doubleshot_ani");
+	AddAnimation("item_tripleshot_ani");
+	AddAnimation("item_porkchop_ani");
+	AddAnimation("item_magiccrystal_ani");
 
 	timeAppear = -1;
+	vy = ITEM_FALLING_SPEED;
 }
 
 void Items::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &animations)
@@ -48,131 +47,131 @@ void Items::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &a
 	LPDIRECT3DTEXTURE9 tex;
 
 	tex = textures->Get(ID_TEX_ITEM_STOP_WATCH);
-	sprites->Add(80001, 0, 0, 26, 28, tex);
+	sprites->Add("item_stopwatch", 0, 0, 26, 28, tex);
 
 	tex = textures->Get(ID_TEX_ITEM_DAGGER);
-	sprites->Add(80002, 0, 0, 32, 18, tex);
+	sprites->Add("item_dagger", 0, 0, 32, 18, tex);
 
 	tex = textures->Get(ID_TEX_ITEM_AXE);
-	sprites->Add(80003, 0, 0, 30, 28, tex);
+	sprites->Add("item_axe", 0, 0, 30, 28, tex);
 
 	tex = textures->Get(ID_TEX_ITEM_HOLY_WATER);
-	sprites->Add(80004, 0, 0, 28, 28, tex);
+	sprites->Add("item_holywater", 0, 0, 28, 28, tex);
 
 	tex = textures->Get(ID_TEX_ITEM_BOOMERANG);
-	sprites->Add(80005, 0, 0, 30, 28, tex);
+	sprites->Add("item_boomerang", 0, 0, 30, 28, tex);
 
 	tex = textures->Get(ID_TEX_ITEM_SMALL_HEART);
-	sprites->Add(80006, 0, 0, 16, 16, tex);
+	sprites->Add("item_smallheart", 0, 0, 16, 16, tex);
 
 	tex = textures->Get(ID_TEX_ITEM_LARGE_HEART);
-	sprites->Add(80007, 0, 0, 24, 20, tex);
+	sprites->Add("item_largeheart", 0, 0, 24, 20, tex);
 
 	tex = textures->Get(ID_TEX_ITEM_CROSS);
-	sprites->Add(80008, 0, 0, 32, 32, tex);
+	sprites->Add("item_cross", 0, 0, 32, 32, tex);
 
 	tex = textures->Get(ID_TEX_ITEM_INVISIBILITY_POTION);
-	sprites->Add(80009, 0, 0, 29, 36, tex);
+	sprites->Add("item_invisibilitypostion", 0, 0, 29, 36, tex);
 
 	tex = textures->Get(ID_TEX_ITEM_CHAIN);
-	sprites->Add(80010, 0, 0, 32, 32, tex);
+	sprites->Add("item_chain", 0, 0, 32, 32, tex);
 
 	tex = textures->Get(ID_TEX_ITEM_MONEY_BAG);
-	sprites->Add(80011, 0, 0, 30, 30, tex); //	red -- 100 point
-	sprites->Add(80012, 60, 0, 90, 30, tex); //	blue -- 400 
-	sprites->Add(80013, 30, 0, 60, 30, tex); //	white -- 700
+	sprites->Add("item_redmoneybag", 0, 0, 30, 30, tex); //	red -- 100 point
+	sprites->Add("item_bluemoneybag", 60, 0, 90, 30, tex); //	blue -- 400 
+	sprites->Add("item_whitemoneybag", 30, 0, 60, 30, tex); //	white -- 700
 
 	tex = textures->Get(ID_TEX_ITEM_DOUBLE_SHOT);
-	sprites->Add(80014, 0, 0, 28, 28, tex);
+	sprites->Add("item_doubleshot", 0, 0, 28, 28, tex);
 
 	tex = textures->Get(ID_TEX_ITEM_TRIPLE_SHOT);
-	sprites->Add(80015, 0, 0, 28, 28, tex);
+	sprites->Add("item_tripleshot", 0, 0, 28, 28, tex);
 
 	tex = textures->Get(ID_TEX_ITEM_PORK_CHOP);
-	sprites->Add(80016, 0, 0, 32, 26, tex);
+	sprites->Add("item_porkchop", 0, 0, 32, 26, tex);
 
 	tex = textures->Get(ID_TEX_ITEM_MAGIC_CRYSTAL);
-	sprites->Add(80017, 0, 0, 28, 32, tex); 
-	sprites->Add(80018, 28, 0, 56, 32, tex);
+	sprites->Add("item_magiccrystal_1", 0, 0, 28, 32, tex); 
+	sprites->Add("item_magiccrystal_2", 28, 0, 56, 32, tex);
 	
 
 
 	LPANIMATION ani;
 
 	ani = new Animation();  
-	ani->Add(80001);
-	animations->Add(STOP_WATCH_ANI, ani);
+	ani->Add("item_stopwatch");
+	animations->Add("item_stopwatch_ani", ani);
 
 	ani = new Animation();
-	ani->Add(80002);
-	animations->Add(DAGGER_ANI, ani);
+	ani->Add("item_dagger");
+	animations->Add("item_dagger_ani", ani);
 
 	ani = new Animation();
-	ani->Add(80003);
-	animations->Add(AXE_ANI, ani);
+	ani->Add("item_axe");
+	animations->Add("item_axe_ani", ani);
 
 	ani = new Animation();
-	ani->Add(80004);
-	animations->Add(HOLY_WATER_ANI, ani);
+	ani->Add("item_holywater");
+	animations->Add("item_holywater_ani", ani);
 
 	ani = new Animation();
-	ani->Add(80005);
-	animations->Add(BOOMERANG_ANI, ani);
+	ani->Add("item_boomerang");
+	animations->Add("item_boomerang_ani", ani);
 
 	ani = new Animation();
-	ani->Add(80006);
-	animations->Add(SMALL_HEART_ANI, ani);
+	ani->Add("item_smallheart");
+	animations->Add("item_smallheart_ani", ani);
 
 	ani = new Animation();
-	ani->Add(80007);
-	animations->Add(LARGE_HEART_ANI, ani);
+	ani->Add("item_largeheart");
+	animations->Add("item_largeheart_ani", ani);
 
 	ani = new Animation();
-	ani->Add(80008);
-	animations->Add(CROSS_ANI, ani);
+	ani->Add("item_cross");
+	animations->Add("item_cross_ani", ani);
 
 	ani = new Animation();
-	ani->Add(80009);
-	animations->Add(INVISIBILITY_POTION_ANI, ani);
+	ani->Add("item_invisibilitypostion");
+	animations->Add("item_invisibilitypostion_ani", ani);
 
 	ani = new Animation();
-	ani->Add(80010);
-	animations->Add(CHAIN_ANI, ani);
+	ani->Add("item_chain");
+	animations->Add("item_chain_ani", ani);
 
 	ani = new Animation();
-	ani->Add(80011);
-	animations->Add(MONEY_BAG_RED_ANI, ani);
+	ani->Add("item_redmoneybag");
+	animations->Add("item_redmoneybag_ani", ani);
 
 	ani = new Animation();
-	ani->Add(80012);
-	animations->Add(MONEY_BAG_BLUE_ANI, ani);
+	ani->Add("item_bluemoneybag");
+	animations->Add("item_bluemoneybag_ani", ani);
 
 	ani = new Animation();
-	ani->Add(80013);
-	animations->Add(MONEY_BAG_WHITE_ANI, ani);
+	ani->Add("item_whitemoneybag");
+	animations->Add("item_whitemoneybag_ani", ani);
 
 	ani = new Animation(50);
-	ani->Add(80011);
-	ani->Add(80012);
-	ani->Add(80013);
-	animations->Add(MONEY_BAG_FLASHING_ANI, ani);
+	ani->Add("item_redmoneybag");
+	ani->Add("item_bluemoneybag");
+	ani->Add("item_whitemoneybag");
+	animations->Add("item_flashingmoneybag_ani", ani);
 
 	ani = new Animation();
-	ani->Add(80014);
-	animations->Add(DOUBLE_SHOT_ANI, ani);
+	ani->Add("item_doubleshot");
+	animations->Add("item_doubleshot_ani", ani);
 
 	ani = new Animation();
-	ani->Add(80015);
-	animations->Add(TRIPLE_SHOT_ANI, ani);
+	ani->Add("item_tripleshot");
+	animations->Add("item_tripleshot_ani", ani);
 
 	ani = new Animation();
-	ani->Add(80016);
-	animations->Add(PORK_CHOP_ANI, ani);
+	ani->Add("item_porkchop");
+	animations->Add("item_porkchop_ani", ani);
 
 	ani = new Animation(50);
-	ani->Add(80017);
-	ani->Add(80018);
-	animations->Add(MAGIC_CRYSTAL_ANI, ani);
+	ani->Add("item_magiccrystal_1");
+	ani->Add("item_magiccrystal_2");
+	animations->Add("item_magiccrystal_ani", ani);
 
 }
 

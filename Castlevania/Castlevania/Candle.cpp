@@ -4,9 +4,9 @@
 
 Candle::Candle() : GameObject()
 {
-	AddAnimation(BIG_CANDLE_ANI);
-	AddAnimation(SMALL_CANDLE_ANI);
-	AddAnimation(EFFECT_ANI);
+	AddAnimation("bigcandle_ani");
+	AddAnimation("smallcandle_ani");
+	AddAnimation("effect1_ani");
 
 	SetState(BIG_CANDLE);
 }
@@ -18,24 +18,24 @@ void Candle::LoadResources(Textures* &textures, Sprites* &sprites, Animations* &
 
 	LPDIRECT3DTEXTURE9 texBigCandle = textures->Get(ID_TEX_CANDLE);
 
-	sprites->Add(30001, 0, 0, 32, 64, texBigCandle); // normal candle
-	sprites->Add(30002, 32, 0, 64, 64, texBigCandle);
+	sprites->Add("bigcandle_1", 0, 0, 32, 64, texBigCandle); // normal candle
+	sprites->Add("bigcandle_2", 32, 0, 64, 64, texBigCandle);
 
 	LPDIRECT3DTEXTURE9 texSmallCandle = textures->Get(ID_TEX_SMALL_CANDLE);
-	sprites->Add(30003, 0, 0, 16, 32, texSmallCandle); // normal candle
-	sprites->Add(30004, 16, 0, 32, 32, texSmallCandle);
+	sprites->Add("smallcandle_1", 0, 0, 16, 32, texSmallCandle); // normal candle
+	sprites->Add("smallcandle_2", 16, 0, 32, 32, texSmallCandle);
 
 	LPANIMATION ani;
 
 	ani = new Animation();
-	ani->Add(30001, 150);
-	ani->Add(30002, 150);
-	animations->Add(BIG_CANDLE_ANI, ani);
+	ani->Add("bigcandle_1", 150);
+	ani->Add("bigcandle_2", 150);
+	animations->Add("bigcandle_ani", ani);
 
 	ani = new Animation();
-	ani->Add(30003, 150);
-	ani->Add(30004, 150);
-	animations->Add(SMALL_CANDLE_ANI, ani);
+	ani->Add("smallcandle_1", 150);
+	ani->Add("smallcandle_2", 150);
+	animations->Add("smallcandle_ani", ani);
 
 }
 

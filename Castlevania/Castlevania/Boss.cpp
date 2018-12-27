@@ -2,9 +2,9 @@
 
 Boss::Boss() : Enemy()
 {
-	AddAnimation(BOSS_ACTIVE_ANI);
-	AddAnimation(EFFECT_2_ANI);
-	AddAnimation(BOSS_INACTIVE_ANI);
+	AddAnimation("boss_fly_ani");
+	AddAnimation("effect2_ani");
+	AddAnimation("boss_idle_ani");
 
 	isFlyToTarget = false;
 	isFlyToSimon = false;
@@ -27,20 +27,21 @@ void Boss::LoadResources(Textures *& textures, Sprites *& sprites, Animations *&
 
 	LPDIRECT3DTEXTURE9 texBoss = textures->Get(ID_TEX_BOSS);
 
-	sprites->Add(160001, 0, 0, 96, 46, texBoss);
-	sprites->Add(160002, 96, 0, 192, 46, texBoss);
-	sprites->Add(160003, 192, 0, 288, 46, texBoss);
+	sprites->Add("boss_idle", 0, 0, 96, 46, texBoss);
+
+	sprites->Add("boss_fly_1", 96, 0, 192, 46, texBoss);
+	sprites->Add("boss_fly_2", 192, 0, 288, 46, texBoss);
 
 	LPANIMATION ani;
 
 	ani = new Animation(300);
-	ani->Add(160002);
-	ani->Add(160003);
-	animations->Add(BOSS_ACTIVE_ANI, ani);
+	ani->Add("boss_fly_1");
+	ani->Add("boss_fly_2");
+	animations->Add("boss_fly_ani", ani);
 
 	ani = new Animation();
-	ani->Add(160001);
-	animations->Add(BOSS_INACTIVE_ANI, ani);
+	ani->Add("boss_idle");
+	animations->Add("boss_idle_ani", ani);
 }
 
 void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)

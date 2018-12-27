@@ -8,7 +8,7 @@ class Whip : public GameObject
 	int targetTypeHit = -1; // Loại mục tiêu đánh trúng (dùng để kiểm tra máu của boss...)
 
 	vector<vector<float>> sparkCoord; // vector lưu toạ độ để render spark khi roi đánh trúng mục tiêu
-	Animation * spark = Animations::GetInstance()->Get(SPARK_ANI);
+	Animation * spark = Animations::GetInstance()->Get("spark_ani");
 	int startTimeRenderSpark = 0;
 
 public:

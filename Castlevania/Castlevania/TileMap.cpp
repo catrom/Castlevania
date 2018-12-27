@@ -18,7 +18,7 @@ TileMap::TileMap(int ID, LPCWSTR filePath_tex, LPCWSTR filePath_data, int map_wi
 	nums_col = map_Width / tile_Width;
 
 	LoadResources();
-	Load_MapData();
+	LoadMap();
 	CreateZoneToDraw();
 }
 
@@ -46,13 +46,14 @@ void TileMap::LoadResources()
 	{
 		for (UINT j = 0; j < nums_colToRead; j++)
 		{
-			sprites->Add(1000 * ID + id_sprite, tile_Width * j, tile_Height * i, tile_Width * (j + 1), tile_Height * (i + 1), texTileMap);
+			string idTile = "map_" + to_string(ID) + "_tile_" + to_string(id_sprite);
+			sprites->Add(idTile, tile_Width * j, tile_Height * i, tile_Width * (j + 1), tile_Height * (i + 1), texTileMap);
 			id_sprite = id_sprite + 1;
 		}
 	}
 }
 
-void TileMap::Load_MapData()
+void TileMap::LoadMap()
 {
 	fstream fs;
 	fs.open(filePath_data, ios::in);
@@ -71,22 +72,19 @@ void TileMap::Load_MapData()
 	{
 		getline(fs, line);
 
-		// tách số từ chuỗi đọc được
-
-		vector<int> numInLine; 
+		// Lưu sprite tile vào vector tilemap
+		vector<LPSPRITE> spriteline; 
 		stringstream ss(line);
 		int n;
 
-		while (ss >> n) 
+		while (ss >> n)
 		{
-			numInLine.push_back(n);
+			string idTile = "map_" + to_string(ID) + "_tile_" + to_string(n);
+			spriteline.push_back(sprites->Get(idTile));
 		}
 
-		// thêm vào ma trận map_Data
-
-		map_Data.push_back(numInLine);
+		tilemap.push_back(spriteline);
 	}
-
 
 	fs.close();
 }
@@ -118,7 +116,8 @@ void TileMap::Draw(D3DXVECTOR3 camPosition, bool isCrossEffect)
 
 	// Xét thông số blend cho hiệu ứng của item cross
 	int alpha = 255;
-	if (isCrossEffect == true) alpha = rand() % 255;
+	if (isCrossEffect == true) 
+		alpha = rand() % 255;
 
 	for (UINT i = 0; i < nums_row; i++)
 	{
@@ -129,7 +128,7 @@ void TileMap::Draw(D3DXVECTOR3 camPosition, bool isCrossEffect)
 			float x = tile_Width * (j - start_col_to_draw) + camPosition.x - (int)camPosition.x % 32; 
 			float y = tile_Height * i + 80;
 
-			sprites->Get(1000 * ID + map_Data[i][j])->Draw(1, -1, x, y, alpha);
+			tilemap[i][j]->Draw(1, -1, x, y, alpha);
 		}
 	}
 }

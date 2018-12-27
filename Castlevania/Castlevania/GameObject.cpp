@@ -233,7 +233,7 @@ void GameObject::FilterCollision(vector<LPCOLLISIONEVENT>& coEvents, vector<LPCO
 	if (min_iy >= 0) coEventsResult.push_back(coEvents[min_iy]);
 }
 
-void GameObject::AddAnimation(int aniID)
+void GameObject::AddAnimation(string aniID)
 {
 	LPANIMATION ani = Animations::GetInstance()->Get(aniID);
 	animations.push_back(ani);

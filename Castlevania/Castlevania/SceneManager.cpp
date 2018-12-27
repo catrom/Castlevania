@@ -38,10 +38,66 @@ void SceneManager::Init(int idScene)
 	}
 }
 
+void SceneManager::LoadSprites(int id, LPCWSTR tex, LPCWSTR sprite_data, LPCWSTR animation_data)
+{
+	textures->Add(id, tex);
+	LPDIRECT3DTEXTURE9 texture = textures->Get(id);
+
+	ifstream spriteReader, animationReader;
+
+	spriteReader.open(sprite_data);
+	animationReader.open(animation_data);
+
+	if (spriteReader.fail())
+	{
+		DebugOut(L"[ERROR] LoadSprites failed!: ID=%d", id);
+		spriteReader.close();
+		return;
+	}
+
+	if (animationReader.fail())
+	{
+		DebugOut(L"[ERROR] LoadAnimation failed!: ID=%d", id);
+		animationReader.close();
+		return;
+	}
+	
+	// Load sprite data
+
+	string spriteid;
+	int left, top, right, bottom;
+
+	while (spriteReader >> spriteid >> left >> top >> right >> bottom)
+		sprites->Add(spriteid, left, top, right, bottom, texture);
+
+	spriteReader.close();
+
+	// Load animation data
+
+	string animationId;
+	string line;
+	string spriteId;
+	int frameTime;
+
+	while (getline(animationReader, line))
+	{
+		LPANIMATION ani = new Animation();
+
+		istringstream iss(line, istringstream::in);
+		iss >> animationId;
+
+		while (iss >> spriteId >> frameTime)
+			ani->Add(spriteId, frameTime);
+
+		animations->Add(animationId, ani);
+	}
+
+	animationReader.close();
+}
+
 void SceneManager::LoadResources()
 {
-	simon = new Simon();
-	simon->LoadResources(textures, sprites, animations);
+	LoadSprites(ID_TEX_SIMON, FILEPATH_TEX_SIMON, L"Textures\\Simon_sprite.txt", L"Textures\\Simon_animation.txt");
 
 	whip = new Whip();
 	whip->LoadResources(textures, sprites, animations);

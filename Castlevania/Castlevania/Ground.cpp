@@ -2,8 +2,8 @@
 
 Ground::Ground() : GameObject()
 {
-	AddAnimation(GROUND_ANI_1);
-	AddAnimation(GROUND_ANI_2);
+	AddAnimation("ground1_ani");
+	AddAnimation("ground2_ani");
 }
 
 void Ground::LoadResources(Textures *& textures, Sprites *& sprites, Animations *& animations)
@@ -12,18 +12,18 @@ void Ground::LoadResources(Textures *& textures, Sprites *& sprites, Animations 
 
 	LPDIRECT3DTEXTURE9 texGround = textures->Get(ID_TEX_GROUND);
 
-	sprites->Add(40001, 0, 0, 32, 32, texGround);
-	sprites->Add(40002, 32, 0, 64, 32, texGround);
+	sprites->Add("ground1", 0, 0, 32, 32, texGround);
+	sprites->Add("ground2", 32, 0, 64, 32, texGround);
 
 	LPANIMATION ani;
 
 	ani = new Animation();
-	ani->Add(40001);
-	animations->Add(GROUND_ANI_1, ani);
+	ani->Add("ground1");
+	animations->Add("ground1_ani", ani);
 
 	ani = new Animation();
-	ani->Add(40002);
-	animations->Add(GROUND_ANI_2, ani);
+	ani->Add("ground2");
+	animations->Add("ground2_ani", ani);
 }
 
 void Ground::Render()

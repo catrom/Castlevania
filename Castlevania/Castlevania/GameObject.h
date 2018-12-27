@@ -112,7 +112,7 @@ public:
 		float &nx,
 		float &ny);
 
-	void AddAnimation(int aniID);
+	void AddAnimation(string aniID);
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom) = 0;
 

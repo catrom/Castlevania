@@ -1,7 +1,7 @@
 #include "Sprites.h"
 
 
-Sprite::Sprite(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex)
+Sprite::Sprite(string id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex)
 {
 	this->id = id;
 	this->left = left;
@@ -20,7 +20,7 @@ void Sprite::Draw(int accordingCam, int nx, float x, float y, int alpha)
 
 Sprites * Sprites::_instance = NULL;
 
-void Sprites::Add(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex)
+void Sprites::Add(string id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex)
 {
 	LPSPRITE sprite = new Sprite(id, left, top, right, bottom, tex);
 	sprites[id] = sprite;
@@ -40,7 +40,7 @@ Animation::Animation(int defaultTime)
 	currentFrame = -1;
 }
 
-void Animation::Add(int spriteID, DWORD time)
+void Animation::Add(string spriteID, DWORD time)
 {
 	if (time == 0) time = this->defaultTime;
 

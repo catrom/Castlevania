@@ -14,13 +14,13 @@ using namespace std;
 */
 class Sprite
 {
-	int id;			// Sprite ID 
+	string id;			// Sprite ID 
 	int left, top, right, bottom;
 
 	LPDIRECT3DTEXTURE9 texture;
 
 public:
-	Sprite(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex);
+	Sprite(string id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex);
 	void Draw(int accordingCam, int nx, float x, float y, int alpha = 255);
 };
 
@@ -32,11 +32,11 @@ typedef Sprite * LPSPRITE;
 class Sprites
 {
 	static Sprites * _instance;
-	unordered_map<int, LPSPRITE> sprites;		// list of Sprite Pointer by Id
+	unordered_map<string, LPSPRITE> sprites;		// list of Sprite Pointer by Id
 
 public:
-	void Add(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex);
-	LPSPRITE Get(int id) { return sprites[id]; }
+	void Add(string id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex);
+	LPSPRITE Get(string id) { return sprites[id]; }
 
 	static Sprites * GetInstance();
 };
@@ -70,7 +70,7 @@ class Animation
 	vector<LPANIMATION_FRAME> frames;
 
 public:
-
+	
 	Animation(int defaultTime = 100);
 
 	void SetAniStartTime(DWORD t) { animStartTime = t; }
@@ -81,7 +81,7 @@ public:
 	int GetCurrentFrame() { return currentFrame; }
 	int GetFramesSize() { return frames.size(); }
 	
-	void Add(int spriteID, DWORD time = 0);
+	void Add(string spriteID, DWORD time = 0);
 	void Render(int accordingCam, int nx, float x, float y, int alpha = 255);
 	void RenderByID(int currentID, int nx, float x, float y, int alpha = 255); // hàm dùng riêng để render whip -> giải quyết bài toán đồng bộ whip cử động tay của simon
 };
@@ -94,11 +94,11 @@ typedef Animation * LPANIMATION;
 class Animations
 {
 	static Animations * _instance;
-	unordered_map<int, LPANIMATION> animations;
+	unordered_map<string, LPANIMATION> animations;
 
 public:
-	void Add(int id, LPANIMATION ani) { animations[id] = ani; }
-	LPANIMATION Get(int id) { return animations[id]; }
+	void Add(string id, LPANIMATION ani) { animations[id] = ani; }
+	LPANIMATION Get(string id) { return animations[id]; }
 
 	static Animations* GetInstance();
 };

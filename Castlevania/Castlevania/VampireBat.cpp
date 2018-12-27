@@ -4,8 +4,8 @@
 
 VampireBat::VampireBat() : Enemy()
 {
-	AddAnimation(VAMPIRE_BAT_ANI);
-	AddAnimation(EFFECT_ANI);
+	AddAnimation("vampirebat_fly_ani");
+	AddAnimation("effect1_ani");
 
 	velocityVariation = 0.004f;
 
@@ -21,20 +21,20 @@ void VampireBat::LoadResources(Textures *& textures, Sprites *& sprites, Animati
 
 	LPDIRECT3DTEXTURE9 texBat = textures->Get(ID_TEX_VAMPIRE_BAT);
 
-	sprites->Add(140001, 0, 0, 32, 32, texBat);
-	sprites->Add(140002, 32, 0, 64, 32, texBat);
-	sprites->Add(140003, 64, 0, 96, 32, texBat);
-	sprites->Add(140004, 96, 0, 128, 32, texBat);
+	sprites->Add("vampirebat_fly_1", 64, 0, 96, 32, texBat);
+	sprites->Add("vampirebat_fly_2", 32, 0, 64, 32, texBat);
+	sprites->Add("vampirebat_fly_3", 64, 0, 96, 32, texBat);
+	sprites->Add("vampirebat_fly_4", 96, 0, 128, 32, texBat);
 
 
 	LPANIMATION ani;
 
 	ani = new Animation(150);
-	ani->Add(140003);
-	ani->Add(140002);
-	ani->Add(140003);
-	ani->Add(140004);
-	animations->Add(VAMPIRE_BAT_ANI, ani);
+	ani->Add("vampirebat_fly_1");
+	ani->Add("vampirebat_fly_2");
+	ani->Add("vampirebat_fly_3");
+	ani->Add("vampirebat_fly_4");
+	animations->Add("vampirebat_fly_ani", ani);
 }
 
 void VampireBat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
