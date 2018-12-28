@@ -6,6 +6,7 @@
 #include "FishMan.h"
 #include "FireBall.h"
 #include "Boss.h"
+#include "BreakWall.h"
 
 Whip::Whip() : GameObject()
 {
@@ -22,7 +23,20 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 	{
 		LPGAMEOBJECT obj = coObjects->at(i);
 
-		if (dynamic_cast<Candle*>(obj))
+		if (dynamic_cast<BreakWall*>(obj))
+		{
+			BreakWall * e = dynamic_cast<BreakWall*>(obj);
+			
+			float left, top, right, bottom;
+			e->GetBoundingBox(left, top, right, bottom);
+
+			if (CheckCollision(left, top, right, bottom) == true)
+			{
+				e->SetState(BREAK);
+				targetTypeHit = BREAKWALL;
+			}
+		}
+		else if (dynamic_cast<Candle*>(obj))
 		{
 			Candle * e = dynamic_cast<Candle*> (obj);
 

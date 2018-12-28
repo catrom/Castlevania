@@ -6,7 +6,6 @@ class FireBall : public GameObject
 {
 public:
 	FireBall();
-	~FireBall();
 
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObject = NULL, bool stopMovement = false);
 	void Render();

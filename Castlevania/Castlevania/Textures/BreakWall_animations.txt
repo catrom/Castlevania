@@ -1,0 +1,2 @@
+wall_break_ani	wall_break	100
+wall_piece_ani	wall_piece	100

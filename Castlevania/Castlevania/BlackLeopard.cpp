@@ -12,7 +12,7 @@ BlackLeopard::BlackLeopard() : Enemy()
 	HP = 1;
 	score = 200;
 	attack = 2;
-	respawnWaitingTime = 20000;
+	respawnWaitingTime = 10000;
 }
 
 void BlackLeopard::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
@@ -62,7 +62,7 @@ void BlackLeopard::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMov
 		x += dx;
 		y += min_ty*dy + ny*0.1f;
 
-		if (ny == -1)
+		if (ny == CDIR_BOTTOM)
 		{
 			vy = 0;
 

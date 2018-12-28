@@ -11,9 +11,6 @@
 #define DEFAULT_CELL_WIDTH		256
 #define DEFAULT_CELL_HEIGHT		240
 
-#define	TILEMAP_DEFAULT_CELL_WIDTH 32
-#define	TILEMAP_DEFAULT_CELL_HEIGHT 32
-
 #define MAX_FRAME_RATE			150
 
 // Input
@@ -27,121 +24,38 @@
 
 #define ID_TEX_BBOX					-1
 #define ID_TEX_BBOX_2				-2
-#define ID_TEX_SCENE_1				0
-#define ID_TEX_SIMON				1
-#define ID_TEX_WHIP					2
-#define ID_TEX_CANDLE				3
-#define ID_TEX_GROUND				4
+#define ID_TEX_SIMON				0
+#define ID_TEX_WHIP					1
+#define ID_TEX_BOSS					2
+#define ID_TEX_SUBWEAPONS			3
+#define ID_TEX_CANDLE				4
 #define ID_TEX_EFFECT				5
-#define ID_TEX_SPARK				38
-#define ID_TEX_HP					6
-#define ID_TEX_RECT					7
-#define ID_TEX_SMALL_CANDLE			26
-#define ID_TEX_STAIR				27
-#define ID_TEX_DOOR					28
-#define ID_TEX_GATE					29
-#define ID_TEX_ZOMBIE				30
-#define ID_TEX_BLACK_LEOPARD		31
-#define ID_TEX_VAMPIRE_BAT			32
-#define ID_TEX_FISHMAN				33
-#define ID_TEX_FIREBALL				34
-#define ID_TEX_BUBBLES				35
-#define ID_TEX_BOSS					36
-
-//Items
-#define ID_TEX_ITEM_STOP_WATCH		8
-#define ID_TEX_ITEM_DAGGER			9
-#define ID_TEX_ITEM_AXE 			10
-#define ID_TEX_ITEM_HOLY_WATER		11
-#define ID_TEX_ITEM_BOOMERANG		12
-#define ID_TEX_ITEM_SMALL_HEART		13
-#define ID_TEX_ITEM_LARGE_HEART		14
-#define ID_TEX_ITEM_CROSS			15
-#define ID_TEX_ITEM_INVISIBILITY_POTION		16
-#define ID_TEX_ITEM_CHAIN			17
-#define ID_TEX_ITEM_MONEY_BAG		18
-#define ID_TEX_ITEM_DOUBLE_SHOT		19
-#define ID_TEX_ITEM_TRIPLE_SHOT		20
-#define ID_TEX_ITEM_PORK_CHOP		21
-#define ID_TEX_ITEM_MAGIC_CRYSTAL	22
-//SubWeapons
-#define ID_TEX_WEAPONS_AXE			23
-#define ID_TEX_WEAPONS_HOLY_WATER	24
-#define ID_TEX_WEAPONS_BOOMERANG	25
-#define ID_TEX_WEAPONS_DAGGER			37
-#define ID_TEX_WEAPONS_STOP_WATCH			39
-
-
-
+#define ID_TEX_SPARK				6
+#define ID_TEX_BUBBLES				7
+#define ID_TEX_GROUND				8
+#define ID_TEX_ITEMS				9
+#define ID_TEX_STAIR				10
+#define ID_TEX_DOOR					11
+#define ID_TEX_ZOMBIE				12
+#define ID_TEX_BLACK_LEOPARD		13
+#define ID_TEX_VAMPIRE_BAT			14
+#define ID_TEX_FISHMAN				15
+#define ID_TEX_FIREBALL				16
+#define ID_TEX_HP					17
+#define ID_TEX_RECT					18
+#define ID_TEX_BREAKWALL			19
 #pragma endregion
 
 
-#pragma region PathFile
+#pragma region Filepath
 
 // Font
 #define FILEPATH_FONT				L"Font\\prstart.ttf"
 
-// Objects
-#define FILEPATH_TEX_BBOX			L"Textures\\BBox.png"
-#define FILEPATH_TEX_BBOX_2			L"Textures\\BBox2.png"
-#define FILEPATH_TEX_SIMON			L"Textures\\Simon.png"
-#define FILEPATH_TEX_WHIP			L"Textures\\Whip.png"
-#define FILEPATH_TEX_CANDLE			L"Textures\\Candle.png"
-#define FILEPATH_TEX_SMALL_CANDLE	L"Textures\\SmallCandle.png"
-#define FILEPATH_TEX_GROUND			L"Textures\\Ground.png"
-#define FILEPATH_TEX_EFFECT			L"Textures\\Effect.png"
-#define FILEPATH_TEX_SPARK			L"Textures\\Spark.png"
-#define FILEPATH_TEX_STAIR			L"Textures\\Stair.png"
-#define FILEPATH_TEX_DOOR			L"Textures\\Door.png"
-#define FILEPATH_TEX_GATE			L"Textures\\Gate.png"
-#define FILEPATH_TEX_ZOMBIE			L"Textures\\Zombie.png"
-#define FILEPATH_TEX_BLACK_LEOPARD	L"Textures\\BlackLeopard.png"
-#define FILEPATH_TEX_VAMPIRE_BAT	L"Textures\\VampireBat.png"
-#define FILEPATH_TEX_FISHMAN		L"Textures\\FishMan.png"
-#define FILEPATH_TEX_FIREBALL		L"Textures\\FireBall.png"
-#define FILEPATH_TEX_BUBBLES		L"Textures\\Bubbles.png"
-#define FILEPATH_TEX_BOSS			L"Textures\\Boss.png"
-
-// Items
-#define FILEPATH_TEX_ITEM_STOP_WATCH			L"Textures\\Items\\Stopwatch.png"
-#define FILEPATH_TEX_ITEM_DAGGER				L"Textures\\Items\\Dagger.png"
-#define FILEPATH_TEX_ITEM_AXE					L"Textures\\Items\\Axe.png"
-#define FILEPATH_TEX_ITEM_HOLY_WATER			L"Textures\\Items\\HolyWater.png"
-#define FILEPATH_TEX_ITEM_BOOMERANG				L"Textures\\Items\\Boomerang.png"
-#define FILEPATH_TEX_ITEM_SMALL_HEART			L"Textures\\Items\\SmallHeart.png"
-#define FILEPATH_TEX_ITEM_LARGE_HEART			L"Textures\\Items\\LargeHeart.png"
-#define FILEPATH_TEX_ITEM_CROSS					L"Textures\\Items\\Cross.png"
-#define FILEPATH_TEX_ITEM_INVISIBILITY_POTION	L"Textures\\Items\\InvisibilityPotion.png"
-#define FILEPATH_TEX_ITEM_CHAIN					L"Textures\\Items\\Chain.png"
-#define FILEPATH_TEX_ITEM_MONEY_BAG				L"Textures\\Items\\MoneyBag.png"
-#define FILEPATH_TEX_ITEM_DOUBLE_SHOT			L"Textures\\Items\\DoubleShot.png"
-#define FILEPATH_TEX_ITEM_TRIPLE_SHOT			L"Textures\\Items\\TripleShot.png"
-#define FILEPATH_TEX_ITEM_PORK_CHOP				L"Textures\\Items\\PorkChop.png"
-#define FILEPATH_TEX_ITEM_MAGIC_CRYSTAL			L"Textures\\Items\\MagicCrystal.png"
-
-// Sub Weapons
-#define FILEPATH_TEX_WEAPONS_AXE				L"Textures\\SubWeapons\\Axe.png"
-#define FILEPATH_TEX_WEAPONS_HOLY_WATER			L"Textures\\SubWeapons\\HolyWater.png"
-#define FILEPATH_TEX_WEAPONS_BOOMERANG			L"Textures\\SubWeapons\\Boomerang.png"
-#define FILEPATH_TEX_WEAPONS_DAGGER				L"Textures\\SubWeapons\\Dagger.png"
-#define FILEPATH_TEX_WEAPONS_STOP_WATCH			L"Textures\\SubWeapons\\StopWatch.png"
-
 // Scenes
-#define FILEPATH_TEX_MAP_SCENE_1		L"Scenes\\Scene1.png"
-#define FILEPATH_DATA_MAP_SCENE_1		L"Scenes\\Scene1_map.txt"
 #define FILEPATH_OBJECTS_SCENE_1		L"Scenes\\Scene1_objects.txt"
-
-#define FILEPATH_TEX_MAP_SCENE_2		L"Scenes\\Scene2.png"
-#define FILEPATH_DATA_MAP_SCENE_2		L"Scenes\\Scene2_map.txt"
 #define FILEPATH_OBJECTS_SCENE_2		L"Scenes\\Scene2_objects.txt"
-
-#define FILEPATH_TEX_MAP_SCENE_3		L"Scenes\\Scene3.png"
-#define FILEPATH_DATA_MAP_SCENE_3		L"Scenes\\Scene3_map.txt"
 #define FILEPATH_OBJECTS_SCENE_3		L"Scenes\\Scene3_objects.txt"
-// Player
-#define FILEPATH_TEX_HP				L"Textures\\HP.png"
-#define FILEPATH_TEX_RECT			L"Textures\\Rect.png"
-
 #pragma endregion
 
 
@@ -157,21 +71,31 @@
 #define GAMESTATE_3_1	6	// SCENE_3 - cầu thang lên 1
 #define GAMESTATE_3_2	7	// SCENE_3 - cầu thang lên 2
 
+// Orientation
+#define DIR_LEFT		-1
+#define DIR_RIGHT		1
+
+// Collision direction
+#define CDIR_LEFT		1.0f
+#define CDIR_RIGHT		-1.0f
+#define CDIR_TOP		1.0f
+#define	CDIR_BOTTOM		-1.0f
+
 // Scene
-#define SCENE_1		0
-#define SCENE_2		1
-#define SCENE_3		2
+#define SCENE_1			0
+#define SCENE_2			1
+#define SCENE_3			2
 
 // Simon
-#define STAND		0
-#define WALK		1
-#define SIT			2
-#define JUMP		3
-#define HIT_SIT		4
-#define HIT_STAND	5
-#define POWER		6
-#define STAIR_UP	7
-#define STAIR_DOWN	8
+#define STAND			0
+#define WALK			1
+#define SIT				2
+#define JUMP			3
+#define HIT_SIT			4
+#define HIT_STAND		5
+#define POWER			6
+#define STAIR_UP		7
+#define STAIR_DOWN		8
 #define HIT_STAIR_UP	9
 #define HIT_STAIR_DOWN	10
 #define	DEFLECT			11
@@ -183,33 +107,29 @@
 #define LONG_CHAIN		2
 
 // Candle
-#define BIG_CANDLE	0
+#define BIG_CANDLE		0
 #define SMALL_CANDLE	1
 #define CANDLE_DESTROYED	2
 
-// Flame Effect
-#define	EFFECT		0
-#define EFFECT_2	1
-
 // Ground
-#define GROUND_1	0
-#define GROUND_2	1
+#define GROUND_1		0
+#define GROUND_2		1
 
 // Stair
 #define STAIR_LEFT_UP		0
 #define STAIR_RIGHT_DOWN	1
 
 // Items
-#define	STOP_WATCH	 0
-#define DAGGER		1
-#define	AXE			2
-#define HOLY_WATER	3
-#define BOOMERANG	4
-#define SMALL_HEART	5
-#define LARGE_HEART  6
-#define CROSS       7
+#define	STOP_WATCH		0
+#define DAGGER			1
+#define	AXE				2
+#define HOLY_WATER		3
+#define BOOMERANG		4
+#define SMALL_HEART		5
+#define LARGE_HEART		6
+#define CROSS			7
 #define INVISIBILITY_POTION	8
-#define CHAIN		9
+#define CHAIN			9
 #define MONEY_BAG_RED	10
 #define MONEY_BAG_BLUE	11
 #define MONEY_BAG_WHITE 12
@@ -220,7 +140,7 @@
 #define MAGIC_CRYSTAL	17
 
 // Subweapons
-#define	WEAPONS_STOP_WATCH	 0
+#define	WEAPONS_STOP_WATCH	0
 #define WEAPONS_DAGGER		1
 #define	WEAPONS_AXE			2
 #define WEAPONS_HOLY_WATER	3
@@ -229,8 +149,8 @@
 
 // Door
 #define DOOR_1			0
-#define DOOR_2_IDLE			1
-#define DOOR_2_OPEN			2
+#define DOOR_2_IDLE		1
+#define DOOR_2_OPEN		2
 
 // Enemy (chung cho Zombie, Black Leopard, Bat...)
 #define ACTIVE			0
@@ -252,7 +172,7 @@
 // Vampire Bat
 #define VAMPIRE_BAT_ACTIVE		0
 #define VAMPIRE_BAT_DESTROYED	1
-#define VAMPIRE_BAT_INACTIVE		2
+#define VAMPIRE_BAT_INACTIVE	2
 
 // Fish man
 #define FISHMAN_ACTIVE		0
@@ -269,128 +189,26 @@
 // Fire ball
 #define FIREBALL			0
 
-// Bubbles
-#define BUBBLES				0
+// Break wall
+#define NORMAL				0
+#define BREAK				1
 #pragma endregion
 
 #pragma region Animation 
-
 // Animation Delay
-#define SPARK_ANI_TIME_DELAY	100
-#define EFFECT_ANI_TIME_DELAY	300
-#define EFFECT_2_ANI_TIME_DELAY	1000
-#define POWER_ANI_TIME_DELAY	450
+#define SPARK_ANI_TIME_DELAY		100
+#define EFFECT_ANI_TIME_DELAY		300
+#define EFFECT_2_ANI_TIME_DELAY		1000
+#define POWER_ANI_TIME_DELAY		450
 #define STAIR_WALK_ANI_TIME_DELAY	200
 #define DEFLECT_ANI_TIME_DELAY		600
 #define HIT_ANI_TIME_DELAY			300
 #define DOOR_2_OPEN_ANI_TIME_DELAY	5000
 #define FISHMAN_HIT_ANI_TIME_DELAY	1000
-
-// Simon
-#define STAND_ANI		101
-#define WALK_ANI		102
-#define SIT_ANI			103
-#define JUMP_ANI		104
-#define HIT_SIT_ANI		105
-#define HIT_STAND_ANI	106
-#define POWER_ANI		107
-#define STAIR_UP_ANI	108
-#define STAIR_DOWN_ANI	109
-#define HIT_STAIR_UP_ANI	110
-#define HIT_STAIR_DOWN_ANI	111
-#define DEFLECT_ANI			112
-#define DEAD_ANI			113
-
-// Whip
-#define NORMAL_WHIP_ANI	201
-#define SHORT_CHAIN_ANI	202
-#define LONG_CHAIN_ANI	203
-
-// Candle
-#define BIG_CANDLE_ANI	301
-#define SMALL_CANDLE_ANI	302
-
-// Ground
-#define GROUND_ANI_1	401
-#define GROUND_ANI_2	402
-
-// Flame Effect
-#define	EFFECT_ANI		501
-#define EFFECT_2_ANI	502
-
-// Spark
-#define SPARK_ANI		1701
-
-// Items
-#define	STOP_WATCH_ANI				601
-#define DAGGER_ANI					602
-#define	AXE_ANI						603
-#define HOLY_WATER_ANI				604
-#define BOOMERANG_ANI				605
-#define SMALL_HEART_ANI				606
-#define LARGE_HEART_ANI				607
-#define CROSS_ANI					608
-#define INVISIBILITY_POTION_ANI		609
-#define CHAIN_ANI					610
-#define MONEY_BAG_RED_ANI			611
-#define MONEY_BAG_BLUE_ANI			612
-#define MONEY_BAG_WHITE_ANI			613
-#define MONEY_BAG_FLASHING_ANI		614
-#define DOUBLE_SHOT_ANI				615
-#define TRIPLE_SHOT_ANI				616
-#define PORK_CHOP_ANI				617
-#define MAGIC_CRYSTAL_ANI			618
-
-// SubWeapons
-#define	WEAPONS_STOP_WATCH_ANI				701
-#define WEAPONS_DAGGER_ANI					702
-#define	WEAPONS_AXE_ANI						703
-#define WEAPONS_HOLY_WATER_ANI				704
-#define WEAPONS_BOOMERANG_ANI				705
-#define WEAPONS_HOLY_WATER_SHATTERED_ANI	706
-
-// Stair
-#define STAIR_LEFT_UP_ANI		801
-#define STAIR_RIGHT_DOWN_ANI	802
-
-// Door
-#define DOOR_1_ANI				901
-#define DOOR_2_IDLE_ANI			902
-#define DOOR_2_OPEN_ANI			903
-
-// Zombie
-#define ZOMBIE_ANI				1001
-
-// Black Leopard
-#define BLACK_LEOPARD_ACTIVE_ANI		1101
-#define BLACK_LEOPARD_INACTIVE_ANI		1102
-#define BLACK_LEOPARD_IDLE_ANI			1103
-#define BLACK_LEOPARD_JUMP_ANI			1104
-
-// Vampire Bat
-#define VAMPIRE_BAT_ANI			1201
-
-// Fish man
-#define FISHMAN_ACTIVE_ANI		1301
-#define FISHMAN_INACTIVE_ANI	1302
-#define FISHMAN_JUMP_ANI		1303
-#define FISHMAN_HIT_ANI			1304
-
-// Boss
-#define BOSS_ACTIVE_ANI			1601
-#define BOSS_DESTROYED_ANI		1602
-#define BOSS_INACTIVE_ANI		1603
-
-// Fire ball
-#define FIREBALL_ANI			1401
-
-// Bubbles
-#define BUBBLES_ANI				1501
 #pragma endregion
 
 
 #pragma region Properties
-
 // Simon
 #define SIMON_HP					16
 #define SIMON_ENERGY				5
@@ -428,41 +246,34 @@
 #define WEAPONS_HOLY_WATER_TIME_EFFECT	1000
 
 #define WEAPONS_BOOMERANG_SPEED		0.5f
-#define WEAPONS_BOOMERANG_TURNBACK_SPEED		0.01f
+#define WEAPONS_BOOMERANG_TURNBACK_SPEED	0.01f
 
 #define WEAPONS_STOP_WATCH_TIME		2000
 
 // Zombie
 #define ZOMBIE_WALKING_SPEED		0.1f
-#define ZOMBIE_RESPAWN_TIME			5000
 #define ZOMBIE_GRAVITY				0.002f
 
 // Black Leopard
-#define BLACK_LEOPARD_RUNNING_SPEED_X		0.3f
-#define BLACK_LEOPARD_RUNNING_SPEED_Y		0.2f
-#define BLACK_LEOPARD_GRAVITY				0.001f
-#define BLACK_LEOPARD_RESPAWN_TIME			20000
+#define BLACK_LEOPARD_RUNNING_SPEED_X	0.3f
+#define BLACK_LEOPARD_RUNNING_SPEED_Y	0.2f
+#define BLACK_LEOPARD_GRAVITY			0.001f
 
 // Vampire Bat
 #define VAMPIRE_BAT_FLYING_SPEED_X	0.12f
 #define VAMPIRE_BAT_FLYING_SPEED_Y	0.1f
 #define VAMPIRE_BAT_SPEED_VARIATION 0.004f
-#define VAMPIRE_BAT_RESPAWN_TIME	5000
 
 // Fish man
 #define FISHMAN_JUMP_SPEED_Y		0.7f
 #define FISHMAN_GRAVITY				0.0015f
 #define FISHMAN_WALKING_SPEED_X		0.1f
-#define FISHMAN_RESPAWN_TIME		3000
 
 // Boss
 #define BOSS_HP						16
 #define BOSS_DEFAULT_TIME_TO_FLY	1000
 #define BOSS_FAST_TIME_TO_FLY		750
 #define BOSS_STOP_TIME_WAITING		1500
-
-// Boss
-#define BOSS_
 
 // Fire ball
 #define FIREBALL_SPEED				0.13f
@@ -474,13 +285,17 @@
 #define BUBBLES_SPEED_Y2			0.2f
 #define BUBBLES_GRAVITY				0.0005f
 #define BUBBLES_TIME				1000
+
+// Wall pieces
+#define	WALLPIECES_GRAVITY			0.0005f
+#define WALLPIECES_TIME				2000
 #pragma endregion
 
 
 #pragma region BBox Size
 
-#define ENEMY_DEFAULT_BBOX_WIDTH			32
-#define ENEMY_DEFAULT_BBOX_HEIGHT			32
+#define ENEMY_DEFAULT_BBOX_WIDTH	32
+#define ENEMY_DEFAULT_BBOX_HEIGHT	32
 
 // Simon
 #define SIMON_BBOX_WIDTH			30
@@ -517,8 +332,8 @@
 // Zombie
 #define ZOMBIE_BBOX_WIDTH			10
 #define ZOMBIE_BBOX_HEIGHT			60
-#define ZOMBIE_ACTIVE_BBOX_WIDTH			200
-#define ZOMBIE_ACTIVE_BBOX_HEIGHT			200
+#define ZOMBIE_ACTIVE_BBOX_WIDTH	200
+#define ZOMBIE_ACTIVE_BBOX_HEIGHT	200
 
 // Black Leopard
 #define BLACK_LEOPARD_BBOX_WIDTH			10
@@ -529,72 +344,63 @@
 // Vampire Bat
 #define VAMPIRE_BAT_BBOX_WIDTH			10
 #define VAMPIRE_BAT_BBOX_HEIGHT			10
-#define VAMPIRE_BAT_ACTIVE_BBOX_WIDTH			250 
-#define VAMPIRE_BAT_ACTIVE_BBOX_HEIGHT			200
+#define VAMPIRE_BAT_ACTIVE_BBOX_WIDTH	250 
+#define VAMPIRE_BAT_ACTIVE_BBOX_HEIGHT	200
 
 // Fish man
 #define FISHMAN_BBOX_WIDTH			10
 #define FISHMAN_BBOX_HEIGHT			60
-#define FISHMAN_ACTIVE_BBOX_WIDTH			150
-#define FISHMAN_ACTIVE_BBOX_HEIGHT			200
+#define FISHMAN_ACTIVE_BBOX_WIDTH	200
+#define FISHMAN_ACTIVE_BBOX_HEIGHT	200
 
 // Boss
-#define BOSS_BBOX_WIDTH				70
-#define BOSS_BBOX_HEIGHT			46
-#define BOSS_ACTIVE_BBOX_WIDTH		50
-#define BOSS_ACTIVE_BBOX_HEIGHT		400
+#define BOSS_BBOX_WIDTH						70
+#define BOSS_BBOX_HEIGHT					46
+#define BOSS_ACTIVE_BBOX_WIDTH				50
+#define BOSS_ACTIVE_BBOX_HEIGHT				400
 #define BOSS_RECT_RANDOMSPOT_BBOX_WIDTH		200
 #define BOSS_RECT_RANDOMSPOT_BBOX_HEIGHT	200
 
 // Fire ball
-#define FIREBALL_BBOX_WIDTH				14
-#define FIREBALL_BBOX_HEIGHT			12
+#define FIREBALL_BBOX_WIDTH			14
+#define FIREBALL_BBOX_HEIGHT		12
 
 // Bubbles
 #define BUBBLES_BBOX_WIDTH			14
 #define BUBBLES_BBOX_HEIGHT			28
 
 // SubWeapons
-#define WEAPONS_HOLY_WATER_BBOX_WIDTH			32
-#define WEAPONS_HOLY_WATER_BBOX_HEIGHT			26
+#define WEAPONS_HOLY_WATER_BBOX_WIDTH	32
+#define WEAPONS_HOLY_WATER_BBOX_HEIGHT	26
 
-#define WEAPONS_DAGGER_BBOX_WIDTH			34
-#define WEAPONS_DAGGER_BBOX_HEIGHT			18
+#define WEAPONS_DAGGER_BBOX_WIDTH		34
+#define WEAPONS_DAGGER_BBOX_HEIGHT		18
 
 #define WEAPONS_AXE_BBOX_WIDTH			30
 #define WEAPONS_AXE_BBOX_HEIGHT			28
 
-#define WEAPONS_BOOMERANG_BBOX_WIDTH			28
-#define WEAPONS_BOOMERANG_BBOX_HEIGHT			28
+#define WEAPONS_BOOMERANG_BBOX_WIDTH	28
+#define WEAPONS_BOOMERANG_BBOX_HEIGHT	28
 
 // Water
 #define	WATER_BBOX_WIDTH			512
 #define WATER_BBOX_HEIGHT			32
 #pragma endregion
 
-
-#pragma region Score
-#define SCORE_ZOMBIE				100
-#define SCORE_VAMPIRE_BAT			200
-#define SCORE_BLACK_LEOPARD			200
-#define SCORE_FISHMAN				300
-#pragma endregion
-
-
-
 #pragma region ID objects to load from file
 
-#define	CANDLE		0
-#define	GROUND		1
-#define STAIR		2
-#define DOOR		3
-#define ZOMBIE		4
-#define BLACK_LEOPARD	5
-#define VAMPIRE_BAT		6
-#define FISHMAN			7
-#define	BOSS			8
+#define	CANDLE				0
+#define	GROUND				1
+#define STAIR				2
+#define DOOR				3
+#define ZOMBIE				4
+#define BLACK_LEOPARD		5
+#define VAMPIRE_BAT			6
+#define FISHMAN				7
+#define	BOSS				8
 #define CHANGE_SCENE_OBJECT 9
-#define WATER			10
+#define WATER				10
+#define BREAKWALL			11
 
 #pragma endregion
 

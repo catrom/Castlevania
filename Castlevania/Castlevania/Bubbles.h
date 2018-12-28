@@ -26,7 +26,7 @@ public:
 	Bubbles(float x, float y);
 	~Bubbles();
 
-	void Update(DWORD dt, vector<LPGAMEOBJECT> *Objects = NULL, vector<LPGAMEOBJECT>* coObject = NULL);
+	void Update(DWORD dt);
 	void Render();
 
 	DWORD GetStartTimeRender() { return startTime; }

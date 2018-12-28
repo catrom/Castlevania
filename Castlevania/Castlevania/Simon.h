@@ -49,7 +49,6 @@ public:
 	///////
 
 	Simon();
-	~Simon();
 
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL, bool stopMovement = false);
 	void Render();

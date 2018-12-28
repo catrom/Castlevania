@@ -28,7 +28,12 @@ Items::Items() : GameObject()
 
 void Items::Render()
 {
-	animations[state]->Render(1, -1, x, y);
+	int alpha = 255;
+
+	if (state != MAGIC_CRYSTAL && GetTickCount() - timeAppear > ITEM_TIME_DESTROYED / 2)
+		alpha = 50 + rand() % 150;
+
+	animations[state]->Render(1, -1, x, y, alpha);
 }
 
 void Items::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)

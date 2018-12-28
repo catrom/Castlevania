@@ -5,6 +5,18 @@ SceneManager::SceneManager(Game * game)
 {
 	this->game = game;
 	LoadResources();
+
+	// INIT
+	simon = new Simon();
+	boss = new Boss();
+	whip = new Whip();
+
+	for (int i = 1; i <= 3; i++)
+	{
+		weapon = new SubWeapon();
+		weapon->SetEnable(false);
+		weaponlist.push_back(weapon);
+	}
 }
 
 SceneManager::~SceneManager()
@@ -97,44 +109,34 @@ void SceneManager::LoadSprites(int id, LPCWSTR tex, LPCWSTR sprite_data, LPCWSTR
 
 void SceneManager::LoadResources()
 {
-	LoadSprites(1, L"Textures\\Simon.png", L"Textures\\Simon_sprites.txt", L"Textures\\Simon_animations.txt");
-	LoadSprites(2, L"Textures\\Whip.png", L"Textures\\Whip_sprites.txt", L"Textures\\Whip_animations.txt");
-	LoadSprites(3, L"Textures\\Boss.png", L"Textures\\Boss_sprites.txt", L"Textures\\Boss_animations.txt");
-	LoadSprites(4, L"Textures\\SubWeapons.png", L"Textures\\SubWeapons_sprites.txt", L"Textures\\SubWeapons_animations.txt");
-	LoadSprites(5, L"Textures\\Candle.png", L"Textures\\Candle_sprites.txt", L"Textures\\Candle_animations.txt");
-	LoadSprites(6, L"Textures\\Effect.png", L"Textures\\Effect_sprites.txt", L"Textures\\Effect_animations.txt");
-	LoadSprites(7, L"Textures\\Spark.png", L"Textures\\Spark_sprites.txt", L"Textures\\Spark_animations.txt");
-	LoadSprites(8, L"Textures\\Bubbles.png", L"Textures\\Bubbles_sprites.txt", L"Textures\\Bubbles_animations.txt");
-	LoadSprites(9, L"Textures\\Ground.png", L"Textures\\Ground_sprites.txt", L"Textures\\Ground_animations.txt");
-	LoadSprites(10, L"Textures\\Items.png", L"Textures\\Items_sprites.txt", L"Textures\\Items_animations.txt");
-	LoadSprites(11, L"Textures\\Stair.png", L"Textures\\Stair_sprites.txt", L"Textures\\Stair_animations.txt");
-	LoadSprites(12, L"Textures\\Door.png", L"Textures\\Door_sprites.txt", L"Textures\\Door_animations.txt");
-	LoadSprites(13, L"Textures\\Zombie.png", L"Textures\\Zombie_sprites.txt", L"Textures\\Zombie_animations.txt");
-	LoadSprites(14, L"Textures\\BlackLeopard.png", L"Textures\\BlackLeopard_sprites.txt", L"Textures\\BlackLeopard_animations.txt");
-	LoadSprites(15, L"Textures\\VampireBat.png", L"Textures\\VampireBat_sprites.txt", L"Textures\\VampireBat_animations.txt");
-	LoadSprites(16, L"Textures\\FishMan.png", L"Textures\\FishMan_sprites.txt", L"Textures\\FishMan_animations.txt");
-	LoadSprites(17, L"Textures\\FireBall.png", L"Textures\\FireBall_sprites.txt", L"Textures\\FireBall_animations.txt");
-	LoadSprites(18, L"Textures\\Rect.png", L"Textures\\Rect_sprites.txt", L"Textures\\Rect_animations.txt");
-	LoadSprites(19, L"Textures\\HP.png", L"Textures\\HP_sprites.txt", L"Textures\\HP_animations.txt");
-
-	tilemaps->Add(SCENE_1, FILEPATH_TEX_MAP_SCENE_1, FILEPATH_DATA_MAP_SCENE_1, 1536, 320);
-	tilemaps->Add(SCENE_2, FILEPATH_TEX_MAP_SCENE_2, FILEPATH_DATA_MAP_SCENE_2, 5632, 352);
-	tilemaps->Add(SCENE_3, FILEPATH_TEX_MAP_SCENE_3, FILEPATH_DATA_MAP_SCENE_3, 1024, 352);
-
 	// for render bounding box
-	textures->Add(ID_TEX_BBOX, FILEPATH_TEX_BBOX);
-	textures->Add(ID_TEX_BBOX_2, FILEPATH_TEX_BBOX_2);
+	textures->Add(ID_TEX_BBOX, L"Textures\\BBox.png");
+	textures->Add(ID_TEX_BBOX_2, L"Textures\\BBox2.png");
 
-	simon = new Simon();
-	boss = new Boss();
-	whip = new Whip();
+	LoadSprites(ID_TEX_SIMON, L"Textures\\Simon.png", L"Textures\\Simon_sprites.txt", L"Textures\\Simon_animations.txt");
+	LoadSprites(ID_TEX_WHIP, L"Textures\\Whip.png", L"Textures\\Whip_sprites.txt", L"Textures\\Whip_animations.txt");
+	LoadSprites(ID_TEX_BOSS, L"Textures\\Boss.png", L"Textures\\Boss_sprites.txt", L"Textures\\Boss_animations.txt");
+	LoadSprites(ID_TEX_SUBWEAPONS, L"Textures\\SubWeapons.png", L"Textures\\SubWeapons_sprites.txt", L"Textures\\SubWeapons_animations.txt");
+	LoadSprites(ID_TEX_CANDLE, L"Textures\\Candle.png", L"Textures\\Candle_sprites.txt", L"Textures\\Candle_animations.txt");
+	LoadSprites(ID_TEX_EFFECT, L"Textures\\Effect.png", L"Textures\\Effect_sprites.txt", L"Textures\\Effect_animations.txt");
+	LoadSprites(ID_TEX_SPARK, L"Textures\\Spark.png", L"Textures\\Spark_sprites.txt", L"Textures\\Spark_animations.txt");
+	LoadSprites(ID_TEX_BUBBLES, L"Textures\\Bubbles.png", L"Textures\\Bubbles_sprites.txt", L"Textures\\Bubbles_animations.txt");
+	LoadSprites(ID_TEX_GROUND, L"Textures\\Ground.png", L"Textures\\Ground_sprites.txt", L"Textures\\Ground_animations.txt");
+	LoadSprites(ID_TEX_ITEMS, L"Textures\\Items.png", L"Textures\\Items_sprites.txt", L"Textures\\Items_animations.txt");
+	LoadSprites(ID_TEX_STAIR, L"Textures\\Stair.png", L"Textures\\Stair_sprites.txt", L"Textures\\Stair_animations.txt");
+	LoadSprites(ID_TEX_DOOR, L"Textures\\Door.png", L"Textures\\Door_sprites.txt", L"Textures\\Door_animations.txt");
+	LoadSprites(ID_TEX_ZOMBIE, L"Textures\\Zombie.png", L"Textures\\Zombie_sprites.txt", L"Textures\\Zombie_animations.txt");
+	LoadSprites(ID_TEX_BLACK_LEOPARD, L"Textures\\BlackLeopard.png", L"Textures\\BlackLeopard_sprites.txt", L"Textures\\BlackLeopard_animations.txt");
+	LoadSprites(ID_TEX_VAMPIRE_BAT, L"Textures\\VampireBat.png", L"Textures\\VampireBat_sprites.txt", L"Textures\\VampireBat_animations.txt");
+	LoadSprites(ID_TEX_FISHMAN, L"Textures\\FishMan.png", L"Textures\\FishMan_sprites.txt", L"Textures\\FishMan_animations.txt");
+	LoadSprites(ID_TEX_FIREBALL, L"Textures\\FireBall.png", L"Textures\\FireBall_sprites.txt", L"Textures\\FireBall_animations.txt");
+	LoadSprites(ID_TEX_RECT, L"Textures\\Rect.png", L"Textures\\Rect_sprites.txt", L"Textures\\Rect_animations.txt");
+	LoadSprites(ID_TEX_HP, L"Textures\\HP.png", L"Textures\\HP_sprites.txt", L"Textures\\HP_animations.txt");
+	LoadSprites(ID_TEX_BREAKWALL, L"Textures\\BreakWall.png", L"Textures\\BreakWall_sprites.txt", L"Textures\\BreakWall_animations.txt");
 
-	for (int i = 1; i <= 3; i++)
-	{
-		weapon = new SubWeapon();
-		weapon->SetEnable(false);
-		weaponlist.push_back(weapon);
-	}
+	tilemaps->Add(SCENE_1, L"Scenes\\Scene1.png", L"Scenes\\Scene1_map.txt", 1536, 320);
+	tilemaps->Add(SCENE_2, L"Scenes\\Scene2.png", L"Scenes\\Scene2_map.txt", 5632, 352);
+	tilemaps->Add(SCENE_3, L"Scenes\\Scene3.png", L"Scenes\\Scene3_map.txt", 1024, 352);
 }
 
 void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
@@ -143,7 +145,6 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 	fs.open(FilePath, ios::in);
 	if (fs.fail())
 	{
-		MessageBox(GetActiveWindow(), L"Load object from file failed!", L"ERROR", MB_OK);
 		DebugOut(L"[ERROR] Scene %d load data failed: file path = %s\n", IDScene, FilePath);
 		fs.close();
 		return;
@@ -166,7 +167,7 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 			Candle * candle = new Candle();
 			candle->SetPosition(pos_x, pos_y);
 			candle->SetState(state);
-			candle->SetEnable(isEnable);
+			candle->SetEnable(true);
 			candle->SetIDItem(idItem);
 			unit = new Unit(grid, candle, pos_x, pos_y);
 			break;
@@ -176,8 +177,7 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 			Ground * ground = new Ground();
 			ground->SetPosition(pos_x, pos_y);
 			ground->SetState(state);
-			ground->SetEnable(isEnable);
-			ground->SetIDItem(idItem);
+			ground->SetEnable(true);
 			unit = new Unit(grid, ground, pos_x, pos_y);
 			break;
 		}
@@ -186,8 +186,7 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 			Stair * stair = new Stair();
 			stair->SetPosition(pos_x, pos_y);
 			stair->SetState(state);
-			stair->SetEnable(isEnable);
-			stair->SetIDItem(idItem);
+			stair->SetEnable(true);
 			unit = new Unit(grid, stair, pos_x, pos_y);
 			break;
 		}
@@ -196,8 +195,7 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 			Door * door = new Door();
 			door->SetPosition(pos_x, pos_y);
 			door->SetState(state);
-			door->SetEnable(isEnable);
-			door->SetIDItem(idItem);
+			door->SetEnable(true);
 			unit = new Unit(grid, door, pos_x, pos_y);
 			break;
 		}
@@ -263,6 +261,16 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 			unit = new Unit(grid, water, pos_x, pos_y);
 			break;
 		}
+		case BREAKWALL:
+		{
+			BreakWall * breakwall = new BreakWall();
+			breakwall->SetPosition(pos_x, pos_y);
+			breakwall->SetEnable(true);
+			breakwall->SetState(NORMAL);
+			breakwall->SetIDItem(idItem);
+			unit = new Unit(grid, breakwall, pos_x, pos_y);
+			break;
+		}
 		default:
 			break;
 		}
@@ -276,6 +284,7 @@ void SceneManager::GetObjectFromGrid()
 	listUnits.clear();
 	listObjects.clear();
 	listStairs.clear();
+	listDoors.clear();
 	listStaticObjectsToRender.clear();
 	listMovingObjectsToRender.clear();
 
@@ -292,7 +301,10 @@ void SceneManager::GetObjectFromGrid()
 			continue;
 		else if (dynamic_cast<Stair*>(obj))
 			listStairs.push_back(obj);
-		else if (dynamic_cast<Candle*>(obj) || dynamic_cast<Door*>(obj) || dynamic_cast<Water*>(obj))
+		else if (dynamic_cast<Door*>(obj))
+			listDoors.push_back(obj);
+		else if (dynamic_cast<Candle*>(obj) || 
+				dynamic_cast<Water*>(obj) || dynamic_cast<BreakWall*>(obj))
 			listStaticObjectsToRender.push_back(obj);
 		else 
 			listMovingObjectsToRender.push_back(obj);
@@ -400,10 +412,7 @@ void SceneManager::UpdateTimeCounter()
 
 void SceneManager::Render()
 {
-	//tilemaps->Get(IDScene)->Draw(game->GetCameraPositon(), !crossEffectTimer->IsTimeUp());
-
-	simon->Render();
-	//simon->RenderBoundingBox();
+	tilemaps->Get(IDScene)->Draw(game->GetCameraPositon(), !crossEffectTimer->IsTimeUp());
 
 	for (auto obj : listStaticObjectsToRender)
 	{
@@ -415,8 +424,10 @@ void SceneManager::Render()
 	{
 		obj->Render();
 		//obj->RenderBoundingBox();
-		//obj->RenderActiveBoundingBox();
 	}
+
+	simon->Render();
+	//simon->RenderBoundingBox();
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -432,6 +443,12 @@ void SceneManager::Render()
 			whip->Render(-1);
 
 		//whip->RenderBoundingBox();
+	}
+
+	for (auto obj : listDoors)
+	{
+		obj->Render();
+		//obj->RenderBoundingBox();
 	}
 }
 
@@ -484,7 +501,8 @@ bool SceneManager::SimonWalkThroughDoor()
 	if (simon->isWalkThroughDoor == true && simon->isTouchGround == true)
 	{
 		simon->isWalkThroughDoor = false;
-		simon->SetOrientation(1);
+		simon->isFalling = false;
+		simon->SetOrientation(DIR_RIGHT);
 		simon->SetState(STAND);
 
 		isMovingCamera1 = true;
@@ -509,7 +527,7 @@ bool SceneManager::SimonWalkThroughDoor()
 
 			simon->SetState(WALK);
 			simon->vy = 0;
-			simon->AutoWalk(120, STAND, 1);
+			simon->AutoWalk(120, STAND, DIR_RIGHT);
 		}
 		else
 		{
@@ -594,6 +612,13 @@ void SceneManager::SetDropItems()
 			object->GetPosition(x, y);
 			object->SetIsDroppedItem(true);
 		}
+		else if (dynamic_cast<BreakWall*>(object)
+			&& object->GetState() == BREAK && object->IsDroppedItem() == false)
+		{
+			idItem = object->idItem;
+			object->GetPosition(x, y);
+			object->SetIsDroppedItem(true);
+		}
 		else if (dynamic_cast<Boss*>(object) && object->GetState() == BOSS_DESTROYED)
 		{
 			if (boss->DropItem() == true)
@@ -673,17 +698,6 @@ void SceneManager::SetInactivationByPosition()
 			else if (dynamic_cast<Items*>(object) && object->IsEnable() == true)
 				object->SetEnable(false);
 		}
-		/*else if (dynamic_cast<FishMan*>(object)
-			&& (object->GetState() == FISHMAN_ACTIVE || object->GetState() == FISHMAN_JUMP))
-		{
-			auto fishman = dynamic_cast<FishMan*>(object);
-
-			float fish_x, fish_y;
-			fishman->GetPosition(fish_x, fish_y);
-
-			if (fish_y > fishman->GetEntryPosition().y)
-				fishman->SetState(FISHMAN_INACTIVE);
-		}*/
 	}
 
 	for (int i = 0; i < 3; i++)
@@ -785,6 +799,7 @@ void SceneManager::ResetGame()
 	simon->SetHP(16);
 	simon->SetSubWeapon(-1);
 	whip->SetState(NORMAL_WHIP);
+
 	boss = new Boss();
 	boss->SetState(BOSS_INACTIVE);
 
@@ -832,12 +847,7 @@ void SceneManager::CrossEffect()
 			if (IsInViewport(listObjects[i]) == false)
 				continue;
 
-			if (dynamic_cast<Candle*>(listObjects[i]) && listObjects[i]->IsEnable() == true)
-			{
-				auto candle = dynamic_cast<Candle*>(listObjects[i]);
-				candle->SetState(CANDLE_DESTROYED);
-			}
-			else if (dynamic_cast<Zombie*>(listObjects[i]) && listObjects[i]->GetState() == ACTIVE)
+			if (dynamic_cast<Zombie*>(listObjects[i]) && listObjects[i]->GetState() == ACTIVE)
 			{
 				auto zombie = dynamic_cast<Zombie*>(listObjects[i]);
 				zombie->SetState(ZOMBIE_DESTROYED);
@@ -899,6 +909,8 @@ void SceneManager::Simon_Update(DWORD dt)
 		if (dynamic_cast<Door*>(obj) || dynamic_cast<Ground*>(obj) ||
 			dynamic_cast<ChangeSceneObject*>(obj) || dynamic_cast<Water*>(obj))
 			coObjects.push_back(obj);
+		else if (dynamic_cast<BreakWall*>(obj) && obj->GetState() == NORMAL)
+			coObjects.push_back(obj);
 		else if (simon->isAutoWalk == false) // nếu simon auto-walk sẽ không xét va chạm với enemy
 		{
 			if (dynamic_cast<FireBall*>(obj) && obj->IsEnable() == true)
@@ -950,7 +962,9 @@ void SceneManager::Whip_Update(DWORD dt)
 
 		for (auto obj : listObjects)
 		{
-			if (dynamic_cast<Candle*>(obj) || dynamic_cast<FireBall*>(obj))
+			if (dynamic_cast<BreakWall*>(obj) && obj->GetState() == NORMAL)
+				coObjects.push_back(obj);
+			else if (dynamic_cast<Candle*>(obj) || dynamic_cast<FireBall*>(obj))
 				coObjects.push_back(obj);
 			else if ((dynamic_cast<Zombie*>(obj) || dynamic_cast<VampireBat*>(obj))
 				&& obj->GetState() == ACTIVE)
@@ -1020,7 +1034,7 @@ void SceneManager::Item_Update(DWORD dt, LPGAMEOBJECT & item)
 
 		for (auto obj : listObjects)
 		{
-			if (dynamic_cast<Ground*>(obj))
+			if (dynamic_cast<Ground*>(obj) || (dynamic_cast<BreakWall*>(obj) && obj->GetState() == NORMAL))
 				coObjects.push_back(obj);
 		}
 
@@ -1062,7 +1076,7 @@ void SceneManager::Zombie_Update(DWORD dt, LPGAMEOBJECT & object)
 
 		for (auto obj : listObjects)
 		{
-			if (dynamic_cast<Ground*>(obj))
+			if (dynamic_cast<Ground*>(obj) || (dynamic_cast<BreakWall*>(obj) && obj->GetState() == NORMAL))
 				coObjects.push_back(obj);
 		}
 
@@ -1077,7 +1091,8 @@ void SceneManager::BlackLeopard_Update(DWORD dt, LPGAMEOBJECT & object)
 
 	if (leopard->GetState() == BLACK_LEOPARD_INACTIVE)
 	{
-		if (leopard->IsAbleToActivate() == true)
+		if (leopard->IsAbleToActivate() == true && IsInViewport(leopard) == true
+			&& abs(simon->x - leopard->GetEntryPosition().x) > BLACK_LEOPARD_ACTIVE_BBOX_WIDTH)
 		{
 			int nx = leopard->GetEntryPosition().x < simon->x ? 1 : -1;
 			leopard->SetOrientation(nx);
@@ -1091,7 +1106,7 @@ void SceneManager::BlackLeopard_Update(DWORD dt, LPGAMEOBJECT & object)
 
 		for (auto obj : listObjects)
 		{
-			if (dynamic_cast<Ground*>(obj))
+			if (dynamic_cast<Ground*>(obj) || (dynamic_cast<BreakWall*>(obj) && obj->GetState() == NORMAL))
 				coObjects.push_back(obj);
 		}
 
@@ -1195,7 +1210,8 @@ void SceneManager::FishMan_Update(DWORD dt, LPGAMEOBJECT & object)
 
 			for (auto obj : listObjects)
 			{
-				if (dynamic_cast<Ground*>(obj) || dynamic_cast<Water*>(obj))
+				if ((dynamic_cast<BreakWall*>(obj) && obj->GetState() == NORMAL) ||
+					dynamic_cast<Ground*>(obj) || dynamic_cast<Water*>(obj))
 					coObjects.push_back(obj);
 			}
 

@@ -5,7 +5,7 @@
 Bubble::Bubble()
 {
 	AddAnimation("bubbles_ani");
-	SetState(BUBBLES);
+	SetState(0);
 }
 
 void Bubble::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
@@ -50,7 +50,7 @@ Bubbles::~Bubbles()
 	bubbles.clear();
 }
 
-void Bubbles::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject)
+void Bubbles::Update(DWORD dt)
 {
 	for (auto bubble : bubbles)
 	{

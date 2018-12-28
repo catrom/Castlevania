@@ -12,6 +12,7 @@
 #include "Boss.h"
 #include "ChangeSceneObject.h"
 #include "Water.h"
+#include "BreakWall.h"
 
 #include <fstream>
 #include <string>
@@ -36,7 +37,7 @@ Simon::Simon() : GameObject()
 
 	score = 0;
 	item = -1;
-	energy = 5;
+	energy = 99;
 	life = 3;
 	subWeapon = -1;
 	HP = 16;
@@ -100,13 +101,13 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
-			if (dynamic_cast<Ground*>(e->obj))
+			if (dynamic_cast<Ground*>(e->obj) || dynamic_cast<BreakWall*>(e->obj))
 			{
 				if (e->ny != 0)
 				{
 					// BUG: 
 					// Simon deflect ngay lập tức va chạm với ground (đôi lúc) -> không bật nhảy được.
-					if (e->ny == -1 && (state != DEFLECT || (state == DEFLECT && vy > 0) ))
+					if (e->ny == CDIR_BOTTOM && (state != DEFLECT || (state == DEFLECT && vy > 0) ))
 					{
 						vy = 0;
 						isTouchGround = true;
@@ -134,7 +135,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 				{
 					vx = 0;
 
-					if (e->nx == 1.0f)	 // Simon đã đi qua cửa
+					if (e->nx == CDIR_LEFT)	 // Simon đã đi qua cửa
 						x += 1.0f;		 // +1 để không bị overlap
 					else
 					{
@@ -149,7 +150,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 					SetState(WALK);
 					vx = SIMON_WALKING_SPEED_LOWER;
 					vy = 0;
-					AutoWalk(80, STAND, 1);
+					AutoWalk(80, STAND, DIR_RIGHT);
 				}
 			}
 			else if (dynamic_cast<ChangeSceneObject*>(e->obj))
@@ -220,8 +221,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 						// đặt trạng thái deflect cho simon
 						if (e->nx != 0)
 						{
-							if (e->nx == 1.0f && this->nx == 1) this->nx = -1;
-							else if (e->nx == -1.0f && this->nx == -1) this->nx = 1;
+							if (e->nx == CDIR_LEFT && this->nx == 1) this->nx = DIR_LEFT;
+							else if (e->nx == CDIR_RIGHT && this->nx == -1) this->nx = DIR_RIGHT;
 						}
 
 						SetState(DEFLECT);

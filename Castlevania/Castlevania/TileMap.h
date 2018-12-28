@@ -37,7 +37,7 @@ public:
 	int index = 0;							 // index hiện tại của min_max_col_to_draw
 
 	TileMap() {}
-	TileMap(int ID, LPCWSTR filePath_tex, LPCWSTR filePath_data, int map_width, int map_height, int tile_width = TILEMAP_DEFAULT_CELL_WIDTH, int tile_height = TILEMAP_DEFAULT_CELL_HEIGHT);
+	TileMap(int ID, LPCWSTR filePath_tex, LPCWSTR filePath_data, int map_width, int map_height, int tile_width = 32, int tile_height = 32);
 	
 	void LoadResources();			// load tất cả các ô tile lưu vào sprites
 	void LoadMap();					// load ma trận map 
@@ -58,7 +58,7 @@ class TileMaps
 	unordered_map<int, LPTILEMAP> tilemaps;
 
 public:
-	void Add(int ID, LPCWSTR filePath_tex, LPCWSTR filePath_data, int map_width, int map_height, int tile_width = TILEMAP_DEFAULT_CELL_WIDTH, int tile_height = TILEMAP_DEFAULT_CELL_HEIGHT);
+	void Add(int ID, LPCWSTR filePath_tex, LPCWSTR filePath_data, int map_width, int map_height, int tile_width = 32, int tile_height = 32);
 	LPTILEMAP Get(int ID) { return tilemaps[ID]; }
 
 	static TileMaps * GetInstance();

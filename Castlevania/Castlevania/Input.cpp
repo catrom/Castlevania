@@ -291,13 +291,15 @@ void Input::Simon_Hit_SubWeapon()
 	if (simon->GetSubWeapon() == -1 || simon->GetEnergy() == 0) // không có vũ khí hoặc enery = 0
 		return;
 
-	if (simon->GetSubWeapon() == STOP_WATCH && simon->GetEnergy() < 5)
-		return;
+	if (simon->GetSubWeapon() == STOP_WATCH)
+	{
+		if (simon->GetEnergy() < 5)
+			return;
+		if (scene->stopWatchTimer->IsTimeUp() == false) // đang sử dụng stop watch
+			return;
 
-	if (scene->stopWatchTimer->IsTimeUp() == false) // đang sử dụng stop watch
-		return;
-	else
 		weaponlist->at(0)->SetEnable(false);
+	}
 
 	if (weaponlist->at(0)->IsEnable() == false)
 		weapon = weaponlist->at(0);

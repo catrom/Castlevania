@@ -14,8 +14,6 @@ void Water::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 		else
 			bubblesList[i]->Update(dt);
 	}
-
-
 }
 
 void Water::Render()

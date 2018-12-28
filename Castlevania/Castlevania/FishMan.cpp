@@ -1,6 +1,7 @@
 ﻿#include "FishMan.h"
 #include "Ground.h"
 #include "Water.h"
+#include "BreakWall.h"
 
 
 FishMan::FishMan() : Enemy()
@@ -71,11 +72,11 @@ void FishMan::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
-			if (dynamic_cast<Ground*>(e->obj))
+			if (dynamic_cast<Ground*>(e->obj) || dynamic_cast<BreakWall*>(e->obj))
 			{
 				if (e->ny != 0)
 				{
-					if (e->ny == -1.0f)
+					if (e->ny == CDIR_BOTTOM)
 					{
 						vy = 0;
 
@@ -88,7 +89,7 @@ void FishMan::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement
 			}
 			else if (dynamic_cast<Water*>(e->obj))
 			{
-				if (e->ny == -1.0f)
+				if (e->ny == CDIR_BOTTOM)
 				{
 					Water * water = dynamic_cast<Water*>(e->obj);
 					water->AddBubbles(x, y + FISHMAN_BBOX_HEIGHT);

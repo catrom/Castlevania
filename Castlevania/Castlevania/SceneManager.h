@@ -20,6 +20,7 @@
 #include "Items.h"
 #include "Boss.h"
 #include "Water.h"
+#include "BreakWall.h"
 #include "ChangeSceneObject.h"
 #include "Timer.h"
 
@@ -52,6 +53,7 @@ class SceneManager
 	
 	vector<LPGAMEOBJECT> listStaticObjectsToRender;
 	vector<LPGAMEOBJECT> listMovingObjectsToRender;
+	vector<LPGAMEOBJECT> listDoors;
 	vector<SubWeapon*> weaponlist;		// dùng mảng để sử dụng double shot, triple shot
 
 	bool isSetSimonAutoWalk = false;	//

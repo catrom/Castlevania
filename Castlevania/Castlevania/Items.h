@@ -4,7 +4,6 @@
 
 class Items : public GameObject
 {
-
 	DWORD timeAppear;   // thời gian bắt đầu xuất hiện của item, dùng để xét cho item tự huỷ
 public:
 	Items();

@@ -14,32 +14,19 @@ Player::~Player()
 
 void Player::Init()
 {
+	Sprites * sprites = Sprites::GetInstance();
 	time = 0;
-
-	// Khởi tạo list máu của Simon và Enemy
-	Textures * textures = Textures::GetInstance();
-	textures->Add(ID_TEX_HP, FILEPATH_TEX_HP, D3DCOLOR_XRGB(255, 255, 255));
-	textures->Add(ID_TEX_RECT, FILEPATH_TEX_RECT, D3DCOLOR_XRGB(255, 255, 255)); 
-
-	LPDIRECT3DTEXTURE9 texHP = textures->Get(ID_TEX_HP);
-	LPDIRECT3DTEXTURE9 texRect = textures->Get(ID_TEX_RECT);
 
 	for (int i = 0; i < 16; i++)
 	{
-		Sprite * player = new Sprite("HP_player", 0, 0, 8, 15, texHP);
-		playerHP.push_back(player);
-
-		Sprite * lose = new Sprite("HP_lose", 8, 0, 16, 15, texHP);
-		loseHP.push_back(lose);
-
-		Sprite * enemy = new Sprite("HP_enemy", 16, 0, 24, 15, texHP);
-		enemyHP.push_back(enemy);
+		playerHP.push_back(sprites->Get("HP_player"));
+		loseHP.push_back(sprites->Get("HP_lose"));
+		enemyHP.push_back(sprites->Get("HP_enemy"));
 	}
 
-	// Khởi tạo list subweapon để render trong subweaponbox
-	subWeaponBox = new Sprite("rect", 0, 0, 95, 40, texRect);
+	// Tạo list subweapon để render trong subweaponbox
+	subWeaponBox = sprites->Get("rect");
 
-	Sprites * sprites = Sprites::GetInstance();
 	subWeaponList.push_back(sprites->Get("item_stopwatch"));
 	subWeaponList.push_back(sprites->Get("item_dagger"));
 	subWeaponList.push_back(sprites->Get("item_axe"));
@@ -61,7 +48,6 @@ void Player::Init()
 
 	if (hr != DI_OK)
 	{
-		MessageBox(GetActiveWindow(), L"Create font failed!", L"ERROR", MB_OK);
 		DebugOut(L"[ERROR] Create font failed\n");
 		return;
 	}
