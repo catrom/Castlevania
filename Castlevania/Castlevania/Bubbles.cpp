@@ -26,20 +26,19 @@ Bubbles::Bubbles(float x, float y)
 {
 	// Khởi tạo 3 bubble
 
-	Bubble * bubble = new Bubble();
-	bubble->SetPosition(x, y);
-	bubble->SetSpeed(-BUBBLES_SPEED_X, -BUBBLES_SPEED_Y);
-	bubbles.push_back(bubble);
-	
-	bubble = new Bubble();
-	bubble->SetPosition(x, y);
-	bubble->SetSpeed(BUBBLES_SPEED_X, -BUBBLES_SPEED_Y);
-	bubbles.push_back(bubble);
+	Bubble * bubble;
 
-	bubble = new Bubble();
-	bubble->SetPosition(x, y);
-	bubble->SetSpeed(-BUBBLES_SPEED_X2, -BUBBLES_SPEED_Y2);
-	bubbles.push_back(bubble);
+	for (int i = 0; i < 3; i++)
+	{
+		bubble = new Bubble();
+		bubble->SetPosition(x, y);
+
+		float vx = (float)(-100 + rand() % 200) / 1000;
+		float vy = (float)(-100 + rand() % 200) / 1000;
+		bubble->SetSpeed(vx, vy);
+
+		bubbles.push_back(bubble);
+	}
 }
 
 Bubbles::~Bubbles()

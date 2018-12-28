@@ -146,12 +146,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bat.cpp" />
     <ClCompile Include="BlackLeopard.cpp" />
     <ClCompile Include="Boss.cpp" />
     <ClCompile Include="BreakWall.cpp" />
     <ClCompile Include="Bubbles.cpp" />
     <ClCompile Include="Candle.cpp" />
     <ClCompile Include="ChangeSceneObject.cpp" />
+    <ClCompile Include="Cloud.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -162,6 +164,7 @@
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="IntroScene.cpp" />
     <ClCompile Include="Items.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -179,12 +182,14 @@
     <ClCompile Include="Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bat.h" />
     <ClInclude Include="BlackLeopard.h" />
     <ClInclude Include="Boss.h" />
     <ClInclude Include="BreakWall.h" />
     <ClInclude Include="Bubbles.h" />
     <ClInclude Include="Candle.h" />
     <ClInclude Include="ChangeSceneObject.h" />
+    <ClInclude Include="Cloud.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Door.h" />
@@ -196,6 +201,7 @@
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="IntroScene.h" />
     <ClInclude Include="Items.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="SceneManager.h" />

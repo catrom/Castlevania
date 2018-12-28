@@ -16,7 +16,7 @@ Boss::Boss() : Enemy()
 
 	dropItem = false;
 
-	HP = 16;
+	HP = 2;
 	score = 3000;
 	attack = 3;
 }

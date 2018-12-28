@@ -48,7 +48,9 @@ void Render()
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 
 		scene->Render();
-		player->Render();
+
+		if (scene->GetIDScene() >= 0)  // Intro screen, title screen -> not render HUD
+			player->Render();
 
 		spriteHandler->End();
 		d3ddv->EndScene();
@@ -155,7 +157,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	game->Init(hWnd);
 	
 	scene = new SceneManager(game);
-	scene->Init(SCENE_2);
+	scene->Init(TITLE_SCREEN);
 
 	input = new Input(game, scene);
 	game->InitKeyboard(input);

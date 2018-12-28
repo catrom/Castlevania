@@ -11,3 +11,4 @@ simon_hitstairup_ani	simon_hitstairup_1	100	simon_hitstairup_2	100	simon_hitstai
 simon_hitstairdown_ani	simon_hitstairdown_1	100	simon_hitstairdown_2	100	simon_hitstairdown_3	100
 simon_deflect_ani	simon_stand	100	simon_deflect	400	simon_sit	100
 simon_dead_ani	simon_dead	100
+simon_back_ani	simon_back	100

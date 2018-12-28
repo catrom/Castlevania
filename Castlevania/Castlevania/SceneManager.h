@@ -24,6 +24,8 @@
 #include "ChangeSceneObject.h"
 #include "Timer.h"
 
+#include "IntroScene.h"
+
 #include <map>
 using namespace std;
 
@@ -34,6 +36,9 @@ class SceneManager
 	Game * game;
 	Grid * grid;
 	Unit * unit;
+
+	IntroScene * introscene;
+	LPDIRECT3DTEXTURE9 titlescene;
 
 	vector<Unit*> listUnits;
 	vector<LPGAMEOBJECT> listObjects;
@@ -71,11 +76,18 @@ public:
 	Timer * doubleShotTimer = new Timer(ITEM_DOUBLE_SHOT_EFFECT_TIME);
 	Timer * tripleShotTimer = new Timer(ITEM_TRIPLE_SHOT_EFFECT_TIME);
 
+	Timer * gameoverDelayTimer = new Timer(50);
+
 	SceneManager(Game * game);
 	~SceneManager();
 
+	int chooseToPlayAgain = 0;					// Lựa chọn của người chơi khi game over
 	bool isGameReset = false;
-
+	bool isGameOver = false;
+	bool isGamePause = false;
+	int isNeedToAddScoreTime = -1;				// Để cộng điểm dựa vào thời gian còn lại bên Player	
+												// -1: không, 0: cần, 1: đã xong.
+	
 	void Init(int idScene);						// init simon position, camera position, grid..
 	void LoadSprites(int id, LPCWSTR tex, LPCWSTR sprite_data, LPCWSTR animation_data);
 	void LoadResources();						// load all sprites, textures and tilemaps
@@ -116,6 +128,9 @@ public:
 	void CrossEffect();
 	void DoubleShotEffect();
 	void TripleShotEffect();
+
+	// Game Over
+	void DoGameOver();
 
 	// Các hàm con của hàm Update()
 	void Simon_Update(DWORD dt);

@@ -126,6 +126,15 @@
     <ClCompile Include="WallPieces.cpp">
       <Filter>Effects</Filter>
     </ClCompile>
+    <ClCompile Include="IntroScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Bat.cpp">
+      <Filter>Moving Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Cloud.cpp">
+      <Filter>Moving Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Debug.h">
@@ -223,6 +232,15 @@
     </ClInclude>
     <ClInclude Include="WallPieces.h">
       <Filter>Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="IntroScene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Bat.h">
+      <Filter>Moving Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Cloud.h">
+      <Filter>Moving Objects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

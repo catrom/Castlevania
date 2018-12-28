@@ -1,0 +1,2 @@
+cloud_ani	cloud	100
+bat_ani	bat_1	100	bat_2	100

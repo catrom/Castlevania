@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include "d3dx9.h"
 #include "SceneManager.h"
 
 #include <vector>
@@ -19,7 +18,6 @@ private:
 	Simon * simon;
 	Boss * boss;
 
-	ID3DXFont * font;
 	string information;
 
 	vector<LPSPRITE> playerHP;
@@ -27,9 +25,12 @@ private:
 	vector<LPSPRITE> loseHP;
 
 	Sprite * subWeaponBox;
+	Sprite * choose;
+	LPDIRECT3DTEXTURE9 pause;
+	LPDIRECT3DTEXTURE9 over;
 	vector<LPSPRITE> subWeaponList;
 	vector<LPSPRITE> itemList;
-	
+
 	int score;
 	int time;
 	int id_scene;
@@ -39,6 +40,8 @@ private:
 	int subWeapon;
 	int simonHP;
 	int bossHP;
+
+	
 
 public:
 	Player(Game * game, SceneManager * scene);

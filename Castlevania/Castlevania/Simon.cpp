@@ -34,10 +34,11 @@ Simon::Simon() : GameObject()
 	AddAnimation("simon_hitstairdown_ani");
 	AddAnimation("simon_deflect_ani");
 	AddAnimation("simon_dead_ani");
+	AddAnimation("simon_back_ani");
 
 	score = 0;
 	item = -1;
-	energy = 99;
+	energy = 15;
 	life = 3;
 	subWeapon = -1;
 	HP = 16;
@@ -46,6 +47,9 @@ Simon::Simon() : GameObject()
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 {
 	GameObject::Update(dt);
+
+	if (state == BACK)
+		return;
 
 	// Update vy
 	if (isStandOnStair == false && isAutoWalk == false)
@@ -67,6 +71,17 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovement)
 	// Reset invisibility timer if invisibility time has passed
 	if (invisibilityTimer->IsTimeUp() == true)
 		invisibilityTimer->Stop();
+
+	if (coObjects == NULL)
+	{
+		if (isAutoWalk == false)
+		{
+			x += dx;
+			y += dy;
+		}
+
+		return;
+	}
 
 	// Check collision between Simon and other objects
 	vector<LPCOLLISIONEVENT> coEvents;
@@ -349,6 +364,12 @@ void Simon::SetState(int state)
 		vy = 0;
 		life -= 1;
 		break;
+	case BACK:
+		vx = 0;
+		vy = 0;
+		animations[state]->Reset();
+		animations[state]->SetAniStartTime(GetTickCount());
+		break;
 	default:
 		break;
 	}
@@ -370,6 +391,14 @@ void Simon::LoseHP(int x)
 
 	if (HP <= 0)
 		HP = 0;
+}
+
+void Simon::AddHP(int x)
+{
+	HP += x;
+
+	if (HP >= 16)
+		HP = 16;
 }
 
 bool Simon::CheckCollisionWithStair(vector<LPGAMEOBJECT>* listStair)
@@ -505,7 +534,7 @@ bool Simon::CheckCollisionWithItem(vector<LPGAMEOBJECT> * listItem)
 					HP = SIMON_HP;
 				break;
 			case MAGIC_CRYSTAL:
-				HP = SIMON_HP;
+				isGotMagicCrystalItem = true;
 				break;
 			default:
 				break;

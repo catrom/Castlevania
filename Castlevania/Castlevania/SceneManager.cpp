@@ -29,6 +29,9 @@ void SceneManager::Init(int idScene)
 
 	switch (idScene)
 	{
+	case INTRO_SCREEN:
+		introscene = new IntroScene(simon);
+		break;
 	case SCENE_1:
 		grid = new Grid(1536, 480);
 		LoadObjectsFromFile(FILEPATH_OBJECTS_SCENE_1);
@@ -113,6 +116,17 @@ void SceneManager::LoadResources()
 	textures->Add(ID_TEX_BBOX, L"Textures\\BBox.png");
 	textures->Add(ID_TEX_BBOX_2, L"Textures\\BBox2.png");
 
+	// for game control
+	textures->Add(ID_TEX_YESNO, L"Textures\\YesNo.png");
+	textures->Add(ID_TEX_PAUSE, L"Textures\\Pause.png");
+
+	// Title screen
+	textures->Add(ID_TEX_TITLESCREEN, L"Textures\\TitleScreen.png");
+
+	// Intro screen
+	textures->Add(ID_TEX_INTROSCREEN, L"Textures\\IntroScreen.png");
+
+	// Game object
 	LoadSprites(ID_TEX_SIMON, L"Textures\\Simon.png", L"Textures\\Simon_sprites.txt", L"Textures\\Simon_animations.txt");
 	LoadSprites(ID_TEX_WHIP, L"Textures\\Whip.png", L"Textures\\Whip_sprites.txt", L"Textures\\Whip_animations.txt");
 	LoadSprites(ID_TEX_BOSS, L"Textures\\Boss.png", L"Textures\\Boss_sprites.txt", L"Textures\\Boss_animations.txt");
@@ -133,6 +147,7 @@ void SceneManager::LoadResources()
 	LoadSprites(ID_TEX_RECT, L"Textures\\Rect.png", L"Textures\\Rect_sprites.txt", L"Textures\\Rect_animations.txt");
 	LoadSprites(ID_TEX_HP, L"Textures\\HP.png", L"Textures\\HP_sprites.txt", L"Textures\\HP_animations.txt");
 	LoadSprites(ID_TEX_BREAKWALL, L"Textures\\BreakWall.png", L"Textures\\BreakWall_sprites.txt", L"Textures\\BreakWall_animations.txt");
+	LoadSprites(ID_TEX_BREAKWALL, L"Textures\\IntroObjects.png", L"Textures\\IntroObjects_sprites.txt", L"Textures\\IntroObjects_animations.txt");
 
 	tilemaps->Add(SCENE_1, L"Scenes\\Scene1.png", L"Scenes\\Scene1_map.txt", 1536, 320);
 	tilemaps->Add(SCENE_2, L"Scenes\\Scene2.png", L"Scenes\\Scene2_map.txt", 5632, 352);
@@ -313,6 +328,28 @@ void SceneManager::GetObjectFromGrid()
 
 void SceneManager::Update(DWORD dt)
 {
+	if (IDScene == TITLE_SCREEN)
+		return;
+
+	if (IDScene == INTRO_SCREEN)
+	{
+		introscene->Update(dt);
+		return;
+	}
+
+	// Pause Game
+	if (isGamePause == true)
+		return;
+
+	// Game over
+	if (simon->isGotMagicCrystalItem == true)
+	{
+		DoGameOver();
+
+		if (isGameOver == true)
+			return;
+	}
+
 	// Nếu Simon đi qua cửa thì không cần cập nhật hay xét va chạm
 	if (SimonWalkThroughDoor() == true)
 		return;
@@ -397,8 +434,11 @@ void SceneManager::UpdateTimeCounter()
 	if (isSimonDead == true && simonDeadTimer->IsTimeUp() == true)
 	{
 		simonDeadTimer->Stop();
-		isSimonDead = false;
-		ResetGame();
+
+		if (simon->GetLife() == 0)
+			isGameOver = true;
+		else 
+			ResetGame();
 	}
 
 	// Double shot
@@ -412,43 +452,58 @@ void SceneManager::UpdateTimeCounter()
 
 void SceneManager::Render()
 {
-	tilemaps->Get(IDScene)->Draw(game->GetCameraPositon(), !crossEffectTimer->IsTimeUp());
+	if (isGameOver == true)
+		return;
 
-	for (auto obj : listStaticObjectsToRender)
+	if (IDScene == TITLE_SCREEN)
 	{
-		obj->Render();
-		//obj->RenderBoundingBox();
+		titlescene = Textures::GetInstance()->Get(ID_TEX_TITLESCREEN);
+		game->Draw(0, 0, 0, 0, titlescene, 0, 0, 514, 450);
 	}
-
-	for (auto obj : listMovingObjectsToRender)
+	else if (IDScene == INTRO_SCREEN)
 	{
-		obj->Render();
-		//obj->RenderBoundingBox();
+		introscene->Render();
 	}
-
-	simon->Render();
-	//simon->RenderBoundingBox();
-
-	for (int i = 0; i < 3; i++)
+	else
 	{
-		weaponlist[i]->Render();
-		//weaponlist[i]->RenderBoundingBox();
-	}
+		tilemaps->Get(IDScene)->Draw(game->GetCameraPositon(), !crossEffectTimer->IsTimeUp());
 
-	if (simon->isHitSubWeapons == false)
-	{
-		if (simon->IsHit() == true)
-			whip->Render(simon->animations[simon->GetState()]->GetCurrentFrame());
-		else
-			whip->Render(-1);
+		for (auto obj : listStaticObjectsToRender)
+		{
+			obj->Render();
+			//obj->RenderBoundingBox();
+		}
 
-		//whip->RenderBoundingBox();
-	}
+		for (auto obj : listMovingObjectsToRender)
+		{
+			obj->Render();
+			//obj->RenderBoundingBox();
+		}
 
-	for (auto obj : listDoors)
-	{
-		obj->Render();
-		//obj->RenderBoundingBox();
+		simon->Render();
+		//simon->RenderBoundingBox();
+
+		for (int i = 0; i < 3; i++)
+		{
+			weaponlist[i]->Render();
+			//weaponlist[i]->RenderBoundingBox();
+		}
+
+		if (simon->isHitSubWeapons == false)
+		{
+			if (simon->IsHit() == true)
+				whip->Render(simon->animations[simon->GetState()]->GetCurrentFrame());
+			else
+				whip->Render(-1);
+
+			//whip->RenderBoundingBox();
+		}
+
+		for (auto obj : listDoors)
+		{
+			obj->Render();
+			//obj->RenderBoundingBox();
+		}
 	}
 }
 
@@ -795,9 +850,16 @@ void SceneManager::SetGameState(int state)
 void SceneManager::ResetGame()
 {
 	isGameReset = true; // flag variable for reset time in Player::Update()
+	isGameOver = false;
+	isGamePause = false;
+	isSimonDead = false;
 
-	simon->SetHP(16);
-	simon->SetSubWeapon(-1);
+	int life = simon->GetLife();
+	
+	simon = new Simon();
+	if (life > 0)
+		simon->SetLife(life);
+
 	whip->SetState(NORMAL_WHIP);
 
 	boss = new Boss();
@@ -887,6 +949,44 @@ void SceneManager::TripleShotEffect()
 		simon->isGotTripleShotItem = false;
 		tripleShotTimer->Start();
 	}
+}
+
+void SceneManager::DoGameOver()
+{
+	// 3 giai đoạn:
+	// + Cộng HP
+	// + Cộng điểm theo thời gian còn lại
+	// + Cộng điểm theo energy còn lại
+
+	if (simon->GetHP() < 16)
+	{
+		if (gameoverDelayTimer->IsTimeUp() == true)		// delay tăng máu
+		{
+			gameoverDelayTimer->Start();
+			simon->AddHP(1);
+		}
+
+		return;
+	}
+	
+	if (isNeedToAddScoreTime == -1)
+	{
+		isNeedToAddScoreTime = 0;
+		return;
+	}
+	else if (isNeedToAddScoreTime == 0)
+	{
+		return;
+	}
+
+	if (simon->GetEnergy() > 0)
+	{
+		simon->LoseEnergy(1);
+		simon->AddScore(100);
+		return;
+	}
+
+	isGameOver = true;
 }
 
 void SceneManager::Simon_Update(DWORD dt)

@@ -34,6 +34,9 @@ bool Input::AnimationDelay()
 		if (simon->GetState() == HIT_SIT && simon->animations[HIT_SIT]->IsOver(HIT_ANI_TIME_DELAY) == false)
 			return true;
 
+		if (simon->GetState() == BACK && simon->animations[BACK]->IsOver(BACK_ANI_TIME_DELAY) == false)
+			return true;
+
 		if (simon->GetState() == HIT_STAIR_UP && simon->animations[HIT_STAIR_UP]->IsOver(HIT_ANI_TIME_DELAY) == false)
 			return true;
 
@@ -58,6 +61,9 @@ bool Input::AnimationDelay()
 bool Input::CanProcessKeyboard()
 {
 	if (scene->IsMovingCamera() == true)
+		return false;
+
+	if (scene->isGamePause == true)
 		return false;
 
 	if (simon->GetState() == DEAD)
@@ -141,6 +147,13 @@ void Input::KeyState(BYTE *state)
 	}
 	else
 	{
+		if (scene->GetIDScene() == INTRO_SCREEN)
+		{
+			scene->ResetGame();
+			scene->Init(SCENE_1);
+			return;
+		}
+
 		simon->isHitSubWeapons = false;
 
 		if (StairCollisionsDetection() == true)
@@ -155,6 +168,39 @@ void Input::KeyState(BYTE *state)
 
 void Input::OnKeyDown(int KeyCode)
 {
+	if (KeyCode == DIK_PAUSE)
+	{
+		scene->isGamePause = !(scene->isGamePause);
+		return;
+	}
+
+	if (scene->isGameOver == true)
+	{
+		if (KeyCode == DIK_UP || KeyCode == DIK_DOWN)
+			scene->chooseToPlayAgain = (scene->chooseToPlayAgain + 1) % 2;
+		else if (KeyCode == DIK_Z)
+		{
+			if (scene->chooseToPlayAgain == 0)
+			{
+				scene->ResetGame();
+				scene->Init(SCENE_1);
+			}
+			else
+			{
+				HWND hWnd = GetActiveWindow();
+				DestroyWindow(hWnd);
+			}
+		}
+
+		return;
+	}
+
+	if (scene->GetIDScene() == TITLE_SCREEN)
+	{
+		scene->Init(INTRO_SCREEN);
+		return;
+	}
+
 	if (CanProcessKeyboard() == false)
 		return;
 

@@ -20,7 +20,8 @@ class Simon : public GameObject
 	float autoWalkDistance = 0;		// Khoảng cách 
 	int stateAfterAutoWalk = -1;	// Trạng thái sau khi auto-walk
 	int nxAfterAutoWalk = 0;		// Hướng Simon sau khi auto-walk
-	
+
+
 public:
 	Timer * untouchableTimer = new Timer(SIMON_UNTOUCHABLE_TIME);
 	Timer * invisibilityTimer = new Timer(SIMON_INVISIBILITY_TIME);
@@ -39,6 +40,7 @@ public:
 	bool isGotDoubleShotItem = false; // Double shot item
 	bool isGotTripleShotItem = false; // Triple shot item
 	bool isGotCrossItem = false;
+	bool isGotMagicCrystalItem = false;
 
 	int changeScene = -1;			// lưu id Scene kế tiếp khi Simon va chạm với ChangeSceneObject
 
@@ -68,6 +70,8 @@ public:
 	void AddScore(int x) { score += x; }
 	void LoseEnergy(int x) { energy -= x; }
 	void LoseHP(int x);
+	void SetLife(int x) { life = x; }
+	void AddHP(int x);
 	void SetHP(int x) { HP = x; }
 	void SetEnergy(int x) { energy = x; }
 	void SetSubWeapon(int x) { subWeapon = x; }

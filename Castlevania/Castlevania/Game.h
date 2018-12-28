@@ -43,6 +43,8 @@ class Game
 
 	LPKEYEVENTHANDLER keyHandler;
 
+	ID3DXFont * font;
+
 	D3DXVECTOR3 cameraPosition;			// camera position for viewing
 
 public:
@@ -62,7 +64,8 @@ public:
 	LPDIRECT3DSURFACE9 GetBackBuffer() { return this->backBuffer; }
 	LPD3DXSPRITE GetSpriteHandler() { return this->spriteHandler; }
 	D3DXVECTOR3 GetCameraPositon() { return this->cameraPosition; }
-	
+	ID3DXFont * GetFont() { return this->font; }
+
 	static Game* GetInstance();
 
 	void SetCameraPosition(float x, float y);

@@ -60,7 +60,6 @@ void TileMap::LoadMap()
 
 	if (fs.fail())
 	{
-		MessageBox(GetActiveWindow(), L"TileMap::Load_MapData failed!", L"ERROR", MB_OK);
 		DebugOut(L"[ERROR] TileMap::Load_MapData failed: ID=%d", ID);
 		fs.close();
 		return;

@@ -37,21 +37,6 @@ void Player::Init()
 	itemList.push_back(sprites->Get("item_doubleshot"));
 	itemList.push_back(sprites->Get("item_tripleshot"));
 
-	// Font
-	font = NULL;
-	AddFontResourceEx(FILEPATH_FONT, FR_PRIVATE, NULL);
-	
-	HRESULT hr = D3DXCreateFont(
-		game->GetDirect3DDevice(), 16, 0, FW_NORMAL, 1, false,
-		DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
-		ANTIALIASED_QUALITY, FF_DONTCARE, L"Press Start", &font);
-
-	if (hr != DI_OK)
-	{
-		DebugOut(L"[ERROR] Create font failed\n");
-		return;
-	}
-
 	information = "SCORE-000000 TIME 0000 SCENE 00\n";
 	information +="PLAYER                  -00\n";
 	information +="ENEMY                   -00\n";
@@ -59,6 +44,9 @@ void Player::Init()
 
 void Player::Update(DWORD dt, bool stopwatch)
 {
+	if (scene->isGameOver == true)
+		return;
+
 	this->simon = scene->GetSimon();
 	this->boss = scene->GetBoss();
 
@@ -81,17 +69,30 @@ void Player::Update(DWORD dt, bool stopwatch)
 		scene->isGameReset = false;
 	}
 
-	if (stopwatch == false) time += dt;				// khi sử dụng stop watch thì không đếm thời gian
+	if (stopwatch == false && scene->isGamePause == false) time += dt;
 	int remainTime = DEFAULT_TIME_PLAY - time / CLOCKS_PER_SEC;
 
 	if (remainTime <= 0)
 	{
 		remainTime = 0;
 
-		if (simon->isTouchGround == true && simon->GetState() != DEAD)
-			simon->SetState(DEAD);
+		if (scene->isNeedToAddScoreTime == -1)		// không phải hết thời gian do cộng điểm win
+		{
+			if (simon->isTouchGround == true && simon->GetState() != DEAD)
+				simon->SetState(DEAD);
+		}
 	}
-		
+	
+	if (scene->isNeedToAddScoreTime == 0)
+	{
+		if (remainTime > 0)
+		{
+			time += CLOCKS_PER_SEC;
+			simon->AddScore(10);
+		}
+		else
+			scene->isNeedToAddScoreTime = 1;
+	}
 
 	// Chuẩn hoá chuỗi
 	string score_str = to_string(score);
@@ -117,11 +118,27 @@ void Player::Update(DWORD dt, bool stopwatch)
 
 void Player::Render()
 {
+	if (scene->isGamePause == true)
+	{
+		pause = Textures::GetInstance()->Get(ID_TEX_PAUSE);
+		game->Draw(0, 0, 240, 210, pause, 0, 0, 34, 52);
+	}
+
+	if (scene->isGameOver == true)
+	{
+		over = Textures::GetInstance()->Get(ID_TEX_YESNO);
+		game->Draw(0, 0, 150, 150, over, 0, 0, 215, 179);
+
+		// vẽ icon lựa chọn của người chơi
+		choose = Sprites::GetInstance()->Get("item_largeheart");
+		choose->Draw(0, 0, 160, 244 + 50 * scene->chooseToPlayAgain);
+	}
+
 	RECT rect;
 	SetRect(&rect, 0, 15, SCREEN_WIDTH, 80);
 
-	if (font != NULL)
-		font->DrawTextA(NULL, information.c_str(), -1, &rect, DT_LEFT, D3DCOLOR_XRGB(255, 255, 255));
+	if (game->GetFont() != NULL)
+		game->GetFont()->DrawTextA(NULL, information.c_str(), -1, &rect, DT_LEFT, D3DCOLOR_XRGB(255, 255, 255));
 
 	// draw subWeaponBox
 	subWeaponBox->Draw(0, -1, 288, 32);

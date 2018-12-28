@@ -44,6 +44,14 @@
 #define ID_TEX_HP					17
 #define ID_TEX_RECT					18
 #define ID_TEX_BREAKWALL			19
+#define ID_TEX_INTROOBJECTS			24
+#define ID_TEX_TITLE				25
+//
+#define ID_TEX_YESNO				20
+#define ID_TEX_PAUSE				21
+#define ID_TEX_TITLESCREEN			22
+#define ID_TEX_INTROSCREEN			23
+
 #pragma endregion
 
 
@@ -62,6 +70,7 @@
 #pragma region State
  
 // Game
+#define GAMESTATE_INTRO	-1
 #define GAMESTATE_1		0   // SCENE_1
 #define GAMESTATE_2_1	1	// SCENE_2 - phòng 1
 #define GAMESTATE_2_2	2	// SCENE_2 - phòng 2
@@ -82,6 +91,8 @@
 #define	CDIR_BOTTOM		-1.0f
 
 // Scene
+#define TITLE_SCREEN	-2
+#define INTRO_SCREEN	-1
 #define SCENE_1			0
 #define SCENE_2			1
 #define SCENE_3			2
@@ -100,6 +111,7 @@
 #define HIT_STAIR_DOWN	10
 #define	DEFLECT			11
 #define DEAD			12
+#define BACK			13
 
 // Whip
 #define NORMAL_WHIP		0
@@ -203,6 +215,7 @@
 #define STAIR_WALK_ANI_TIME_DELAY	200
 #define DEFLECT_ANI_TIME_DELAY		600
 #define HIT_ANI_TIME_DELAY			300
+#define BACK_ANI_TIME_DELAY			3000
 #define DOOR_2_OPEN_ANI_TIME_DELAY	5000
 #define FISHMAN_HIT_ANI_TIME_DELAY	1000
 #pragma endregion
@@ -279,10 +292,6 @@
 #define FIREBALL_SPEED				0.13f
 
 // Bubbles
-#define BUBBLES_SPEED_X				0.07f
-#define BUBBLES_SPEED_Y				0.1f
-#define BUBBLES_SPEED_X2			0.03f
-#define BUBBLES_SPEED_Y2			0.2f
 #define BUBBLES_GRAVITY				0.0005f
 #define BUBBLES_TIME				1000
 

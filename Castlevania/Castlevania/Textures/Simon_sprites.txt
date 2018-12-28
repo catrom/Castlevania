@@ -26,3 +26,4 @@ simon_hitstairdown_2	180	132	240	196
 simon_hitstairdown_3	240	132	300	196
 simon_deflect	0	66	60	130
 simon_dead	240	198	300	264
+simon_back	60	66	120	130	
