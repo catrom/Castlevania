@@ -1,0 +1,3 @@
+fishman_walk_ani	fishman_walk_1	200	fishman_walk_2	200
+fishman_jump_ani	fishman_jump	100
+fishman_hit_ani	fishman_hit	1000

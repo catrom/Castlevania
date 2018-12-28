@@ -141,7 +141,7 @@ void Player::Render()
 	subWeaponBox->Draw(0, -1, 288, 32);
 
 	if (subWeapon != -1)
-		subWeaponList[subWeapon]->Draw(0, -1, 305, 40);
+		subWeaponList[subWeapon]->Draw(0, -1, 305, 38);
 
 	// draw item
 	if (item != -1)

@@ -1,0 +1,4 @@
+bigcandle_1	0	0	32	64
+bigcandle_2	32	0	64	64
+smallcandle_1	64	0	80	32
+smallcandle_2	80	0	96	32

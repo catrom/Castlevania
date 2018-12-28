@@ -15,39 +15,6 @@ BlackLeopard::BlackLeopard() : Enemy()
 	respawnWaitingTime = 20000;
 }
 
-void BlackLeopard::LoadResources(Textures *& textures, Sprites *& sprites, Animations *& animations)
-{
-	textures->Add(ID_TEX_BLACK_LEOPARD, FILEPATH_TEX_BLACK_LEOPARD, D3DCOLOR_XRGB(255, 255, 255));
-
-	LPDIRECT3DTEXTURE9 texLeopard = textures->Get(ID_TEX_BLACK_LEOPARD);
-
-	sprites->Add("leopard_idle", 0, 0, 64, 32, texLeopard);
-
-	sprites->Add("leopard_run_1", 64, 0, 128, 32, texLeopard);
-	sprites->Add("leopard_run_2", 128, 0, 192, 32, texLeopard);
-	sprites->Add("leopard_run_3", 192, 0, 256, 32, texLeopard);
-	sprites->Add("leopard_run_4", 128, 0, 192, 32, texLeopard);
-	
-	sprites->Add("leopard_jump", 192, 0, 256, 32, texLeopard);
-
-	LPANIMATION ani;
-
-	ani = new Animation(200);
-	ani->Add("leopard_run_1");
-	ani->Add("leopard_run_2");
-	ani->Add("leopard_run_3");
-	ani->Add("leopard_run_4");
-	animations->Add("leopard_run_ani", ani);
-
-	ani = new Animation(200);
-	ani->Add("leopard_idle");
-	animations->Add("leopard_idle_ani", ani);
-
-	ani = new Animation(200);
-	ani->Add("leopard_jump");
-	animations->Add("leopard_jump_ani", ani);
-}
-
 void BlackLeopard::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
 	DWORD now = GetTickCount();

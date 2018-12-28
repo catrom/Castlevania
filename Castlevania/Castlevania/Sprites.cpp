@@ -88,7 +88,6 @@ void Animation::RenderByID(int currentID, int nx, float x, float y, int alpha)
 	}
 }
 
-
 Animations * Animations::_instance = NULL;
 
 Animations * Animations::GetInstance()

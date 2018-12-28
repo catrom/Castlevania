@@ -1,0 +1,6 @@
+effect1_1	0	0	32	60
+effect1_2	32	0	64	60
+effect1_3	64	0	96	60
+effect2_1	96	0	192	60
+effect2_2	192	0	288	60
+effect2_3	288	0	384	60

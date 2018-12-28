@@ -8,26 +8,6 @@ Bubble::Bubble()
 	SetState(BUBBLES);
 }
 
-
-Bubble::~Bubble()
-{
-}
-
-void Bubble::LoadResources(Textures *& textures, Sprites *& sprites, Animations *& animations)
-{
-	textures->Add(ID_TEX_BUBBLES, FILEPATH_TEX_BUBBLES, D3DCOLOR_XRGB(255, 255, 255));
-
-	LPDIRECT3DTEXTURE9 texBubbles = textures->Get(ID_TEX_BUBBLES);
-
-	sprites->Add("bubbles", 0, 0, 14, 28, texBubbles);
-
-	LPANIMATION ani;
-
-	ani = new Animation(100);
-	ani->Add("bubbles");
-	animations->Add("bubbles_ani", ani);
-}
-
 void Bubble::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
 	GameObject::Update(dt);
@@ -65,9 +45,7 @@ Bubbles::Bubbles(float x, float y)
 Bubbles::~Bubbles()
 {
 	for (UINT i = 0; i < 3; i++)
-	{
 		delete(bubbles[i]);
-	}
 
 	bubbles.clear();
 }

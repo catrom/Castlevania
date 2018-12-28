@@ -21,35 +21,6 @@ FishMan::FishMan() : Enemy()
 	respawnWaitingTime = 3000;
 }
 
-void FishMan::LoadResources(Textures *& textures, Sprites *& sprites, Animations *& animations)
-{
-	textures->Add(ID_TEX_FISHMAN, FILEPATH_TEX_FISHMAN, D3DCOLOR_XRGB(255, 255, 255));
-
-	LPDIRECT3DTEXTURE9 texFishman = textures->Get(ID_TEX_FISHMAN);
-
-	sprites->Add("fishman_hit", 0, 0, 32, 64, texFishman);
-
-	sprites->Add("fishman_walk_1", 32, 0, 64, 64, texFishman);
-	sprites->Add("fishman_walk_2", 64, 0, 96, 64, texFishman);
-
-	sprites->Add("fishman_jump", 64, 0, 96, 64, texFishman);
-
-	LPANIMATION ani;
-
-	ani = new Animation(200);
-	ani->Add("fishman_walk_1");
-	ani->Add("fishman_walk_2");
-	animations->Add("fishman_walk_ani", ani);
-
-	ani = new Animation(1000);
-	ani->Add("fishman_hit");
-	animations->Add("fishman_hit_ani", ani);
-
-	ani = new Animation();
-	ani->Add("fishman_jump");
-	animations->Add("fishman_jump_ani", ani);
-}
-
 void FishMan::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
 	// Update fishman

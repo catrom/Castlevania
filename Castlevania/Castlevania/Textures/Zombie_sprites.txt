@@ -1,0 +1,2 @@
+zombie_walk_1	0	0	32	64
+zombie_walk_2	32	0	64	64

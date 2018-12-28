@@ -21,76 +21,6 @@ SubWeapon::SubWeapon()
 	state = -1; // no subweapon
 }
 
-
-SubWeapon::~SubWeapon()
-{
-}
-
-void SubWeapon::LoadResources(Textures *& textures, Sprites *& sprites, Animations *& animations)
-{
-	textures->Add(ID_TEX_WEAPONS_STOP_WATCH, FILEPATH_TEX_WEAPONS_STOP_WATCH, D3DCOLOR_XRGB(255, 255, 255));
-	textures->Add(ID_TEX_WEAPONS_DAGGER, FILEPATH_TEX_WEAPONS_DAGGER, D3DCOLOR_XRGB(255, 255, 255));
-	textures->Add(ID_TEX_WEAPONS_AXE, FILEPATH_TEX_WEAPONS_AXE, D3DCOLOR_XRGB(255, 255, 255));
-	textures->Add(ID_TEX_WEAPONS_HOLY_WATER, FILEPATH_TEX_WEAPONS_HOLY_WATER, D3DCOLOR_XRGB(255, 255, 255));
-	textures->Add(ID_TEX_WEAPONS_BOOMERANG, FILEPATH_TEX_WEAPONS_BOOMERANG, D3DCOLOR_XRGB(255, 255, 255));
-
-	LPDIRECT3DTEXTURE9 tex;
-
-	tex = textures->Get(ID_TEX_WEAPONS_AXE);
-	sprites->Add("weapon_axe_1", 0, 0, 30, 28, tex);
-	sprites->Add("weapon_axe_2", 30, 0, 60, 28, tex);
-	sprites->Add("weapon_axe_3", 60, 0, 90, 28, tex);
-	sprites->Add("weapon_axe_4", 90, 0, 120, 28, tex);
-
-	tex = textures->Get(ID_TEX_WEAPONS_HOLY_WATER);
-	sprites->Add("weapon_holywater", 0, 0, 32, 26, tex);
-	sprites->Add("weapon_holywatershattered_1", 32, 0, 64, 26, tex);
-	sprites->Add("weapon_holywatershattered_2", 64, 0, 96, 26, tex);
-
-	tex = textures->Get(ID_TEX_WEAPONS_BOOMERANG);
-	sprites->Add("weapon_boomerang_1", 0, 0, 28, 28, tex);
-	sprites->Add("weapon_boomerang_2", 28, 0, 56, 28, tex);
-	sprites->Add("weapon_boomerang_3", 56, 0, 84, 28, tex);
-
-	tex = textures->Get(ID_TEX_WEAPONS_DAGGER);
-	sprites->Add("weapon_dagger", 0, 0, 32, 18, tex);
-
-	tex = textures->Get(ID_TEX_WEAPONS_STOP_WATCH);
-	sprites->Add("weapon_stopwatch", 0, 0, 26, 28, tex);
-
-	LPANIMATION ani;
-
-	ani = new Animation();
-	ani->Add("weapon_stopwatch");
-	animations->Add("weapon_stopwatch_ani", ani);
-
-	ani = new Animation();
-	ani->Add("weapon_dagger");
-	animations->Add("weapon_dagger_ani", ani);
-
-	ani = new Animation();
-	ani->Add("weapon_axe_1");
-	ani->Add("weapon_axe_2");
-	ani->Add("weapon_axe_3");
-	ani->Add("weapon_axe_4");
-	animations->Add("weapon_axe_ani", ani);
-
-	ani = new Animation();
-	ani->Add("weapon_holywater");
-	animations->Add("weapon_holywater_ani", ani);
-
-	ani = new Animation();
-	ani->Add("weapon_holywatershattered_1");
-	ani->Add("weapon_holywatershattered_2");
-	animations->Add("weapon_holywatershattered_ani", ani);
-
-	ani = new Animation();
-	ani->Add("weapon_boomerang_1");
-	ani->Add("weapon_boomerang_2");
-	ani->Add("weapon_boomerang_3");
-	animations->Add("weapon_boomerang_ani", ani);
-}
-
 void SubWeapon::UpdateCollisionState()
 {
 	if (state == WEAPONS_DAGGER || state == WEAPONS_BOOMERANG)
@@ -360,11 +290,6 @@ void SubWeapon::GetBoundingBox(float & left, float & top, float & right, float &
 		bottom = top;
 		break;
 	}
-}
-
-void SubWeapon::GetActiveBoundingBox(float & left, float & top, float & right, float & bottom)
-{
-	GetBoundingBox(left, top, right, bottom);
 }
 
 void SubWeapon::GetCoordinateObject(LPGAMEOBJECT obj)

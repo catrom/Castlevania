@@ -13,23 +13,6 @@ Zombie::Zombie() : Enemy()
 	respawnWaitingTime = 5000;
 }
 
-void Zombie::LoadResources(Textures *& textures, Sprites *& sprites, Animations *& animations)
-{
-	textures->Add(ID_TEX_ZOMBIE, FILEPATH_TEX_ZOMBIE, D3DCOLOR_XRGB(255, 255, 255));
-
-	LPDIRECT3DTEXTURE9 texZombie = textures->Get(ID_TEX_ZOMBIE);
-
-	sprites->Add("zombie_walk_1", 0, 0, 32, 64, texZombie);
-	sprites->Add("zombie_walk_2", 32, 0, 64, 64, texZombie);
-
-	LPANIMATION ani;
-
-	ani = new Animation(150);
-	ani->Add("zombie_walk_1");
-	ani->Add("zombie_walk_2");
-	animations->Add("zombie_walk_ani", ani);
-}
-
 void Zombie::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
 	if (state == ZOMBIE_INACTIVE)

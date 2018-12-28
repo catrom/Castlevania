@@ -1,0 +1,20 @@
+item_smallheart_ani	item_smallheart	100
+item_largeheart_ani	item_largeheart	100
+item_redmoneybag_ani	item_redmoneybag	100
+item_whitemoneybag_ani	item_whitemoneybag	100
+item_bluemoneybag_ani	item_bluemoneybag	100
+item_flashingmoneybag_ani	item_redmoneybag	50	item_bluemoneybag	50	item_whitemoneybag	50
+item_chain_ani	item_chain	100
+item_dagger_ani	item_dagger	100
+item_stopwatch_ani	item_stopwatch	100
+item_cross_ani	item_cross	100
+item_axe_ani	item_axe	100
+item_invisibilitypotion_ani	item_invisibilitypotion	100
+item_treasurechest_ani	item_treasurechest_1	50	item_treasurechest_2	50
+item_boomerang_ani	item_boomerang	100
+item_holywater_ani	item_holywater	100
+item_porkchop_ani	item_porkchop	100
+item_doubleshot_ani	item_doubleshot	100
+item_tripleshot_ani	item_tripleshot	100
+item_magiccrystal_ani	item_magiccrystal_1	50	item_magiccrystal_2	50
+item_crown_ani	item_crown_1	50	item_crown_2	50

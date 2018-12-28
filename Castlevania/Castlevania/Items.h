@@ -9,14 +9,10 @@ class Items : public GameObject
 public:
 	Items();
 
-	virtual void LoadResources(Textures* &textures, Sprites* &sprites, Animations* &animations);
 	void Render();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObject = NULL, bool stopMovement = false);
+	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 
 	void SetItem(int idItem);
-
-	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
-	virtual void GetActiveBoundingBox(float &left, float &top, float &right, float &bottom);
-
 };
 

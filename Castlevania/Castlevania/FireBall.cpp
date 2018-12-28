@@ -8,27 +8,6 @@ FireBall::FireBall()
 	SetState(FIREBALL);
 }
 
-
-FireBall::~FireBall()
-{
-}
-
-void FireBall::LoadResources(Textures *& textures, Sprites *& sprites, Animations *& animations)
-{
-	textures->Add(ID_TEX_FIREBALL, FILEPATH_TEX_FIREBALL, D3DCOLOR_XRGB(255, 255, 255));
-
-	LPDIRECT3DTEXTURE9 texFireball = textures->Get(ID_TEX_FIREBALL);
-
-	sprites->Add("fireball", 0, 0, 14, 12, texFireball);
-	
-
-	LPANIMATION ani;
-
-	ani = new Animation(100);
-	ani->Add("fireball");
-	animations->Add("fireball_ani", ani);
-}
-
 void FireBall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
 	if (stopMovement == true)
@@ -66,9 +45,3 @@ void FireBall::GetBoundingBox(float & left, float & top, float & right, float & 
 	right = left + FIREBALL_BBOX_WIDTH;
 	bottom = top + FIREBALL_BBOX_HEIGHT;
 }
-
-void FireBall::GetActiveBoundingBox(float & left, float & top, float & right, float & bottom)
-{
-	GetBoundingBox(left, top, right, bottom);
-}
-

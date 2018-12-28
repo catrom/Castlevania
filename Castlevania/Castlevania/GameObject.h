@@ -59,16 +59,14 @@ public:
 	DWORD dt;
 
 	bool isEnable;
-	int idItem;		// id của item mà object đó chứa (-1: no item)
 
+	int idItem;		// id của item mà object đó chứa (-1: no item)
 	bool isDroppedItem = false;
 	
-
 	vector<LPANIMATION> animations;
 
 
 	GameObject();
-	virtual void LoadResources(Textures* &textures, Sprites* &sprites, Animations* &animations) = 0;
 
 	void SetPosition(float x, float y) { this->x = x; this->y = y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx; this->vy = vy; }
@@ -87,7 +85,6 @@ public:
 	bool IsEnable() { return this->isEnable; }
 
 	void RenderBoundingBox();
-	void RenderActiveBoundingBox();
 
 	// check collision of 2 static object (ex: whip and candle)
 	bool AABB(
@@ -115,9 +112,6 @@ public:
 	void AddAnimation(string aniID);
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom) = 0;
-
-	// Lấy boundingbox vùng va chạm với simon để khiến enemy active
-	virtual void GetActiveBoundingBox(float &left, float &top, float &right, float &bottom) = 0;
 
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObject = NULL, bool stopMovement = false);
 	virtual void Render() = 0;

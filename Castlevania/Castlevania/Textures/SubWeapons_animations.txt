@@ -1,0 +1,6 @@
+weapon_stopwatch_ani	weapon_stopwatch	100
+weapon_dagger_ani	weapon_dagger	100
+weapon_axe_ani	weapon_axe_1	100	weapon_axe_2	100	weapon_axe_3	100	weapon_axe_4	100
+weapon_holywater_ani	weapon_holywater	100
+weapon_holywatershattered_ani	weapon_holywatershattered_1	100	weapon_holywatershattered_2	100
+weapon_boomerang_ani	weapon_boomerang_1	100	weapon_boomerang_2	100	weapon_boomerang_3	100

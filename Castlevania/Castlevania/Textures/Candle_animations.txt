@@ -1,0 +1,2 @@
+bigcandle_ani	bigcandle_1	150	bigcandle_2	150
+smallcandle_ani	smallcandle_1	150	smallcandle_2	150

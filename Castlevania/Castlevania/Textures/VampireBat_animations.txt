@@ -1,0 +1,1 @@
+vampirebat_fly_ani	vampirebat_fly_1	150	vampirebat_fly_2	150	vampirebat_fly_3	150	vampirebat_fly_4	150

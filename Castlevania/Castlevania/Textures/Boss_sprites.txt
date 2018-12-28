@@ -1,0 +1,3 @@
+boss_idle	0	0	96	46
+boss_fly_1	96	0	192	46
+boss_fly_2	192	0	288	46

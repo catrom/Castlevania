@@ -1,0 +1,2 @@
+effect1_ani	effect1_1	100	effect1_2	100	effect1_3	100
+effect2_ani	effect2_1	100	effect2_2	100	effect2_3	100

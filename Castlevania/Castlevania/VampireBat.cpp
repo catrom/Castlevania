@@ -15,28 +15,6 @@ VampireBat::VampireBat() : Enemy()
 	respawnWaitingTime = 5000;
 }
 
-void VampireBat::LoadResources(Textures *& textures, Sprites *& sprites, Animations *& animations)
-{
-	textures->Add(ID_TEX_VAMPIRE_BAT, FILEPATH_TEX_VAMPIRE_BAT, D3DCOLOR_XRGB(255, 255, 255));
-
-	LPDIRECT3DTEXTURE9 texBat = textures->Get(ID_TEX_VAMPIRE_BAT);
-
-	sprites->Add("vampirebat_fly_1", 64, 0, 96, 32, texBat);
-	sprites->Add("vampirebat_fly_2", 32, 0, 64, 32, texBat);
-	sprites->Add("vampirebat_fly_3", 64, 0, 96, 32, texBat);
-	sprites->Add("vampirebat_fly_4", 96, 0, 128, 32, texBat);
-
-
-	LPANIMATION ani;
-
-	ani = new Animation(150);
-	ani->Add("vampirebat_fly_1");
-	ani->Add("vampirebat_fly_2");
-	ani->Add("vampirebat_fly_3");
-	ani->Add("vampirebat_fly_4");
-	animations->Add("vampirebat_fly_ani", ani);
-}
-
 void VampireBat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
 	if (state == VAMPIRE_BAT_DESTROYED && animations[state]->IsOver(EFFECT_ANI_TIME_DELAY) == true)

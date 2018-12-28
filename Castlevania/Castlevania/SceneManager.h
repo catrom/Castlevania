@@ -6,7 +6,6 @@
 #include "Candle.h"
 #include "TileMap.h"
 #include "Ground.h"
-#include "Effect.h"
 #include "Simon.h"
 #include "Whip.h"
 #include "SubWeapon.h"

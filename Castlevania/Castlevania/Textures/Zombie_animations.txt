@@ -1,0 +1,1 @@
+zombie_walk_ani	zombie_walk_1	150	zombie_walk_2	150

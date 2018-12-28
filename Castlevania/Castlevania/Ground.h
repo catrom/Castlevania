@@ -9,11 +9,8 @@ class Ground : public GameObject
 public:
 	Ground();
 
-	virtual void LoadResources(Textures* &textures, Sprites* &sprites, Animations* &animations);
-
 	virtual void Render();
 	virtual void GetBoundingBox(float &l, float &t, float &r, float &b);
-	virtual void GetActiveBoundingBox(float &left, float &top, float &right, float &bottom);
 };
 
 

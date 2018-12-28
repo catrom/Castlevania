@@ -1,0 +1,3 @@
+leopard_run_ani	leopard_run_1	200	leopard_run_2	200	leopard_run_3	200	leopard_run_4	200
+leopard_idle_ani	leopard_idle	200
+leopard_jump_ani	leopard_jump	200

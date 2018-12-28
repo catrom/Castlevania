@@ -99,9 +99,6 @@
     <ClCompile Include="Bubbles.cpp">
       <Filter>Effects</Filter>
     </ClCompile>
-    <ClCompile Include="Effect.cpp">
-      <Filter>Effects</Filter>
-    </ClCompile>
     <ClCompile Include="Water.cpp">
       <Filter>Static Objects</Filter>
     </ClCompile>
@@ -189,9 +186,6 @@
       <Filter>Moving Objects</Filter>
     </ClInclude>
     <ClInclude Include="Bubbles.h">
-      <Filter>Effects</Filter>
-    </ClInclude>
-    <ClInclude Include="Effect.h">
       <Filter>Effects</Filter>
     </ClInclude>
     <ClInclude Include="Water.h">

@@ -1,0 +1,6 @@
+leopard_idle	0	0	64	32
+leopard_run_1	64	0	128	32
+leopard_run_2	128	0	192	32
+leopard_run_3	192	0	256	32
+leopard_run_4	128	0	192	32
+leopard_jump	192	0	256	32

@@ -97,60 +97,33 @@ void SceneManager::LoadSprites(int id, LPCWSTR tex, LPCWSTR sprite_data, LPCWSTR
 
 void SceneManager::LoadResources()
 {
-	LoadSprites(ID_TEX_SIMON, FILEPATH_TEX_SIMON, L"Textures\\Simon_sprite.txt", L"Textures\\Simon_animation.txt");
-
-	whip = new Whip();
-	whip->LoadResources(textures, sprites, animations);
-
-	boss = new Boss();
-	boss->LoadResources(textures, sprites, animations);
-
-	weapon = new SubWeapon();
-	weapon->LoadResources(textures, sprites, animations);
-
-	Candle * candle = new Candle();
-	candle->LoadResources(textures, sprites, animations);
-
-	Effect * effect = new Effect();
-	effect->LoadResources(textures, sprites, animations);
-
-	Ground * ground = new Ground();
-	ground->LoadResources(textures, sprites, animations);
-
-	Items * item = new Items();
-	item->LoadResources(textures, sprites, animations);
-
-	Stair * stair = new Stair();
-	stair->LoadResources(textures, sprites, animations);
-
-	Door * door = new Door();
-	door->LoadResources(textures, sprites, animations);
-
-	Zombie * zombie = new Zombie();
-	zombie->LoadResources(textures, sprites, animations);
-
-	BlackLeopard * leopard = new BlackLeopard();
-	leopard->LoadResources(textures, sprites, animations);
-
-	VampireBat * bat = new VampireBat();
-	bat->LoadResources(textures, sprites, animations);
-
-	FishMan * fishman = new FishMan();
-	fishman->LoadResources(textures, sprites, animations);
-
-	FireBall * fireball = new FireBall();
-	fireball->LoadResources(textures, sprites, animations);
-
-	Bubble * bubble = new Bubble();
-	bubble->LoadResources(textures, sprites, animations);
+	LoadSprites(1, L"Textures\\Simon.png", L"Textures\\Simon_sprites.txt", L"Textures\\Simon_animations.txt");
+	LoadSprites(2, L"Textures\\Whip.png", L"Textures\\Whip_sprites.txt", L"Textures\\Whip_animations.txt");
+	LoadSprites(3, L"Textures\\Boss.png", L"Textures\\Boss_sprites.txt", L"Textures\\Boss_animations.txt");
+	LoadSprites(4, L"Textures\\SubWeapons.png", L"Textures\\SubWeapons_sprites.txt", L"Textures\\SubWeapons_animations.txt");
+	LoadSprites(5, L"Textures\\Candle.png", L"Textures\\Candle_sprites.txt", L"Textures\\Candle_animations.txt");
+	LoadSprites(6, L"Textures\\Effect.png", L"Textures\\Effect_sprites.txt", L"Textures\\Effect_animations.txt");
+	LoadSprites(7, L"Textures\\Spark.png", L"Textures\\Spark_sprites.txt", L"Textures\\Spark_animations.txt");
+	LoadSprites(8, L"Textures\\Bubbles.png", L"Textures\\Bubbles_sprites.txt", L"Textures\\Bubbles_animations.txt");
+	LoadSprites(9, L"Textures\\Ground.png", L"Textures\\Ground_sprites.txt", L"Textures\\Ground_animations.txt");
+	LoadSprites(10, L"Textures\\Items.png", L"Textures\\Items_sprites.txt", L"Textures\\Items_animations.txt");
+	LoadSprites(11, L"Textures\\Stair.png", L"Textures\\Stair_sprites.txt", L"Textures\\Stair_animations.txt");
+	LoadSprites(12, L"Textures\\Door.png", L"Textures\\Door_sprites.txt", L"Textures\\Door_animations.txt");
+	LoadSprites(13, L"Textures\\Zombie.png", L"Textures\\Zombie_sprites.txt", L"Textures\\Zombie_animations.txt");
+	LoadSprites(14, L"Textures\\BlackLeopard.png", L"Textures\\BlackLeopard_sprites.txt", L"Textures\\BlackLeopard_animations.txt");
+	LoadSprites(15, L"Textures\\VampireBat.png", L"Textures\\VampireBat_sprites.txt", L"Textures\\VampireBat_animations.txt");
+	LoadSprites(16, L"Textures\\FishMan.png", L"Textures\\FishMan_sprites.txt", L"Textures\\FishMan_animations.txt");
+	LoadSprites(17, L"Textures\\FireBall.png", L"Textures\\FireBall_sprites.txt", L"Textures\\FireBall_animations.txt");
+	LoadSprites(18, L"Textures\\Rect.png", L"Textures\\Rect_sprites.txt", L"Textures\\Rect_animations.txt");
+	LoadSprites(19, L"Textures\\HP.png", L"Textures\\HP_sprites.txt", L"Textures\\HP_animations.txt");
 
 	tilemaps->Add(SCENE_1, FILEPATH_TEX_MAP_SCENE_1, FILEPATH_DATA_MAP_SCENE_1, 1536, 320);
 	tilemaps->Add(SCENE_2, FILEPATH_TEX_MAP_SCENE_2, FILEPATH_DATA_MAP_SCENE_2, 5632, 352);
 	tilemaps->Add(SCENE_3, FILEPATH_TEX_MAP_SCENE_3, FILEPATH_DATA_MAP_SCENE_3, 1024, 352);
 
 	// for render bounding box
-	textures->Add(ID_TEX_BBOX, FILEPATH_TEX_BBOX, D3DCOLOR_XRGB(255, 255, 255));
-	textures->Add(ID_TEX_BBOX_2, FILEPATH_TEX_BBOX_2, D3DCOLOR_XRGB(255, 255, 255));
+	textures->Add(ID_TEX_BBOX, FILEPATH_TEX_BBOX);
+	textures->Add(ID_TEX_BBOX_2, FILEPATH_TEX_BBOX_2);
 
 	simon = new Simon();
 	boss = new Boss();
@@ -427,7 +400,7 @@ void SceneManager::UpdateTimeCounter()
 
 void SceneManager::Render()
 {
-	tilemaps->Get(IDScene)->Draw(game->GetCameraPositon(), !crossEffectTimer->IsTimeUp());
+	//tilemaps->Get(IDScene)->Draw(game->GetCameraPositon(), !crossEffectTimer->IsTimeUp());
 
 	simon->Render();
 	//simon->RenderBoundingBox();

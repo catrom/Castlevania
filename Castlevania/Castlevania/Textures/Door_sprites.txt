@@ -1,0 +1,7 @@
+door1	0	0	96	288
+door2_idle	96	0	144	96
+door2_open_1	96	0	144	96
+door2_open_2	144	0	192	96
+door2_open_3	192	0	240	96
+door2_open_4	240	0	288	96
+door2_open_5	96	0	144	96

@@ -1,0 +1,2 @@
+ground1_ani	ground1	100
+ground2_ani	ground2	100

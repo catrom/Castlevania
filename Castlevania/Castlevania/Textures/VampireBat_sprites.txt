@@ -1,0 +1,4 @@
+vampirebat_fly_1	64	0	96	32
+vampirebat_fly_2	32	0	64	32
+vampirebat_fly_3	64	0	96	32
+vampirebat_fly_4	96	0	128	32

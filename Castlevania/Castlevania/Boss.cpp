@@ -21,29 +21,6 @@ Boss::Boss() : Enemy()
 	attack = 3;
 }
 
-void Boss::LoadResources(Textures *& textures, Sprites *& sprites, Animations *& animations)
-{
-	textures->Add(ID_TEX_BOSS, FILEPATH_TEX_BOSS, D3DCOLOR_XRGB(255, 255, 255));
-
-	LPDIRECT3DTEXTURE9 texBoss = textures->Get(ID_TEX_BOSS);
-
-	sprites->Add("boss_idle", 0, 0, 96, 46, texBoss);
-
-	sprites->Add("boss_fly_1", 96, 0, 192, 46, texBoss);
-	sprites->Add("boss_fly_2", 192, 0, 288, 46, texBoss);
-
-	LPANIMATION ani;
-
-	ani = new Animation(300);
-	ani->Add("boss_fly_1");
-	ani->Add("boss_fly_2");
-	animations->Add("boss_fly_ani", ani);
-
-	ani = new Animation();
-	ani->Add("boss_idle");
-	animations->Add("boss_idle_ani", ani);
-}
-
 void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
 	if (state == BOSS_DESTROYED)

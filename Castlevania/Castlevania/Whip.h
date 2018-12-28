@@ -14,7 +14,6 @@ class Whip : public GameObject
 public:
 	Whip();
 
-	virtual void LoadResources(Textures* &textures, Sprites* &sprites, Animations* &animations);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL, bool stopMovement = false);
 	virtual void Render() {}
 
@@ -25,7 +24,6 @@ public:
 	bool CheckCollision(float obj_left, float obj_top, float obj_right, float obj_bottom);
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
-	virtual void GetActiveBoundingBox(float &left, float &top, float &right, float &bottom);
 
 	void PowerUp();
 

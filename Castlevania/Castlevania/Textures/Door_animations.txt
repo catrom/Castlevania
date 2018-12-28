@@ -1,0 +1,3 @@
+door1_ani	door1	100
+door2_idle_ani	door2_idle	700
+door2_open_ani	door2_open_1	700	door2_open_2	700	door2_open_3	2000	door2_open_4	700	door2_open_5	1000

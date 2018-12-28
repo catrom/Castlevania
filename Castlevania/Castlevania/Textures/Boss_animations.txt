@@ -1,0 +1,2 @@
+boss_fly_ani	boss_fly_1	300	boss_fly_2	300
+boss_idle_ani	boss_idle	100

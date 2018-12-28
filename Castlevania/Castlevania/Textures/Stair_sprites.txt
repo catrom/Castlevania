@@ -1,0 +1,2 @@
+stair_leftup	0	0	32	32
+stair_rightdown	32	0	64	32

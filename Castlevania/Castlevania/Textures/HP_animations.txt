@@ -1,0 +1,3 @@
+HP_player_ani	HP_player	100
+HP_lose_ani	HP_lose	100
+HP_enemy_ani	HP_enemy	100
