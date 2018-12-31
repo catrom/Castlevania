@@ -48,6 +48,13 @@ Nguyễn Thành Luân - MSSV: 16520703 - Lớp: SE102.J13.PMCL
 ### NOTE
 - Không thể ấn phím nếu animation hành động của Simon vẫn chưa diễn ra hết.
 
+### THƯ VIỆN HỖ TRỢ
+- Directx 9 SDK
+
+### MÔI TRƯỜNG PHÁT TRIỂN
+- Microsoft Visual Studio 2015
+- C++
+
 ### TÀI LIỆU THAM KHẢO
 - Wiki: http://castlevania.wikia.com
 - Resource: https://www.spriters-resource.com/nes/cv/
