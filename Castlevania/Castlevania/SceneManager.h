@@ -25,6 +25,7 @@
 #include "Timer.h"
 
 #include "IntroScene.h"
+#include "TitleScreen.h"
 
 #include <map>
 using namespace std;
@@ -38,7 +39,7 @@ class SceneManager
 	Unit * unit;
 
 	IntroScene * introscene;
-	LPDIRECT3DTEXTURE9 titlescene;
+	TitleScreen * titlescreen;
 
 	vector<Unit*> listUnits;
 	vector<LPGAMEOBJECT> listObjects;
@@ -77,6 +78,7 @@ public:
 	Timer * tripleShotTimer = new Timer(ITEM_TRIPLE_SHOT_EFFECT_TIME);
 
 	Timer * gameoverDelayTimer = new Timer(50);
+	Timer * gameoverDelayTimer2 = new Timer(3000);
 
 	SceneManager(Game * game);
 	~SceneManager();
@@ -109,6 +111,8 @@ public:
 	
 	bool IsInViewport(LPGAMEOBJECT object);
 	void SetInactivationByPosition();			// Nếu object ra khỏi vùng viewport thì set unable / inactive
+
+	void SetEnemiesSpawnPositon();				// Set position cho khởi tạo enemies
 
 	void ChangeScene();							// Chuyển đổi scene khi Simon va chạm với ChangeSceneObject
 

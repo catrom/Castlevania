@@ -175,6 +175,7 @@
     <ClCompile Include="SubWeapon.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="TileMap.cpp" />
+    <ClCompile Include="TitleScreen.cpp" />
     <ClCompile Include="VampireBat.cpp" />
     <ClCompile Include="WallPieces.cpp" />
     <ClCompile Include="Water.cpp" />
@@ -212,6 +213,7 @@
     <ClInclude Include="Textures.h" />
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="TitleScreen.h" />
     <ClInclude Include="VampireBat.h" />
     <ClInclude Include="WallPieces.h" />
     <ClInclude Include="Water.h" />

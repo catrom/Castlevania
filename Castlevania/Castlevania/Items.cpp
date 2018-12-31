@@ -1,4 +1,4 @@
-#include "Items.h"
+﻿#include "Items.h"
 
 
 Items::Items() : GameObject()
@@ -23,7 +23,6 @@ Items::Items() : GameObject()
 	AddAnimation("item_magiccrystal_ani");
 
 	timeAppear = -1;
-	vy = ITEM_FALLING_SPEED;
 }
 
 void Items::Render()
@@ -31,7 +30,7 @@ void Items::Render()
 	int alpha = 255;
 
 	if (state != MAGIC_CRYSTAL && GetTickCount() - timeAppear > ITEM_TIME_DESTROYED / 2)
-		alpha = 50 + rand() % 150;
+		alpha -= 100 * (rand() % 2);
 
 	animations[state]->Render(1, -1, x, y, alpha);
 }
@@ -41,9 +40,7 @@ void Items::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 	if (state != MAGIC_CRYSTAL)
 	{
 		if (timeAppear == -1)
-		{
 			timeAppear = GetTickCount();
-		}
 		else
 		{
 			DWORD now = GetTickCount();
@@ -56,8 +53,13 @@ void Items::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 		}
 	}
 
-
 	GameObject::Update(dt);
+	if (state == SMALL_HEART && vy != 0)
+	{
+		vx += velocityVariation_x;
+		if (vx >= ITEM_FALLING_SPEED_X || vx <= -ITEM_FALLING_SPEED_X)
+			velocityVariation_x *= -1; // đổi chiều
+	}
 
 	// Check collision between item and ground (falling on ground)
 	vector<LPCOLLISIONEVENT> coEvents;
@@ -79,16 +81,15 @@ void Items::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
 
 		y += min_ty*dy + ny*0.1f;
-		if (ny != 0) vy = 0;
+		if (ny != 0)
+		{
+			vx = 0;
+			vy = 0;
+		}
 	}
 
 	// clean up collision events
 	for (int i = 0; i < coEvents.size(); i++) delete coEvents[i];
-}
-
-void Items::SetItem(int idItem)
-{
-	state = idItem;
 }
 
 void Items::GetBoundingBox(float & left, float & top, float & right, float & bottom)
@@ -161,6 +162,24 @@ void Items::GetBoundingBox(float & left, float & top, float & right, float & bot
 	default:
 		right = left;
 		bottom = top;
+		break;
+	}
+}
+
+void Items::SetState(int state)
+{
+	GameObject::SetState(state);
+
+	switch (state)
+	{
+	case SMALL_HEART:
+		velocityVariation_x = ITEM_FALLING_SPEED_X_VARIATION;
+		vx = 0;
+		vy = ITEM_SMALLHEART_FALLING_SPEED_Y;
+		break;
+	default:
+		vx = 0;
+		vy = ITEM_FALLING_SPEED_Y;
 		break;
 	}
 }

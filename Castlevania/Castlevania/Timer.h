@@ -8,7 +8,7 @@ class Timer
 	int limitedTime;
 
 public:
-	Timer(int limitedTime) { this->limitedTime = limitedTime; }
+	Timer(int limitedTime) { this->limitedTime = limitedTime; start = 0; }
 	
 	void Start() { start = GetTickCount(); }
 	void Stop() { start = 0; }

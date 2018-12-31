@@ -77,6 +77,7 @@ public:
 	bool IsOver(DWORD dt) { return GetTickCount() - animStartTime >= dt; }
 	bool IsRenderingLastFrame() { return currentFrame == frames.size() - 1; }
 	void Reset() { currentFrame = -1; }
+	void SetFrame(int x) { currentFrame = x; }
 
 	int GetCurrentFrame() { return currentFrame; }
 	int GetFramesSize() { return frames.size(); }

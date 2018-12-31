@@ -136,7 +136,6 @@ void Game::Draw(int accordingCam, int nx, float x, float y, LPDIRECT3DTEXTURE9 t
 	rect.bottom = bottom;
 
 	// flip sprite, using nx parameter
-
 	D3DXMATRIX oldTransform;
 	D3DXMATRIX newTransform;
 

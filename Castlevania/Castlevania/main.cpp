@@ -43,7 +43,11 @@ void Render()
 	if (d3ddv->BeginScene())
 	{
 		// clear back buffer with background color
-		d3ddv->ColorFill(bb, NULL, BACKGROUND_COLOR);
+		// cross effect, random to render background color changed
+		if (scene->crossEffectTimer->IsTimeUp() == false && rand() % 2 == 1)
+			d3ddv->ColorFill(bb, NULL, BACKGROUND_CROSS_EFFECT_COLOR);
+		else
+			d3ddv->ColorFill(bb, NULL, BACKGROUND_COLOR);
 
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 
@@ -157,7 +161,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	game->Init(hWnd);
 	
 	scene = new SceneManager(game);
-	scene->Init(TITLE_SCREEN);
+	scene->Init(SCENE_2);
 
 	input = new Input(game, scene);
 	game->InitKeyboard(input);

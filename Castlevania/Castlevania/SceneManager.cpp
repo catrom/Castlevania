@@ -29,6 +29,9 @@ void SceneManager::Init(int idScene)
 
 	switch (idScene)
 	{
+	case TITLE_SCREEN:
+		titlescreen = new TitleScreen();
+		break;
 	case INTRO_SCREEN:
 		introscene = new IntroScene(simon);
 		break;
@@ -147,7 +150,8 @@ void SceneManager::LoadResources()
 	LoadSprites(ID_TEX_RECT, L"Textures\\Rect.png", L"Textures\\Rect_sprites.txt", L"Textures\\Rect_animations.txt");
 	LoadSprites(ID_TEX_HP, L"Textures\\HP.png", L"Textures\\HP_sprites.txt", L"Textures\\HP_animations.txt");
 	LoadSprites(ID_TEX_BREAKWALL, L"Textures\\BreakWall.png", L"Textures\\BreakWall_sprites.txt", L"Textures\\BreakWall_animations.txt");
-	LoadSprites(ID_TEX_BREAKWALL, L"Textures\\IntroObjects.png", L"Textures\\IntroObjects_sprites.txt", L"Textures\\IntroObjects_animations.txt");
+	LoadSprites(ID_TEX_INTROOBJECTS, L"Textures\\IntroObjects.png", L"Textures\\IntroObjects_sprites.txt", L"Textures\\IntroObjects_animations.txt");
+	LoadSprites(ID_TEX_TITLE, L"Textures\\Title.png", L"Textures\\Title_sprites.txt", L"Textures\\Title_animations.txt");
 
 	tilemaps->Add(SCENE_1, L"Scenes\\Scene1.png", L"Scenes\\Scene1_map.txt", 1536, 320);
 	tilemaps->Add(SCENE_2, L"Scenes\\Scene2.png", L"Scenes\\Scene2_map.txt", 5632, 352);
@@ -457,8 +461,7 @@ void SceneManager::Render()
 
 	if (IDScene == TITLE_SCREEN)
 	{
-		titlescene = Textures::GetInstance()->Get(ID_TEX_TITLESCREEN);
-		game->Draw(0, 0, 0, 0, titlescene, 0, 0, 514, 450);
+		titlescreen->Render();
 	}
 	else if (IDScene == INTRO_SCREEN)
 	{
@@ -566,7 +569,7 @@ bool SceneManager::SimonWalkThroughDoor()
 
 	if (isMovingCamera1 == true)
 	{
-		if (countDxCamera < 240)			// Di chuyển camera một đoạn 224
+		if (countDxCamera < 224)			// Di chuyển camera một đoạn 224
 		{
 			countDxCamera += 2;
 
@@ -702,7 +705,7 @@ void SceneManager::SetDropItems()
 			auto item = new Items();
 			item->SetEnable(true);
 			item->SetPosition(x, y);
-			item->SetItem(idItem);
+			item->SetState(idItem);
 
 			listItems.push_back(item);
 			unit = new Unit(grid, item, x, y);
@@ -761,6 +764,45 @@ void SceneManager::SetInactivationByPosition()
 		{
 			if (IsInViewport(weaponlist[i]) == false)
 				weaponlist[i]->SetEnable(false);
+		}
+	}
+}
+
+void SceneManager::SetEnemiesSpawnPositon()
+{
+	// Không spawn enemies khi hiệu ứng cross còn diễn ra
+	if (crossEffectTimer->IsTimeUp() == false)
+		return;
+
+	for (auto obj : listObjects)
+	{
+		if (dynamic_cast<Zombie*>(obj))
+		{
+			Zombie * zombie = dynamic_cast<Zombie*>(obj);
+
+			if (zombie->GetState() != ZOMBIE_INACTIVE && zombie->isSettedPosition == false)
+			{
+				zombie->isSettedPosition = true;
+
+				float simon_x, simon_y;
+				simon->GetPosition(simon_x, simon_y);
+
+				int nx = zombie->GetEntryPosition().x < simon_x ? 1 : -1;
+				zombie->SetOrientation(nx);
+
+				// Cần random một khoảng nhỏ để tránh việc các zombie spawn cùng lúc, tại cùng một vị trí
+				int randomDistance = rand() % 20;
+
+				float x, y;
+				y = zombie->GetEntryPosition().y;
+				if (nx == -1)
+					x = game->GetCameraPositon().x + SCREEN_WIDTH - (ENEMY_DEFAULT_BBOX_WIDTH + randomDistance);
+				else
+					x = game->GetCameraPositon().x + (ENEMY_DEFAULT_BBOX_WIDTH + randomDistance);
+
+				zombie->SetPosition(x, y);
+				zombie->SetState(ZOMBIE_ACTIVE);
+			}
 		}
 	}
 }
@@ -968,7 +1010,7 @@ void SceneManager::DoGameOver()
 
 		return;
 	}
-	
+
 	if (isNeedToAddScoreTime == -1)
 	{
 		isNeedToAddScoreTime = 0;
@@ -986,7 +1028,14 @@ void SceneManager::DoGameOver()
 		return;
 	}
 
-	isGameOver = true;
+	if (isGameOver == false && gameoverDelayTimer2->GetStartTime() == 0)
+	{
+		gameoverDelayTimer2->Start();
+	}
+	else if (gameoverDelayTimer2->IsTimeUp() == true)
+	{
+		isGameOver = true;
+	}
 }
 
 void SceneManager::Simon_Update(DWORD dt)
@@ -1159,7 +1208,7 @@ void SceneManager::Zombie_Update(DWORD dt, LPGAMEOBJECT & object)
 			zombie->SetOrientation(nx);
 
 			// Cần random một khoảng nhỏ để tránh việc các zombie spawn cùng lúc, tại cùng một vị trí
-			int randomDistance = rand() % 20; 
+			int randomDistance = rand() % 20;
 
 			float x, y;
 			y = zombie->GetEntryPosition().y;

@@ -7,10 +7,10 @@ Cloud::Cloud()
 	AddAnimation("cloud_ani");
 	SetState(0);
 
-	x = 440;
-	y = 160;
-	vx = -0.015f;
-	vy = -0.003f;
+	x = 450;
+	y = 100;
+	vx = -0.02f;
+	vy = -0.001f;
 }
 
 Cloud::~Cloud()

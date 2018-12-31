@@ -86,7 +86,7 @@ void Input::KeyState(BYTE *state)
 		return;
 
 	// nếu simon đang nhảy và chưa chạm đất
-	if ((simon->GetState() == JUMP || simon->GetState() == STAND) 
+	if ((simon->GetState() == JUMP || simon->GetState() == STAND)
 		&& simon->isTouchGround == false)
 		return;
 
@@ -97,7 +97,7 @@ void Input::KeyState(BYTE *state)
 		{
 			if (simon->stairDirection == 1) // cầu thang trái dưới - phải trên
 				Simon_Stair_Up();
-			else 
+			else
 				Simon_Stair_Down();
 
 			return;
@@ -111,7 +111,7 @@ void Input::KeyState(BYTE *state)
 		{
 			if (simon->stairDirection == 1) // cầu thang trái dưới - phải trên
 				Simon_Stair_Down();
-			else 
+			else
 				Simon_Stair_Up();
 
 			return;
@@ -132,7 +132,7 @@ void Input::KeyState(BYTE *state)
 			simon->SetState(STAND);
 			return;
 		}
-		
+
 		simon->SetState(SIT);
 	}
 	else if (game->IsKeyDown(DIK_UP))
@@ -168,7 +168,7 @@ void Input::KeyState(BYTE *state)
 
 void Input::OnKeyDown(int KeyCode)
 {
-	if (KeyCode == DIK_PAUSE)
+	if (KeyCode == DIK_PAUSE)						// Pause game
 	{
 		scene->isGamePause = !(scene->isGamePause);
 		return;
@@ -178,24 +178,24 @@ void Input::OnKeyDown(int KeyCode)
 	{
 		if (KeyCode == DIK_UP || KeyCode == DIK_DOWN)
 			scene->chooseToPlayAgain = (scene->chooseToPlayAgain + 1) % 2;
-		else if (KeyCode == DIK_Z)
+		else if (KeyCode == DIK_A)
 		{
-			if (scene->chooseToPlayAgain == 0)
+			if (scene->chooseToPlayAgain == 0)		// Continue game
 			{
 				scene->ResetGame();
 				scene->Init(SCENE_1);
 			}
 			else
 			{
-				HWND hWnd = GetActiveWindow();
+				HWND hWnd = GetActiveWindow();		// End game
 				DestroyWindow(hWnd);
 			}
 		}
 
 		return;
 	}
-
-	if (scene->GetIDScene() == TITLE_SCREEN)
+	
+	if (scene->GetIDScene() == TITLE_SCREEN)		// nhấn phím bất kì từ màn hình Title Screen
 	{
 		scene->Init(INTRO_SCREEN);
 		return;
@@ -258,17 +258,17 @@ void Input::OnKeyDown(int KeyCode)
 		scene->SetGameState(GAMESTATE_3_2);
 		break;
 	case DIK_A:
-		scene->ResetGame();
-		scene->Init(SCENE_1);
+		if (game->IsKeyDown(DIK_UP))
+			Simon_Hit_SubWeapon();
+		else
+			Simon_Hit();
 		break;
 	case DIK_SPACE:
 		Simon_Jump();
 		break;
 	case DIK_Z:
-		Simon_Hit();
-		break;
-	case DIK_X:
-		Simon_Hit_SubWeapon();
+		scene->ResetGame();
+		scene->Init(SCENE_1);
 		break;
 	default:
 		break;
@@ -363,12 +363,12 @@ void Input::Simon_Hit_SubWeapon()
 
 		// position
 		simon->GetPosition(sx, sy);
-		
+
 		if (simon->GetState() == SIT) sy += 25.0f; // khớp vị trí tay
 		else sy += 10.0f;
 		if (simon->GetOrientation() < 0) sx += 30.0f;
 
-		weapon->SetPosition(sx, sy); 
+		weapon->SetPosition(sx, sy);
 
 		// orientation
 		weapon->SetOrientation(simon->GetOrientation());
@@ -394,7 +394,7 @@ void Input::Simon_Hit_SubWeapon()
 void Input::Simon_Stair_Down()
 {
 	int stairDirection = simon->stairDirection;
-	
+
 	if (simon->canMoveDownStair == false)
 	{
 		if (simon->isStandOnStair == true)
@@ -500,7 +500,10 @@ bool Input::Simon_Stair_Stand()
 		}
 
 		simon->StandOnStair();
-		simon->animations[simon->GetState()]->Reset();
+		simon->animations[STAIR_UP]->Reset();
+		simon->animations[STAIR_UP_INVISIBLE]->Reset();
+		simon->animations[STAIR_DOWN]->Reset();
+		simon->animations[STAIR_DOWN_INVISIBLE]->Reset();
 
 		return true;
 	}

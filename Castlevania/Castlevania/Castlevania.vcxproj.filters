@@ -135,6 +135,9 @@
     <ClCompile Include="Cloud.cpp">
       <Filter>Moving Objects</Filter>
     </ClCompile>
+    <ClCompile Include="TitleScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Debug.h">
@@ -241,6 +244,9 @@
     </ClInclude>
     <ClInclude Include="Cloud.h">
       <Filter>Moving Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleScreen.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

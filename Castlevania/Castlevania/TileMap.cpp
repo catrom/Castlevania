@@ -26,7 +26,7 @@ void TileMap::LoadResources()
 {
 	Textures * texture = Textures::GetInstance();
 
-	texture->Add(ID, filePath_tex, D3DCOLOR_XRGB(255, 255, 255));
+	texture->Add(ID, filePath_tex, TILEMAP_TRANSPARENT_COLOR);
 	
 	LPDIRECT3DTEXTURE9 texTileMap = texture->Get(ID);
 
@@ -113,11 +113,6 @@ void TileMap::Draw(D3DXVECTOR3 camPosition, bool isCrossEffect)
 	int start_col_to_draw = (int)camPosition.x / 32;
 	int end_col_to_draw = start_col_to_draw + SCREEN_WIDTH / 32;
 
-	// Xét thông số blend cho hiệu ứng của item cross
-	int alpha = 255;
-	if (isCrossEffect == true) 
-		alpha = rand() % 255;
-
 	for (UINT i = 0; i < nums_row; i++)
 	{
 		for (UINT j = start_col_to_draw; j <= end_col_to_draw; j++)
@@ -127,7 +122,7 @@ void TileMap::Draw(D3DXVECTOR3 camPosition, bool isCrossEffect)
 			float x = tile_Width * (j - start_col_to_draw) + camPosition.x - (int)camPosition.x % 32; 
 			float y = tile_Height * i + 80;
 
-			tilemap[i][j]->Draw(1, -1, x, y, alpha);
+			tilemap[i][j]->Draw(1, -1, x, y);
 		}
 	}
 }
