@@ -7,6 +7,7 @@ c:\users\admin\desktop\mygame\castlevania\castlevania\debug\grid.obj
 c:\users\admin\desktop\mygame\castlevania\castlevania\debug\ground.obj
 c:\users\admin\desktop\mygame\castlevania\castlevania\debug\input.obj
 c:\users\admin\desktop\mygame\castlevania\castlevania\debug\items.obj
+c:\users\admin\desktop\mygame\castlevania\castlevania\debug\main.obj
 c:\users\admin\desktop\mygame\castlevania\castlevania\debug\player.obj
 c:\users\admin\desktop\mygame\castlevania\castlevania\debug\scenemanager.obj
 c:\users\admin\desktop\mygame\castlevania\castlevania\debug\simon.obj
@@ -26,10 +27,14 @@ c:\users\admin\desktop\mygame\castlevania\castlevania\debug\candle.obj
 c:\users\admin\desktop\mygame\castlevania\castlevania\debug\changesceneobject.obj
 c:\users\admin\desktop\mygame\castlevania\castlevania\debug\debug.obj
 c:\users\admin\desktop\mygame\castlevania\castlevania\debug\door.obj
-c:\users\admin\desktop\mygame\castlevania\castlevania\debug\effect.obj
 c:\users\admin\desktop\mygame\castlevania\castlevania\debug\enemy.obj
 c:\users\admin\desktop\mygame\castlevania\castlevania\debug\fireball.obj
-c:\users\admin\desktop\mygame\castlevania\castlevania\debug\main.obj
+c:\users\admin\desktop\mygame\castlevania\castlevania\debug\breakwall.obj
+c:\users\admin\desktop\mygame\castlevania\castlevania\debug\wallpieces.obj
+c:\users\admin\desktop\mygame\castlevania\castlevania\debug\introscene.obj
+c:\users\admin\desktop\mygame\castlevania\castlevania\debug\bat.obj
+c:\users\admin\desktop\mygame\castlevania\castlevania\debug\cloud.obj
+c:\users\admin\desktop\mygame\castlevania\castlevania\debug\titlescreen.obj
 c:\users\admin\desktop\mygame\castlevania\debug\castlevania.ilk
 c:\users\admin\desktop\mygame\castlevania\debug\castlevania.exe
 c:\users\admin\desktop\mygame\castlevania\debug\castlevania.pdb

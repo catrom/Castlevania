@@ -1,10 +1,101 @@
-﻿  SceneManager.cpp
+﻿  Zombie.cpp
+c:\users\admin\desktop\mygame\castlevania\castlevania\zombie.cpp(67): warning C4018: '<': signed/unsigned mismatch
+  Whip.cpp
+  Water.cpp
+  WallPieces.cpp
+  VampireBat.cpp
+  TitleScreen.cpp
+  c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+c:\users\admin\desktop\mygame\castlevania\castlevania\define.h(19): warning C4005: 'DIRECTINPUT_VERSION': macro redefinition
+  c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h(42): note: see previous definition of 'DIRECTINPUT_VERSION'
+  TileMap.cpp
+  c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+c:\users\admin\desktop\mygame\castlevania\castlevania\define.h(19): warning C4005: 'DIRECTINPUT_VERSION': macro redefinition
+  c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h(42): note: see previous definition of 'DIRECTINPUT_VERSION'
+c:\users\admin\desktop\mygame\castlevania\castlevania\tilemap.cpp(45): warning C4018: '<': signed/unsigned mismatch
+c:\users\admin\desktop\mygame\castlevania\castlevania\tilemap.cpp(47): warning C4018: '<': signed/unsigned mismatch
+c:\users\admin\desktop\mygame\castlevania\castlevania\tilemap.cpp(116): warning C4018: '<': signed/unsigned mismatch
+c:\users\admin\desktop\mygame\castlevania\castlevania\tilemap.cpp(118): warning C4018: '<=': signed/unsigned mismatch
+c:\users\admin\desktop\mygame\castlevania\castlevania\tilemap.cpp(123): warning C4244: 'initializing': conversion from 'UINT' to 'float', possible loss of data
+  Textures.cpp
+  c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+c:\users\admin\desktop\mygame\castlevania\castlevania\define.h(19): warning C4005: 'DIRECTINPUT_VERSION': macro redefinition
+  c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h(42): note: see previous definition of 'DIRECTINPUT_VERSION'
+  SubWeapon.cpp
+c:\users\admin\desktop\mygame\castlevania\castlevania\timer.h(15): warning C4018: '>': signed/unsigned mismatch
+c:\users\admin\desktop\mygame\castlevania\castlevania\subweapon.cpp(194): warning C4018: '<': signed/unsigned mismatch
+  Stair.cpp
+  Sprites.cpp
+  c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+c:\users\admin\desktop\mygame\castlevania\castlevania\define.h(19): warning C4005: 'DIRECTINPUT_VERSION': macro redefinition
+  c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h(42): note: see previous definition of 'DIRECTINPUT_VERSION'
+c:\users\admin\desktop\mygame\castlevania\castlevania\sprites.cpp(68): warning C4018: '>=': signed/unsigned mismatch
+  Simon.cpp
+c:\users\admin\desktop\mygame\castlevania\castlevania\timer.h(15): warning C4018: '>': signed/unsigned mismatch
+  SceneManager.cpp
   c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
 c:\users\admin\desktop\mygame\castlevania\castlevania\define.h(19): warning C4005: 'DIRECTINPUT_VERSION': macro redefinition
   c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h(42): note: see previous definition of 'DIRECTINPUT_VERSION'
 c:\users\admin\desktop\mygame\castlevania\castlevania\timer.h(15): warning C4018: '>': signed/unsigned mismatch
 c:\users\admin\desktop\mygame\castlevania\castlevania\scenemanager.cpp(557): warning C4018: '<': signed/unsigned mismatch
 c:\users\admin\desktop\mygame\castlevania\castlevania\scenemanager.cpp(881): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+  Player.cpp
+  c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+c:\users\admin\desktop\mygame\castlevania\castlevania\define.h(19): warning C4005: 'DIRECTINPUT_VERSION': macro redefinition
+  c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h(42): note: see previous definition of 'DIRECTINPUT_VERSION'
+c:\users\admin\desktop\mygame\castlevania\castlevania\timer.h(15): warning C4018: '>': signed/unsigned mismatch
+c:\users\admin\desktop\mygame\castlevania\castlevania\player.cpp(134): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\admin\desktop\mygame\castlevania\castlevania\player.cpp(155): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\admin\desktop\mygame\castlevania\castlevania\player.cpp(158): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\admin\desktop\mygame\castlevania\castlevania\player.cpp(162): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\admin\desktop\mygame\castlevania\castlevania\player.cpp(165): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  main.cpp
+c:\users\admin\desktop\mygame\castlevania\castlevania\timer.h(15): warning C4018: '>': signed/unsigned mismatch
+  Items.cpp
+c:\users\admin\desktop\mygame\castlevania\castlevania\items.cpp(92): warning C4018: '<': signed/unsigned mismatch
+  IntroScene.cpp
+c:\users\admin\desktop\mygame\castlevania\castlevania\timer.h(15): warning C4018: '>': signed/unsigned mismatch
+  Input.cpp
+  c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+c:\users\admin\desktop\mygame\castlevania\castlevania\define.h(19): warning C4005: 'DIRECTINPUT_VERSION': macro redefinition
+  c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h(42): note: see previous definition of 'DIRECTINPUT_VERSION'
+c:\users\admin\desktop\mygame\castlevania\castlevania\timer.h(15): warning C4018: '>': signed/unsigned mismatch
+c:\users\admin\desktop\mygame\castlevania\castlevania\input.cpp(452): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Ground.cpp
+  Grid.cpp
+c:\users\admin\desktop\mygame\castlevania\castlevania\grid.cpp(105): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  Generating Code...
 c:\users\admin\desktop\mygame\castlevania\castlevania\scenemanager.cpp(670): warning C4715: 'SceneManager::GetRandomItem': not all control paths return a value
+c:\users\admin\desktop\mygame\castlevania\castlevania\simon.cpp(575): warning C4715: 'Simon::CheckCollisionWithItem': not all control paths return a value
+  Compiling...
+  GameObject.cpp
+c:\users\admin\desktop\mygame\castlevania\castlevania\gameobject.cpp(93): warning C4305: '=': truncation from '__int64' to 'float'
+c:\users\admin\desktop\mygame\castlevania\castlevania\gameobject.cpp(94): warning C4305: '=': truncation from '__int64' to 'float'
+c:\users\admin\desktop\mygame\castlevania\castlevania\gameobject.cpp(104): warning C4305: '=': truncation from '__int64' to 'float'
+c:\users\admin\desktop\mygame\castlevania\castlevania\gameobject.cpp(105): warning C4305: '=': truncation from '__int64' to 'float'
+  Game.cpp
+  c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+c:\users\admin\desktop\mygame\castlevania\castlevania\define.h(19): warning C4005: 'DIRECTINPUT_VERSION': macro redefinition
+  c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h(42): note: see previous definition of 'DIRECTINPUT_VERSION'
+c:\users\admin\desktop\mygame\castlevania\castlevania\game.cpp(145): warning C4244: 'argument': conversion from 'int' to 'FLOAT', possible loss of data
+  FishMan.cpp
+c:\users\admin\desktop\mygame\castlevania\castlevania\fishman.cpp(106): warning C4018: '<': signed/unsigned mismatch
+  FireBall.cpp
+  Enemy.cpp
+c:\users\admin\desktop\mygame\castlevania\castlevania\enemy.cpp(37): warning C4018: '>=': signed/unsigned mismatch
+  Door.cpp
+  Debug.cpp
+  Cloud.cpp
+  ChangeSceneObject.cpp
+  Candle.cpp
+  Bubbles.cpp
+  BreakWall.cpp
+  Boss.cpp
+  BlackLeopard.cpp
+c:\users\admin\desktop\mygame\castlevania\castlevania\blackleopard.cpp(81): warning C4018: '<': signed/unsigned mismatch
+  Bat.cpp
+c:\users\admin\desktop\mygame\castlevania\castlevania\bat.cpp(13): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\admin\desktop\mygame\castlevania\castlevania\bat.cpp(14): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  Generating Code...
   Castlevania.vcxproj -> C:\Users\Admin\Desktop\MyGame\Castlevania\Debug\Castlevania.exe
   Castlevania.vcxproj -> C:\Users\Admin\Desktop\MyGame\Castlevania\Debug\Castlevania.pdb (Full PDB)

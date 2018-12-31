@@ -178,7 +178,7 @@ void Input::OnKeyDown(int KeyCode)
 	{
 		if (KeyCode == DIK_UP || KeyCode == DIK_DOWN)
 			scene->chooseToPlayAgain = (scene->chooseToPlayAgain + 1) % 2;
-		else if (KeyCode == DIK_A)
+		else if (KeyCode == DIK_Z)
 		{
 			if (scene->chooseToPlayAgain == 0)		// Continue game
 			{
@@ -269,7 +269,7 @@ void Input::OnKeyDown(int KeyCode)
 	case DIK_SPACE:
 		Simon_Jump();
 		break;
-	case DIK_Z:
+	case DIK_L:
 		scene->ResetGame();
 		scene->Init(SCENE_1);
 		break;
