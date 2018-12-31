@@ -263,6 +263,9 @@ void Input::OnKeyDown(int KeyCode)
 		else
 			Simon_Hit();
 		break;
+	case DIK_S:
+		Simon_Hit_SubWeapon();
+		break;
 	case DIK_SPACE:
 		Simon_Jump();
 		break;

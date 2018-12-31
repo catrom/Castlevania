@@ -31,6 +31,9 @@ void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 		return;
 	}
 
+	if (state == BOSS_INACTIVE)
+		return;
+
 	if (isStopWaiting == true)
 	{
 		if (GetTickCount() - startTimeWaiting > BOSS_STOP_TIME_WAITING)

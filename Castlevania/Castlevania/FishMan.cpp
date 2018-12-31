@@ -1,6 +1,7 @@
 ﻿#include "FishMan.h"
 #include "Ground.h"
 #include "Water.h"
+#include "FireBall.h"
 #include "BreakWall.h"
 
 
@@ -12,8 +13,8 @@ FishMan::FishMan() : Enemy()
 	AddAnimation("fishman_jump_ani");
 	AddAnimation("fishman_hit_ani");
 
-	lastTimeShoot = 0; 
-	deltaTimeToShoot = 0; 
+	lastTimeShoot = 0;
+	deltaTimeToShoot = 0;
 	nxAfterShoot = 0;
 
 	HP = 1;
@@ -30,7 +31,7 @@ void FishMan::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement
 		SetState(FISHMAN_INACTIVE);
 		return;
 	}
-	
+
 	if (stopMovement == true)
 		return;
 
@@ -40,7 +41,7 @@ void FishMan::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement
 		SetState(FISHMAN_ACTIVE);
 		return;
 	}
-	
+
 	if (state == FISHMAN_INACTIVE)
 		return;
 
@@ -98,7 +99,7 @@ void FishMan::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement
 				}
 			}
 		}
-		
+
 	}
 
 	// clean up collision events
@@ -173,5 +174,26 @@ void FishMan::LoseHP(int x)
 
 	if (HP == 0)
 		SetState(FISHMAN_DESTROYED);
+}
+
+bool FishMan::CanHit()
+{
+	return (state == FISHMAN_ACTIVE && isSettedPosition == true &&
+		GetTickCount() - lastTimeShoot >= deltaTimeToShoot);
+}
+
+void FishMan::Hit(Grid * grid, int new_nx)
+{
+	// Tạo fireball
+	auto fireball = new FireBall();
+	fireball->SetPosition(x + 5, y + 10);
+	fireball->SetOrientation(nx);
+	fireball->SetState(FIREBALL);
+	fireball->SetEnable(true);
+
+	Unit * unit = new Unit(grid, fireball, x + 5, y + 10);
+
+	// Đặt hướng quay mặt của Fishman sau khi bắn (quay về phía simon)
+	nxAfterShoot = new_nx;
 }
 

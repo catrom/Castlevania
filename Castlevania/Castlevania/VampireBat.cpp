@@ -23,6 +23,9 @@ void VampireBat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovem
 		return;
 	}
 
+	if (state == VAMPIRE_BAT_INACTIVE)
+		return;
+
 	if (stopMovement == true)
 		return;
 

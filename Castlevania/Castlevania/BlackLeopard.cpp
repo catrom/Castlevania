@@ -25,6 +25,9 @@ void BlackLeopard::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMov
 		return;
 	}
 
+	if (state == BLACK_LEOPARD_INACTIVE)
+		return;
+
 	if (stopMovement == true)
 		return;
 

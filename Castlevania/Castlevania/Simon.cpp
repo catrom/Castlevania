@@ -292,7 +292,6 @@ void Simon::Render()
 			alpha = 200 * (rand() % 100 < 20);
 		else						// render animation của invisible
 		{
-			alpha = 255 * (rand() % 100 < 80);
 			switch (tempState)
 			{
 			case STAND:	tempState = STAND_INVISIBLE; break;

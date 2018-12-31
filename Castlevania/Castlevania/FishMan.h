@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "Grid.h"
 #include "Enemy.h"
 
 class FishMan : public Enemy
@@ -20,9 +21,7 @@ public:
 
 	virtual void LoseHP(int x);
 
-	int GetLastTimeShoot() { return lastTimeShoot; }
-	int GetDeltaTimeToShoot() { return deltaTimeToShoot; }
-
-	void SetNxAfterShoot(int x) { nxAfterShoot = x; }
+	bool CanHit();
+	void Hit(Grid * grid, int new_nx);
 };
 

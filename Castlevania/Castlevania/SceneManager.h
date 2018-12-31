@@ -91,12 +91,14 @@ public:
 												// -1: không, 0: cần, 1: đã xong.
 	
 	void Init(int idScene);						// init simon position, camera position, grid..
-	void LoadSprites(int id, LPCWSTR tex, LPCWSTR sprite_data, LPCWSTR animation_data);
-	void LoadResources();						// load all sprites, textures and tilemaps
 	void LoadObjectsFromFile(LPCWSTR FilePath);	// load all objects (position, state, isEnable) from file 
 
 	void GetObjectFromGrid();
-		
+	void GetColliableObjects(LPGAMEOBJECT curObj, vector<LPGAMEOBJECT>&coObjects);
+
+	void Simon_Update(DWORD dt);
+	void Whip_Update(DWORD dt);
+	void Weapon_Update(DWORD dt, int index);
 	void Update(DWORD dt);						
 	void UpdateTimeCounter();					
 	void UpdateCameraPosition();				
@@ -135,16 +137,5 @@ public:
 
 	// Game Over
 	void DoGameOver();
-
-	// Các hàm con của hàm Update()
-	void Simon_Update(DWORD dt);
-	void Whip_Update(DWORD dt);
-	void Weapon_Update(DWORD dt, int index);  
-	void Item_Update(DWORD dt, LPGAMEOBJECT &object);
-	void Zombie_Update(DWORD dt, LPGAMEOBJECT &object);
-	void BlackLeopard_Update(DWORD dt, LPGAMEOBJECT &object);
-	void VampireBat_Update(DWORD dt, LPGAMEOBJECT &object);
-	void FishMan_Update(DWORD dt, LPGAMEOBJECT &object);
-	void Boss_Update(DWORD dt, LPGAMEOBJECT &object);
 };
 
