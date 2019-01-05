@@ -54,9 +54,11 @@ Nguyễn Thành Luân - MSSV: 16520703 - Lớp: SE102.J13.PMCL
 ### MÔI TRƯỜNG PHÁT TRIỂN
 - Microsoft Visual Studio 2015
 - C++
+- Mappy TiledMap Editor
 
 ### TÀI LIỆU THAM KHẢO
 - Wiki: http://castlevania.wikia.com
 - Resource: https://www.spriters-resource.com/nes/cv/
 - Grid: http://gameprogrammingpatterns.com/spatial-partition.html
+- Mappy: https://tilemap.co.uk/mappy.php
 - Framework của thầy Đinh Nguyễn Anh Dũng: https://github.com/dungdna2000/gamedev-intro-tutorials
